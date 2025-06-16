@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TxTLauncher</string>
+    <string name="first_fragment_label">Első</string>
+    <string name="second_fragment_label">Második</string>
+    <string name="next">Következő</string>
+    <string name="previous">Előző</string>
+    <string name="applist_button_desc">Telepített alkalmazások</string>
+    <string name="quit_button_desc">Kilépés</string>
+    <string name="started">Az app elindult</string>
+    <string name="dark_mode">sötét mód</string>
+    <string name="light_mode">világos mód</string>
+    <string name="service_disable">Eszköz adminisztrátori jog szükséges</string>
+    <string name="button_dial">Telefon app</string>
+    <string name="button_mail">Levelező app</string>
+    <string name="button_browser">Böngésző app</string>
+    <string name="button_camera">Képkészítő app</string>
+    <string name="button_search">Kereső app</string>
+    <string name="setting_addapp">Applikáció hozzáadása a kezdőképernyőhöz</string>
+    <string name="setting_sysicon">Rendszer applikációk ikon használata</string>
+    <string name="setting_starticon">Választott applikációk ikon használata</string>
+    <string name="settings_title">Beállítások</string>
+    <string name="started_activity">Nézet elindult</string>
+    <string name="stopped_activty">Nézet leállt</string>
+    <string name="starting_other_app">Külső app indítása</string>
+    <string name="favorite_apps">Kedvencek</string>
+    <string name="note_title">Jegyzet</string>
+    <string name="settings_addfavapp">Applikáció hozzáadása kedvencekhez</string>
+    <string name="title_home_addapp">App választás kezdőképernyőre</string>
+    <string name="title_favorite_addapp">App választás kedvencek közé</string>
+    <string name="title_widget">Eszközök</string>
+    <string name="search">Keresés</string>
+    <string name="new_install">Első indítás: beállítás</string>
+    <string name="update_install">Frissítés érkezett: beállítás</string>
+    <string name="settings_title_privateai">Privát MI URL beállítása</string>
+    <string name="settings_title_searchurl">Internet kereső URL beállítása</string>
+    <string name="settings_title_background_image">Háttérkép neve, elérése</string>
+    <string name="button_reset">Visszaállítás</string>
+    <string name="settings_read_applist">Applikációk újraolvasása (telepítés, törlés után)</string>
+    <string name="settings_sysbackground">A rendszer háttérképének használata</string>
+    <string name="error_bitmap">Hiba a kép átalakításakor</string>
+    <string name="background_file_not_found">Háttérkép fájl nem elérhető</string>
+    <string name="button_close_widget">Vissza</string>
+    <string name="start_ai">AI indítása</string>
+    <string name="settings_weather_html1">Időjárás lekérdezés HTML 1</string>
+    <string name="settings_weather_html2">Időjárás lekérdezés HTML 2</string>
+</resources>
