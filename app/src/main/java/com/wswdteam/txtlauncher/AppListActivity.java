@@ -67,7 +67,10 @@ public class AppListActivity extends AppCompatActivity {
     //
     @Override
     protected void onStart() {
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
+        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
+
         appListView();
         SearchView sv = findViewById(R.id.allAppListSearch);
         sv.setQuery("", false);

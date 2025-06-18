@@ -9,8 +9,9 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML1;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML2;
+import static com.wswdteam.txtlauncher.MainActivity.TXT_APP_NAME;
+import static com.wswdteam.txtlauncher.MainActivity.TXT_VERSION;
 import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher.MainActivity.privateSearchUrlOrig;
@@ -76,8 +77,12 @@ public class SettingsActivity extends AppCompatActivity {
     //
     // Beállítások indítása
     //
+    @SuppressLint("SetTextI18n")
     public void onStart() {
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
+        //overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_left, R.anim.exit_to_right);
         super.onStart();
+
         String val;
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c1 = findViewById(R.id.sysIconCheck);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c2 = findViewById(R.id.appIconCheck);
@@ -193,6 +198,14 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             v5.setText(WidgetActivity.queryWeatherHTML2Orig);
         }
+
+        TextView ver = findViewById(R.id.settingsVersion);
+        ver.setText(String.format("%s: %s", TXT_APP_NAME, TXT_VERSION));
+        TextView help = findViewById(R.id.settingsHelp);
+        String h = getString(R.string.settings_help);
+        h = h.replaceAll(" X", "\n");
+        help.setText(h);
+
         Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -202,6 +215,7 @@ public class SettingsActivity extends AppCompatActivity {
     //
     public void onStop() {
         super.onStop();
+
         Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 

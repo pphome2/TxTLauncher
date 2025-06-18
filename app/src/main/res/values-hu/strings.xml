@@ -44,4 +44,6 @@
     <string name="start_ai">AI indítása</string>
     <string name="settings_weather_html1">Időjárás lekérdezés HTML 1</string>
     <string name="settings_weather_html2">Időjárás lekérdezés HTML 2</string>
+    <string name="version">Verzió</string>
+    <string name="settings_help">Jobbra húzás: eszközök X Balra húzás: rendszer beállítások X Fel húzás: applikációk listája X Lefelé húzás: kedvencek X Dupla érintés: zárolás</string>
 </resources>

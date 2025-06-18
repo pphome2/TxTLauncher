@@ -1,9 +1,7 @@
 package com.wswdteam.txtlauncher;
 
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 
@@ -15,7 +13,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,7 +68,10 @@ public class AddAppActivity extends AppCompatActivity {
     //
     @Override
     public void onStart() {
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_right, R.anim.exit_to_left);
+        //overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_left, R.anim.exit_to_right);
         super.onStart();
+
         selApp.clear();
         String tag;
         String val;
@@ -104,6 +104,7 @@ public class AddAppActivity extends AppCompatActivity {
             }
         }
         settings.apply();
+
         super.onStop();
         Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }

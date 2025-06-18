@@ -60,7 +60,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final String TXT_VERSION = "1.0.1";
+    public static String TXT_VERSION = "1.0.1";
+    public static String TXT_APP_NAME = "TxTLauncher";
 
     public final String SETTINGS_VERSION_TAG = "TxTVersion";
 
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainView), (v, insets) -> {
@@ -287,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
     //
     @Override
     public void onStart() {
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_bottom, R.anim.exit_to_top);
+        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
 
         generateAppList();
@@ -848,6 +852,7 @@ public class MainActivity extends AppCompatActivity {
     public void openAppListButton(View view){
         Log.d(DEBUG_TAG,"Action tap button: openapplist");
         startedAppAct = true;
+
         startActivity(new Intent(MainActivity.this, AppListActivity.class));
     }
 
@@ -859,7 +864,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(DEBUG_TAG,"Action long tap: open settings");
         startedSettingsAct = true;
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-
     }
 
 

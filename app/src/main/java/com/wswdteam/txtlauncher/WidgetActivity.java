@@ -44,6 +44,7 @@ public class WidgetActivity extends AppCompatActivity {
     public static String queryWeatherHTML1Orig = "<iframe src='https://beepulo.idokep.hu/futar/";
     public static String queryWeatherHTML2Orig = "' scrolling='no' style='width:300px;height:260px;border:none;'>";
 
+
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class WidgetActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (firstLoadWv) {
                     firstLoadWv = false;
-                    String data = queryWeatherHTMLFrame1 + queryWeatherHTML1 + savedCity + queryWeatherHTML2 + queryWeatherHTMLFrame2;
+                    String data = queryWeatherHTMLFrame1 + queryWeatherHTML1 + "'" + savedCity +"'" + queryWeatherHTML2 + queryWeatherHTMLFrame2;
                     wv2.loadData(data, "text/html; charset=utf-8", "UTF-8");
                     WebSettings webSettings = wv2.getSettings();
                     webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -139,7 +140,10 @@ public class WidgetActivity extends AppCompatActivity {
     //
     @Override
     public void onStart(){
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_left, R.anim.exit_to_right);
+        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_right, R.anim.exit_to_left);
         super.onStart();
+
         String val = MainActivity.sharedPreferences.getString(SETTINGS_NOTE, "");
         if (!val.isEmpty()) {
             EditText tv = findViewById(R.id.widgetTextNote);
@@ -159,6 +163,7 @@ public class WidgetActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             queryWeatherHTML2 = val;
         }
+
         Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 

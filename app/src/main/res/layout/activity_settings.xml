@@ -147,6 +147,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:autofillHints=""
                 android:hint="@string/settings_title_privateai"
                 android:inputType="textUri"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -172,6 +173,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:autofillHints=""
                 android:hint="@string/settings_title_searchurl"
                 android:inputType="textUri"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -198,6 +200,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints=""
                 android:hint="@string/settings_title_background_image"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -224,6 +227,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints=""
                 android:hint="@string/settings_weather_html1"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -250,6 +254,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints=""
                 android:hint="@string/settings_weather_html2"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -302,15 +307,51 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/buttonReadAppList" />
 
+            <TextView
+                android:id="@+id/settingsVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center|center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
+
             <View
-            android:id="@+id/settingsDividerX"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
+                android:id="@+id/settingsDivider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/settingsVersion" />
+
+            <TextView
+                android:id="@+id/settingsHelp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:text=""
+                android:singleLine="false"
+                android:maxLines="100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider3" />
+
+            <View
+                android:id="@+id/settingsDividerX"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/settingsHelp" />
 
         </LinearLayout>
 

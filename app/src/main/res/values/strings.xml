@@ -44,5 +44,7 @@
     <string name="start_ai">Start AI</string>
     <string name="settings_weather_html1">Weather HTML 1</string>
     <string name="settings_weather_html2">Weather HTML2</string>
+    <string name="version">Version</string>
+    <string name="settings_help">Swipe right: Tools X Swipe left: system settings X Sipe up: all app X Swipe down: favorites X Double click: lock</string>
 
 </resources>

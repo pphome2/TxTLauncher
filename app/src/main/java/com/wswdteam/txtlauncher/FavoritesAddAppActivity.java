@@ -2,7 +2,6 @@ package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 
@@ -64,7 +63,10 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
     //
     @Override
     public void onStart() {
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_right, R.anim.exit_to_left);
+        //overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_left, R.anim.exit_to_right);
         super.onStart();
+
         selApp.clear();
         String tag;
         String val;
@@ -96,6 +98,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             }
         }
         settings.apply();
+
         super.onStop();
         Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
