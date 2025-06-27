@@ -34,7 +34,7 @@
     <string name="update_install">Updated version: initializing</string>
     <string name="settings_title_privateai">Private AI set URL</string>
     <string name="settings_title_searchurl">Web search URL</string>
-    <string name="settings_title_background_image">Background image name</string>
+    <string name="settings_title_background_image">Background image name (in download folder)</string>
     <string name="button_reset">Reset</string>
     <string name="settings_read_applist">Re-read app list (after install, delete apps)</string>
     <string name="settings_sysbackground">Set system background image</string>
@@ -42,9 +42,22 @@
     <string name="background_file_not_found">Not found background image file</string>
     <string name="button_close_widget">Close</string>
     <string name="start_ai">Start AI</string>
-    <string name="settings_weather_html1">Weather HTML 1</string>
-    <string name="settings_weather_html2">Weather HTML2</string>
+    <string name="settings_weather_html1">Weather HTML (@CITY@ - where the city should be inserted)</string>
     <string name="version">Version</string>
-    <string name="settings_help">Swipe right: Tools X Swipe left: system settings X Sipe up: all app X Swipe down: favorites X Double click: lock</string>
+    <string name="widgat_map">Go to map</string>
+    <string name="error_startapp">App launch faled</string>
+    <string name="news_update_title">The app is updated</string>
+    <string name="news_update">New functions: # - error repair # - new function</string>
+    <string name="button_next">Next</string>
+    <string name="help_title">Help</string>
+    <string name="news_firstrun_title">First start</string>
+    <string name="news_firstrun">Initializing...</string>
+    <string name="help_text_1">Usage: ## Swipe right: Tools # Swipe left: discovery # Sipe up: all app # Swipe down: favorites # Double click: lock # Long press: app settings</string>
+    <string name="help_text_2">Settings: ## - select home screen apps # - select favorites # - add icons to apps # - private AI link (tools page) # - web search link (search field add to end of link # - background image (in download folder) # - weather web link (copy city name to @CITY@) # - reset settings to default # - read app list when changed apps</string>
+    <string name="help_text_3">New version download from web page.</string>
+    <string name="help_text_4">Licence: GPLv3</string>
+    <string name="licence">GPLv3</string>
+    <string name="button_help">Help</string>
+    <string name="button_settings">Settings</string>
 
 </resources>

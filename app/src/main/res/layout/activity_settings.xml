@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/settingsScrollFrame"
+        android:id="@+id/helpScrollFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -208,7 +208,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
 
             <TextView
-                android:id="@+id/weatherHtml1"
+                android:id="@+id/weatherHtml"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -220,7 +220,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/editBackgroundImage" />
 
             <EditText
-                android:id="@+id/editWeatherHtml1"
+                android:id="@+id/editWeatherHtml"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -232,34 +232,7 @@
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weatherHtml1" />
-
-            <TextView
-                android:id="@+id/weatherHtml2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/settings_weather_html2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editWeatherHtml1" />
-
-            <EditText
-                android:id="@+id/editWeatherHtml2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:autofillHints=""
-                android:hint="@string/settings_weather_html2"
-                android:inputType="textMultiLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weatherHtml2" />
+                app:layout_constraintTop_toBottomOf="@+id/weatherHtml" />
 
             <Button
                 android:id="@+id/buttonReset"
@@ -272,7 +245,7 @@
                 android:text="@string/button_reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
+                app:layout_constraintTop_toBottomOf="@+id/editWeatherHtml" />
 
             <View
                 android:id="@+id/settingsDivider1"
@@ -307,41 +280,18 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/buttonReadAppList" />
 
-            <TextView
-                android:id="@+id/settingsVersion"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/buttonHelp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
                 android:gravity="center|center_horizontal"
+                android:onClick="helpButton"
+                android:text="@string/help_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
-
-            <View
-                android:id="@+id/settingsDivider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/settingsVersion" />
-
-            <TextView
-                android:id="@+id/settingsHelp"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:text=""
-                android:singleLine="false"
-                android:maxLines="100"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsDivider3" />
 
             <View
                 android:id="@+id/settingsDividerX"

@@ -1,8 +1,10 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -53,12 +55,6 @@ public class AppListActivity extends AppCompatActivity {
             return insets;
         });
 
-        if (MainActivity.isDarkMode) {
-            Log.d(MainActivity.DEBUG_TAG,getString(R.string.started) + " " + getString(R.string.dark_mode));
-        } else {
-            Log.d(MainActivity.DEBUG_TAG,getString(R.string.started) + " " + getString(R.string.light_mode));
-        }
-
     }
 
 
@@ -67,7 +63,7 @@ public class AppListActivity extends AppCompatActivity {
     //
     @Override
     protected void onStart() {
-        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_bottom, R.anim.exit_to_top);
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
 
@@ -174,11 +170,15 @@ public class AppListActivity extends AppCompatActivity {
             for (int i=0; i<appList.size(); i++) {
                 String appp = appList.get(i);
                 if (Objects.equals(appp, selectedP)) {
-                    appp = appPackList.get(i);
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-                    if (launchIntent != null) {
-                        startActivity(launchIntent);
-                        this.finish();
+                    try {
+                        appp = appPackList.get(i);
+                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
+                        if (launchIntent != null) {
+                            startActivity(launchIntent);
+                            this.finish();
+                        }
+                    } catch (Exception e) {
+                        systemMessage(getString(R.string.error_startapp));
                     }
                     Log.e(DEBUG_TAG, R.string.starting_other_app + " " + appp);
                 }

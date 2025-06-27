@@ -44,11 +44,6 @@ public class AddAppActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        if (MainActivity.isDarkMode) {
-            Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.dark_mode));
-        } else {
-            Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.light_mode));
-        }
 
         TextView tv = findViewById(R.id.addappTitle);
         tv.setTextSize(tv.getTextSize() + defaultPlusFontSizeTitle);

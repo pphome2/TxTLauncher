@@ -3,20 +3,22 @@ package com.wswdteam.txtlauncher;
 import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_CITY;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML1;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML2;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
+import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -36,13 +38,14 @@ public class WidgetActivity extends AppCompatActivity {
     public static boolean firstLoadAI = true;
     public static boolean firstLoadWv = true;
     public static String savedCity = "";
+    public static String cityCode = "@CITY@";
     public static String queryWeatherHTMLFrame1 = "<html><body style='background-color:black;'><center>" +
             "<div style='margin:auto;display:block;'>";
     public static String queryWeatherHTMLFrame2 = "</div></center></body></html>";
-    public static String queryWeatherHTML1 = "<iframe src='https://beepulo.idokep.hu/futar/";
-    public static String queryWeatherHTML2 = "' scrolling='no' style='width:300px;height:260px;border:none;'>";
-    public static String queryWeatherHTML1Orig = "<iframe src='https://beepulo.idokep.hu/futar/";
-    public static String queryWeatherHTML2Orig = "' scrolling='no' style='width:300px;height:260px;border:none;'>";
+    public static String queryWeatherHTML = "<iframe src='https://beepulo.idokep.hu/futar/@CITY@' scrolling='no' style='width:300px;height:260px;border:none;'>";
+    public static String queryWeatherHTMLOrig = "<iframe src='https://beepulo.idokep.hu/futar/@CITY@' scrolling='no' style='width:300px;height:260px;border:none;'>";
+    //public static String defaultHTML = "<html><body></body></html>";
+
 
 
     @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
@@ -68,6 +71,18 @@ public class WidgetActivity extends AppCompatActivity {
             tv.setCompoundDrawables(appI, null, null, null);
         }
 
+        CalendarView cv = findViewById(R.id.widgetCalendar);
+        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            try {
+                Intent cal = new Intent(Intent.ACTION_MAIN);
+                cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
+                startActivity(cal);
+                this.finish();
+            } catch (Exception e) {
+                systemMessage(getString(R.string.error_startapp));
+            }
+        });
+
         SearchView sv = findViewById(R.id.widgetSearch);
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -91,7 +106,9 @@ public class WidgetActivity extends AppCompatActivity {
                 settings.putString(SETTINGS_CITY, query);
                 settings.apply();
                 WebView wv = findViewById(R.id.widgetWeather);
-                String data = queryWeatherHTMLFrame1 + queryWeatherHTML1 + query + queryWeatherHTML2 + queryWeatherHTMLFrame2;
+                String qu = queryWeatherHTML;
+                qu = qu.replaceFirst(cityCode, query);
+                String data = queryWeatherHTMLFrame1 + qu + queryWeatherHTMLFrame2;
                 wv.loadData(data, "text/html; charset=utf-8", "UTF-8");
                 return true;
             }
@@ -103,34 +120,31 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         WebView wv = findViewById(R.id.widgetPrivateAI);
-        wv.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (firstLoadAI) {
-                    firstLoadAI = false;
-                    wv.loadUrl(privateAIUrl);
-                    WebSettings webSettings = wv.getSettings();
-                    webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                    webSettings.setJavaScriptEnabled(true);
-                }
-                return false;
+        wv.setOnTouchListener((view, motionEvent) -> {
+            if (firstLoadAI) {
+                firstLoadAI = false;
+                wv.loadUrl(privateAIUrl);
+                WebSettings webSettings = wv.getSettings();
+                webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                webSettings.setJavaScriptEnabled(true);
             }
+            return false;
         });
 
         WebView wv2 = findViewById(R.id.widgetWeather);
-        wv2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (firstLoadWv) {
-                    firstLoadWv = false;
-                    String data = queryWeatherHTMLFrame1 + queryWeatherHTML1 + "'" + savedCity +"'" + queryWeatherHTML2 + queryWeatherHTMLFrame2;
-                    wv2.loadData(data, "text/html; charset=utf-8", "UTF-8");
-                    WebSettings webSettings = wv2.getSettings();
-                    webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-                    webSettings.setJavaScriptEnabled(true);
-                }
-                return false;
+        wv2.setOnTouchListener((view, motionEvent) -> {
+            if (firstLoadWv) {
+                firstLoadWv = false;
+                String qu = queryWeatherHTML;
+                qu = qu.replaceFirst(cityCode, savedCity);
+                String data = queryWeatherHTMLFrame1 + qu + queryWeatherHTMLFrame2;
+                wv2.loadData(data, "text/html; charset=utf-8", "UTF-8");
+                WebSettings webSettings = wv2.getSettings();
+                webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                webSettings.setJavaScriptEnabled(true);
+                Log.e(DEBUG_TAG, qu);
             }
+            return false;
         });
     }
 
@@ -155,14 +169,13 @@ public class WidgetActivity extends AppCompatActivity {
             sv.setQuery(val, false);
             savedCity = val;
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML1, "");
+        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML, "");
         if (!val.isEmpty()) {
-            queryWeatherHTML1 = val;
+            queryWeatherHTML = val;
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML2, "");
-        if (!val.isEmpty()) {
-            queryWeatherHTML2 = val;
-        }
+
+        firstLoadAI = true;
+        firstLoadWv = true;
 
         Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
@@ -204,6 +217,40 @@ public class WidgetActivity extends AppCompatActivity {
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webSettings.setJavaScriptEnabled(true);
     }
+
+
+    //
+    // Widget jegyzet címre kattintás
+    //
+    public void widgetClickNote(View view) {
+        //1try {
+            //Intent keepIntent = new Intent(Intent.ACTION_VIEW);
+            //keepIntent.setPackage("com.google.android.apps.keep");
+            //startActivity(keepIntent);
+            //this.finish();
+        //} catch (Exception e) {
+            //systemMessage(getString(R.string.error_startapp));
+        //}
+    }
+
+
+    //
+    // Widget térkép mutatása
+    //
+    public void openWidgetMap(View view) {
+        try {
+            //Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
+            Uri mapUri = Uri.parse("geo:0,0");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+            //mapIntent.setPackage("com.google.android.apps.maps");
+            mapIntent.setPackage("com.google.android.app.");
+            startActivity(mapIntent);
+            this.finish();
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
 
 
 }

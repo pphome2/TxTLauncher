@@ -34,7 +34,7 @@
     <string name="update_install">Frissítés érkezett: beállítás</string>
     <string name="settings_title_privateai">Privát MI URL beállítása</string>
     <string name="settings_title_searchurl">Internet kereső URL beállítása</string>
-    <string name="settings_title_background_image">Háttérkép neve, elérése</string>
+    <string name="settings_title_background_image">Háttérkép neve (a letöltések mappában)</string>
     <string name="button_reset">Visszaállítás</string>
     <string name="settings_read_applist">Applikációk újraolvasása (telepítés, törlés után)</string>
     <string name="settings_sysbackground">A rendszer háttérképének használata</string>
@@ -42,8 +42,21 @@
     <string name="background_file_not_found">Háttérkép fájl nem elérhető</string>
     <string name="button_close_widget">Vissza</string>
     <string name="start_ai">AI indítása</string>
-    <string name="settings_weather_html1">Időjárás lekérdezés HTML 1</string>
-    <string name="settings_weather_html2">Időjárás lekérdezés HTML 2</string>
+    <string name="settings_weather_html1">Időjárás lekérdezés HTML (@CITY@ - ahova a település nevet kell illeszteni)</string>
     <string name="version">Verzió</string>
-    <string name="settings_help">Jobbra húzás: eszközök X Balra húzás: rendszer beállítások X Fel húzás: applikációk listája X Lefelé húzás: kedvencek X Dupla érintés: zárolás</string>
+    <string name="widgat_map">Tegyél a térképre</string>
+    <string name="error_startapp">App indítása nem sikerült</string>
+    <string name="news_update_title">Az applikáció frissült</string>
+    <string name="news_update">Változások: # - hibajavítás # - új funkciók</string>
+    <string name="button_next">Tovább</string>
+    <string name="help_title">Leírás</string>
+    <string name="news_firstrun_title">Első indítás</string>
+    <string name="news_firstrun">Előkészítés # Beállítások mentése</string>
+    <string name="help_text_1">Használat: ## Jobbra húzás: eszközök # Balra húzás: felfedezés # Fel húzás: applikációk listája # Lefelé húzás: kedvencek # Dupla érintés: zárolás # Hosszú érintés: app beállítások</string>
+    <string name="help_text_2">Beállítások: ## - fő képenyőre appok választása # - appok választása a kedvencek közé # - ikonok megjelenítésének bekapcsolása # - AI link beállítása (Eszközök lap) # - web kereső lbeállítása (a link végére kerül a keresett kifejezés) # - háttérkép (a Letöltések mappából) # - időjárás web linkj (a város neve a  @CITY@ helyére kerül) # - visszaállítás alapértékekre # - appikációk újraolvasása (változás esetén)</string>
+    <string name="help_text_4">Licenc: GPLv3</string>
+    <string name="licence">GPLv3</string>
+    <string name="help_text_3">Új verzió letölthető a weboldalról.</string>
+    <string name="button_help">Leírás</string>
+    <string name="button_settings">Beállítások</string>
 </resources>

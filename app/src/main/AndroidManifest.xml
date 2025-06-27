@@ -65,6 +65,13 @@
             android:windowSoftInputMode="stateVisible|adjustResize"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
+            android:name=".HelpActivity"
+            android:exported="false"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/Theme.TxtLauncher"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+        <activity
             android:name=".AppListActivity"
             android:exported="false"
             android:screenOrientation="userPortrait"

@@ -7,6 +7,7 @@ import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
+import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -72,7 +73,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
-        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
+        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_bottom, R.anim.exit_to_top);
         super.onStart();
 
         favAppName.clear();
@@ -226,10 +227,14 @@ public class FavoritesActivity extends AppCompatActivity {
                 String pName = app.activityInfo.packageName;
                 Log.d(DEBUG_TAG, appName);
                 if (appName.equals(selectedP)) {
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                    if (launchIntent != null) {
-                        startActivity(launchIntent);
-                        this.finish();
+                    try {
+                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
+                        if (launchIntent != null) {
+                            startActivity(launchIntent);
+                            this.finish();
+                        }
+                    } catch (Exception e) {
+                        systemMessage(getString(R.string.error_startapp));
                     }
                 }
             }
@@ -243,10 +248,14 @@ public class FavoritesActivity extends AppCompatActivity {
                 String appName = app.loadLabel(pmx).toString();
                 String pName = app.activityInfo.packageName;
                 if (appName.equals(selectedP)) {
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                    if (launchIntent != null) {
-                        startActivity(launchIntent);
-                        this.finish();
+                    try {
+                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
+                        if (launchIntent != null) {
+                            startActivity(launchIntent);
+                            this.finish();
+                        }
+                    } catch (Exception e) {
+                        systemMessage(getString(R.string.error_startapp));
                     }
                 }
             }

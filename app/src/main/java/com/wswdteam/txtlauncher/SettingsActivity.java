@@ -7,10 +7,7 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML1;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML2;
-import static com.wswdteam.txtlauncher.MainActivity.TXT_APP_NAME;
-import static com.wswdteam.txtlauncher.MainActivity.TXT_VERSION;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML;
 import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
@@ -52,12 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        if (MainActivity.isDarkMode) {
-            Log.d(DEBUG_TAG,getString(R.string.started) + " " + getString(R.string.dark_mode));
-        } else {
-            Log.d(DEBUG_TAG,getString(R.string.started) + " " + getString(R.string.light_mode));
-        }
 
         this.getWindow().setSoftInputMode(SOFT_INPUT_ADJUST_PAN);
 
@@ -117,8 +108,7 @@ public class SettingsActivity extends AppCompatActivity {
         EditText v2 = findViewById(R.id.editUrlSearch);
         EditText v3 = findViewById(R.id.editBackgroundImage);
 
-        EditText v4 = findViewById(R.id.editWeatherHtml1);
-        EditText v5 = findViewById(R.id.editWeatherHtml2);
+        EditText v4 = findViewById(R.id.editWeatherHtml);
 
         v1.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -151,16 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
         v4.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 var settings = MainActivity.sharedPreferences.edit();
-                settings.putString(SETTINGS_WEATHER_HTML1, String.valueOf(s).trim());
-                settings.apply();
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-        v5.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
-                settings.putString(SETTINGS_WEATHER_HTML2, String.valueOf(s).trim());
+                settings.putString(SETTINGS_WEATHER_HTML, String.valueOf(s).trim());
                 settings.apply();
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -186,25 +167,12 @@ public class SettingsActivity extends AppCompatActivity {
             v3.setText(MainActivity.backgroundImage);
         }
 
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML1, "");
+        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML, "");
         if (!val.isEmpty()) {
             v4.setText(val);
         } else {
-            v4.setText(WidgetActivity.queryWeatherHTML1Orig);
+            v4.setText(WidgetActivity.queryWeatherHTMLOrig);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML2, "");
-        if (!val.isEmpty()) {
-            v5.setText(val);
-        } else {
-            v5.setText(WidgetActivity.queryWeatherHTML2Orig);
-        }
-
-        TextView ver = findViewById(R.id.settingsVersion);
-        ver.setText(String.format("%s: %s", TXT_APP_NAME, TXT_VERSION));
-        TextView help = findViewById(R.id.settingsHelp);
-        String h = getString(R.string.settings_help);
-        h = h.replaceAll(" X", "\n");
-        help.setText(h);
 
         Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
@@ -243,13 +211,11 @@ public class SettingsActivity extends AppCompatActivity {
         EditText v1 = findViewById(R.id.editPrivateAI);
         EditText v2 = findViewById(R.id.editUrlSearch);
         EditText v3 = findViewById(R.id.editBackgroundImage);
-        EditText v4 = findViewById(R.id.editWeatherHtml1);
-        EditText v5 = findViewById(R.id.editWeatherHtml2);
+        EditText v4 = findViewById(R.id.editWeatherHtml);
         v1.setText(privateAIUrlOrig);
         v2.setText(privateSearchUrlOrig);
         v3.setText(backgroundImageOrig);
-        v4.setText(WidgetActivity.queryWeatherHTML1Orig);
-        v5.setText(WidgetActivity.queryWeatherHTML2Orig);
+        v4.setText(WidgetActivity.queryWeatherHTMLOrig);
     }
 
 
@@ -258,6 +224,14 @@ public class SettingsActivity extends AppCompatActivity {
     public void rereadAppListButton(View view) {
         MainActivity.generateAppList();
         this.finish();
+    }
+
+
+    //
+    // App választás indítása
+    //
+    public void helpButton(View view){
+        startActivity(new Intent(SettingsActivity.this, HelpActivity.class));
     }
 
 

@@ -69,7 +69,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:gravity="start"
-                android:onClick="closeWidgetButton"
+                android:onClick="widgetClickNote"
                 android:text="@string/note_title"
                 android:textAlignment="gravity"
                 android:textStyle="bold"
@@ -96,8 +96,49 @@
                 android:id="@+id/widgetDivider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/textNote" />
+                app:layout_constraintTop_toBottomOf="@+id/widgetTextNote" />
+
+            <CalendarView
+                android:id="@+id/widgetCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/widgetDivider" />
+
+            <View
+                android:id="@+id/widgetDividerCal"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/widgetCalendar" />
+
+            <Button
+                android:id="@+id/widgetOpenMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center|center_horizontal"
+                android:onClick="openWidgetMap"
+                android:text="@string/widgat_map"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/widgetDividerCal" />
+
+            <View
+                android:id="@+id/widgetDividerMap"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/widgetOpenMapr" />
+
 
             <SearchView
                 android:id="@+id/widgetSearch"
@@ -105,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/widgetDividerMap" />
 
             <WebView
                 android:id="@+id/widgetPrivateAI"
@@ -113,6 +154,7 @@
                 android:layout_height="700dp"
                 android:layout_marginBottom="16dp"
                 android:background="@color/material_dynamic_neutral30"
+                android:backgroundTint="@color/material_dynamic_neutral30"
                 app:layout_constraintTop_toBottomOf="@+id/search" />
 
             <Button
@@ -151,9 +193,10 @@
                 android:id="@+id/widgetWeather"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginBottom="16dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
                 android:background="@color/material_dynamic_neutral30"
+                android:backgroundTint="@color/material_dynamic_neutral30"
                 app:layout_constraintTop_toBottomOf="@+id/widgetCitySearch" />
 
             <View

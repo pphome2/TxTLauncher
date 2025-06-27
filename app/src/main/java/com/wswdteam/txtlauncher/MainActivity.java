@@ -2,6 +2,8 @@ package com.wswdteam.txtlauncher;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String TXT_VERSION = "1.0.1";
     public static String TXT_APP_NAME = "TxTLauncher";
+    public static String TXT_WEB_PAGE = "https://github.com/pphome2/TxTLauncher";
 
     public final String SETTINGS_VERSION_TAG = "TxTVersion";
 
@@ -86,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
     public static String SETTINGS_NOTE = "AppNote";
 
     public static String SETTINGS_CITY = "AppCity";
-    public static String SETTINGS_WEATHER_HTML1 = "WHtml1";
-    public static String SETTINGS_WEATHER_HTML2 = "WHtml2";
+    public static String SETTINGS_WEATHER_HTML = "WHtml1";
 
     public static SharedPreferences sharedPreferences;
     public static PackageManager packageMan;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static int homeAppNum = 10;
     public static int favAppNum = 20;
+
+    public static final String lineSeparator = "#";
 
     public static ArrayList<ResolveInfo> allApplicationsList = new ArrayList<>();
     public static List<String> packName = new ArrayList<>();
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean startedWidgetAct = false;
     public boolean startedSettingsAct = false;
     public boolean startedFavAct = false;
+    public boolean startedHelp = false;
     private boolean dateReady = false;
     private boolean firstPermissionRequest = true;
     public String backgroundImageBackup = "";
@@ -159,28 +164,13 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.applistButton);
         imageView.setOnLongClickListener(v -> {
-            Log.d(DEBUG_TAG, "Action long tap: open settings");
+            //Log.d(DEBUG_TAG, "Action long tap: open settings");
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         });
 
-        // verzió
-        String val = sharedPreferences.getString(SETTINGS_VERSION_TAG, "");
-        if (val.isEmpty()) {
-            var settings = sharedPreferences.edit();
-            settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-            settings.apply();
-            newInstall();
-            systemMessage(getString(R.string.new_install));
-        } else {
-            if (!val.equals(TXT_VERSION)) {
-                var settings = sharedPreferences.edit();
-                settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-                settings.apply();
-                updateInstall();
-                systemMessage(getString(R.string.update_install));
-            }
-        }
+        // verzió ellenőrzés
+        versionCheck();
 
         timeInScreen();
         generateAppList();
@@ -193,14 +183,14 @@ public class MainActivity extends AppCompatActivity {
             private final GestureDetector gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(@NonNull MotionEvent event) {
-                    Log.d(DEBUG_TAG, "Action double tap: lock");
+                    //Log.d(DEBUG_TAG, "Action double tap: lock");
                     lockApp();
                     return super.onDoubleTap(event);
                 }
 
                 @Override
                 public void onLongPress(@NonNull MotionEvent event) {
-                    Log.d(DEBUG_TAG, "Action long tap: setting");
+                    //Log.d(DEBUG_TAG, "Action long tap: setting");
                     openSettingsActivity();
                     super.onLongPress(event);
                 }
@@ -214,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
                     var y1 = event.getY();
                     var y2 = event2.getY();
                     // függőleges
-                    if ((Math.abs(y2 - y1) > SWIPE_MIN_DISTANCE) && (Math.abs(x2 - x1) < SWIPE_TRESHOLD)){
+                    if ((Math.abs(y2 - y1) > SWIPE_MIN_DISTANCE) && (Math.abs(x2 - x1) < SWIPE_TRESHOLD)) {
                         // fel vagy le
                         if (y2 < y1) {
                             // fel
@@ -237,15 +227,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {
                             // balra
-                            Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            List<ResolveInfo> packm = getPackageManager().queryIntentActivities(intent, 0);
-                            ResolveInfo packmres = packm.get(0);
-                            String appp = packmres.activityInfo.packageName;
-                            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-                            if (launchIntent != null) {
-                                startActivity(launchIntent);
-                            }
+                            //openAndroidSystemSettings();
+                            openGoogleDiscovery();
                         }
                     }
                     return super.onScroll(event, event2, distanceX, distanceY);
@@ -267,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
             @SuppressLint("ClickableViewAccessibility")
             @Override
-            public boolean onTouch (View v, MotionEvent event){
+            public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 return true;
             }
@@ -281,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
         screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         backgroundSavedImageSet();
     }
-
 
 
     //
@@ -306,9 +288,10 @@ public class MainActivity extends AppCompatActivity {
         startedWidgetAct = false;
         startedSettingsAct = false;
         startedFavAct = false;
+        startedHelp = false;
         dateReady = false;
 
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -318,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -368,8 +351,8 @@ public class MainActivity extends AppCompatActivity {
     //
     // háttérkép beállítása
     //
-    public void backgroundImageSet(){
-        if  (backgroundImage.isEmpty()) {
+    public void backgroundImageSet() {
+        if (backgroundImage.isEmpty()) {
             // nincs megadott háttér fájl
             backgroundSavedImageSet();
         } else {
@@ -404,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                             if (iWidth > iHeight) {
                                 // fekvó
                                 int iw = Math.round((iHeight / screenRatio));
-                                ch = Math.round((float)((iWidth - iw) / 2));
+                                ch = Math.round((float) ((iWidth - iw) / 2));
                                 cutStartW = ch;
                                 cutEndW = iw;
                                 cutStartH = 0;
@@ -413,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
                                 // álló
                                 int iw = Math.round((iHeight / screenRatio));
                                 if (iw < iWidth) {
-                                    ch = Math.round((float)((iWidth - iw) / 2));
+                                    ch = Math.round((float) ((iWidth - iw) / 2));
                                     cutStartW = ch;
                                     cutEndW = iw;
                                     cutStartH = 0;
@@ -463,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: gombok eredeti képeinek mentése
     //
-    public void saveButtonImages(){
+    public void saveButtonImages() {
         ImageView ivone;
         ivone = findViewById(R.id.dialButton);
         defaultIcons.add(ivone.getDrawable());
@@ -481,12 +464,12 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: beállítások betöltése
     //
-    public void getSettings(){
+    public void getSettings() {
         homeAppName.clear();
         String tag;
         String val;
         String appName;
-        for (var i=0; i<homeAppNum; i++) {
+        for (var i = 0; i < homeAppNum; i++) {
             tag = SETTINGS_APP_TAG + i;
             val = sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
@@ -535,7 +518,7 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: alapértelmezett gombok beállítása
     //
-    public void setHomaApp(){
+    public void setHomaApp() {
         final ArrayList<String> appHList1 = new ArrayList<>();
         final ArrayList<String> appHList2 = new ArrayList<>();
         final ListView homeTable1 = findViewById(R.id.homeAppList1);
@@ -565,12 +548,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize +defaultPlusFontSize);
+                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
                     tvt.setCompoundDrawablePadding(30);
-                    tvt.setPadding(10,10,10,10);
+                    tvt.setPadding(10, 10, 10, 10);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
                     tvt.setMaxLines(1);
                 }
@@ -607,7 +590,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     tvt.setText(appN);
                     tvt.setCompoundDrawablePadding(30);
-                    tvt.setPadding(10,10,10,10);
+                    tvt.setPadding(10, 10, 10, 10);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
                     tvt.setMaxLines(1);
                 }
@@ -617,14 +600,14 @@ public class MainActivity extends AppCompatActivity {
 
         int anum = Math.min(homeAppName.size(), homeAppNum);
         int halfApp = anum / 2;
-        for (var i=0; i < halfApp; i++){
+        for (var i = 0; i < halfApp; i++) {
             if (homeAppName.size() > i) {
                 if (!homeAppName.get(i).isEmpty()) {
                     appHList1.add(homeAppName.get(i));
                 }
             }
         }
-        for (var i=halfApp; i < homeAppNum; i++){
+        for (var i = halfApp; i < homeAppNum; i++) {
             if (homeAppName.size() > i) {
                 if (!homeAppName.get(i).isEmpty()) {
                     appHList2.add(homeAppName.get(i));
@@ -646,9 +629,11 @@ public class MainActivity extends AppCompatActivity {
                 String pName = app.activityInfo.packageName;
                 Log.d(DEBUG_TAG, appName);
                 if (appName.equals(selectedP)) {
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                    if (launchIntent != null) {
+                    try {
+                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
                         startActivity(launchIntent);
+                    } catch (Exception e) {
+                        systemMessage(getString(R.string.error_startapp));
                     }
                 }
             }
@@ -662,9 +647,11 @@ public class MainActivity extends AppCompatActivity {
                 String appName = app.loadLabel(pmx).toString();
                 String pName = app.activityInfo.packageName;
                 if (appName.equals(selectedP)) {
-                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                    if (launchIntent != null) {
+                    try {
+                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
                         startActivity(launchIntent);
+                    } catch (Exception e) {
+                        systemMessage(getString(R.string.error_startapp));
                     }
                 }
             }
@@ -762,27 +749,17 @@ public class MainActivity extends AppCompatActivity {
             appp = MainActivity.packName.get(3);
             msg = "Button start: camera";
         }
-        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-        if (launchIntent != null) {
-            startActivity(launchIntent);
-            Log.d(DEBUG_TAG, msg);
+        if (view.getId() == R.id.applistButton) {
+            openAppListActivity();
+            msg = "Button start: applist";
         }
-    }
-
-
-    //
-    //  Fő nézet: keresés
-    //
-    public void startSearch(View view) {
-        Intent sIn = new Intent(Intent.ACTION_ASSIST, null);
-        sIn.addCategory(Intent.CATEGORY_DEFAULT);
-        List<ResolveInfo> sDL = getPackageManager().queryIntentActivities(sIn, 0);
-        ResolveInfo sD = sDL.get(0);
-        String sP = sD.activityInfo.packageName;
-        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(sP);
-        if (launchIntent != null) {
-            startActivity(launchIntent);
-            Log.d(DEBUG_TAG, "Button start: search" + sP);
+        if (!appp.isEmpty()) {
+            try {
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
+                startActivity(launchIntent);
+            } catch (Exception e) {
+                systemMessage(getString(R.string.error_startapp));
+            }
         }
     }
 
@@ -792,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
     //
     public static void generateAppList() {
         // másodperc
-        long currentTime = System.currentTimeMillis()/1000;
+        long currentTime = System.currentTimeMillis() / 1000;
         // 5 perc
         if ((currentTime - packageUpdateTime) > 300) {
             packageUpdateTime = currentTime;
@@ -813,7 +790,7 @@ public class MainActivity extends AppCompatActivity {
         // óra
         final TextView textView = findViewById(R.id.digitalClock);
         final TextView textDateView = findViewById(R.id.digitalDate);
-        final Handler handler = new Handler (Looper.getMainLooper());
+        final Handler handler = new Handler(Looper.getMainLooper());
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -837,10 +814,39 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
+    //  Fő nézet: keresés
+    //
+    public void startSearch(View view) {
+        try {
+            Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+            searchintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(searchintent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+        //Log.d(DEBUG_TAG, "Button start: search");
+    }
+
+
+    //
+    //  Fő nézet: google discovery
+    //
+    public void openGoogleDiscovery() {
+        try {
+            Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+            startActivity(intent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+        //Log.d(DEBUG_TAG, "Button start: search");
+    }
+
+
+    //
     //  Fő nézet: app lista nézet indítása
     //
-    public void openAppListActivity(){
-        Log.d(DEBUG_TAG,"Action tap: openapplist");
+    public void openAppListActivity() {
+        //Log.d(DEBUG_TAG,"Action swipe up: openapplist");
         startedAppAct = true;
         startActivity(new Intent(MainActivity.this, AppListActivity.class));
     }
@@ -849,11 +855,13 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: app lista nézet indítása gombról
     //
-    public void openAppListButton(View view){
-        Log.d(DEBUG_TAG,"Action tap button: openapplist");
-        startedAppAct = true;
-
-        startActivity(new Intent(MainActivity.this, AppListActivity.class));
+    public void openAppListButton(View view) {
+        //Log.d(DEBUG_TAG,"Action tap button: openapplist");
+        try {
+            startActivity(new Intent(MainActivity.this, AppListActivity.class));
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
     }
 
 
@@ -861,7 +869,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: beállítás nézet indítása
     //
     public void openSettingsActivity() {
-        Log.d(DEBUG_TAG,"Action long tap: open settings");
+        //Log.d(DEBUG_TAG,"Action long tap: open settings");
         startedSettingsAct = true;
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     }
@@ -871,7 +879,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: kedvensek nézet indítása
     //
     public void openFavActivity() {
-        Log.d(DEBUG_TAG,"Action long tap: open fav avt");
+        //Log.d(DEBUG_TAG,"Action swipe down: open fav avt");
         startedFavAct = true;
         startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
 
@@ -882,7 +890,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: widget nézet indítása
     //
     public void openWidgetActivity() {
-        Log.d(DEBUG_TAG,"Action long tap: open widgets");
+        //Log.d(DEBUG_TAG,"Action swipe right: open widgets");
         startedWidgetAct = true;
         startActivity(new Intent(MainActivity.this, WidgetActivity.class));
 
@@ -892,17 +900,62 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: óra app indítása
     //
-    public void openClock(View view){
-        Intent mClockIntent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
-        mClockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mClockIntent);
+    public void openClock(View view) {
+        try {
+            Intent mClockIntent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
+            mClockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(mClockIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
+    //  Fő nézet: leírás
+    //
+    public void openHelp(View view) {
+        startActivity(new Intent(MainActivity.this, HelpActivity.class));
+    }
+
+
+
+    //
+    // Rendszer beállítások indítása
+    //
+    public void openAndroidSystemSettings() {
+        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        List<ResolveInfo> packm = getPackageManager().queryIntentActivities(intent, 0);
+        ResolveInfo packmres = packm.get(0);
+        String appp = packmres.activityInfo.packageName;
+        try {
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
+    // Rendszer beállítások indítása
+    //
+    public void openAndroidSystemSettingsButton(View v) {
+        try {
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            startActivity(intent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
     }
 
 
     //
     //  Fő nézet: eszköz zárolása
     //
-    public void lockApp(){
+    public void lockApp() {
         DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         try {
             devicePolicyManager.lockNow();
@@ -917,20 +970,76 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: admin
     //
     public void adminService() {
-        startActivity(new Intent().setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings")));
+        try {
+            startActivity(new Intent().setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings")));
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
+    // verzió ellenőrzése
+    //
+    public void versionCheck() {
+        //newInstall();
+        String val = sharedPreferences.getString(SETTINGS_VERSION_TAG, "");
+        if (val.isEmpty()) {
+            var settings = sharedPreferences.edit();
+            settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
+            settings.apply();
+            newInstall();
+            systemMessage(getString(R.string.new_install));
+        } else {
+            if (!val.equals(TXT_VERSION)) {
+                var settings = sharedPreferences.edit();
+                settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
+                settings.apply();
+                updateInstall();
+                systemMessage(getString(R.string.update_install));
+            }
+        }
     }
 
 
     //
     // Első indítás
     //
-    public void newInstall() {}
+    public void newInstall() {
+        //
+        // első indítás: alap beállítások
+        //
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String msg = getString(R.string.news_firstrun);
+        msg = msg.replaceAll(lineSeparator, "\n");
+        builder.setTitle(getString(R.string.news_firstrun_title))
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.button_next), (dialog, id) ->
+                        startActivity(new Intent(MainActivity.this, HelpActivity.class)));
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
 
     //
     // Frissítés utáni első indítás
     //
-    public void updateInstall() {}
+    public void updateInstall() {
+        //
+        // esetleges beállítások és egyebek módosítása az új verzióhoz
+        //
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String msg = getString(R.string.news_update);
+        msg = msg.replaceAll(lineSeparator, "\n");
+        builder.setTitle(getString(R.string.news_update_title))
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.button_next), (dialog, id) -> {
+                    //startActivity(new Intent(MainActivity.this, HelpActivity.class));
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 
     //
