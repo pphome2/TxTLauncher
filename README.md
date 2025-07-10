@@ -1,5 +1,6 @@
-# TxTLauncher
-Android launcher - nekem
+# TxTLauncher - Android launcher
+
+Indító app - nekem
 
 Amire nekem szükségem van.
 (HUN/ENG)
