@@ -3,6 +3,7 @@ Android launcher - nekem
 
 Amire nekem szükségem van.
 
+<p align=center>
 ![Screenshot 1](./img/screen1.png)
 
 
@@ -13,4 +14,6 @@ Amire nekem szükségem van.
 
 
 ![Screenshot 4](./img/screen4.png)
+
+</p>
 
