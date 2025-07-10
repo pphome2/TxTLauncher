@@ -1,7 +1,6 @@
 package com.wswdteam.txtlauncher;
 
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
-import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_APP_NAME;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_VERSION;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_WEB_PAGE;
@@ -11,7 +10,6 @@ import static com.wswdteam.txtlauncher.MainActivity.lineSeparator;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -77,7 +75,7 @@ public class HelpActivity extends AppCompatActivity {
         help = findViewById(R.id.helpText4);
         help.setText(getString(R.string.help_text_4).replaceAll(lineSeparator, "\n"));
 
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -87,7 +85,7 @@ public class HelpActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.favorites.FavoritesFragment">
+
+        <LinearLayout
+            android:id="@+id/FavAppFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="96dp"
+            android:baselineAligned="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <ListView
+                    android:id="@+id/favAppList1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|clip_horizontal|start|fill_horizontal"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:ellipsize="end"
+                    android:layoutDirection="locale"
+                    android:maxLines="1" />
+
+                <ListView
+                    android:id="@+id/favAppList2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|clip_horizontal|fill_horizontal|end"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:ellipsize="end"
+                    android:maxLines="1">
+
+                </ListView>
+        </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

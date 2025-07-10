@@ -1,6 +1,5 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
@@ -9,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +76,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             }
         }
         favListSelect();
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -100,7 +98,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
         settings.apply();
 
         super.onStop();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -133,7 +131,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                     tvt.setCompoundDrawablePadding(30);
                     tvt.setPadding(10,10,10,10);
                     if (selApp.contains(appN)) {
-                        tvt.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary));
+                        tvt.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary_variant));
                     } else {
                         tvt.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_on_background));
                     }
@@ -165,10 +163,10 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             if (!del) {
                 String iname = parent.getItemAtPosition(position).toString();
                 selApp.add(iname);
-                view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary));
+                view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary_variant));
             }
             String selectedP = (String) (appTable.getItemAtPosition(position));
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
         });
     }
 

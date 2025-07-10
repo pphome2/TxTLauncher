@@ -1,15 +1,12 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -71,7 +68,7 @@ public class AppListActivity extends AppCompatActivity {
         SearchView sv = findViewById(R.id.allAppListSearch);
         sv.setQuery("", false);
         sv.setIconified(true);
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -81,7 +78,7 @@ public class AppListActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -164,9 +161,9 @@ public class AppListActivity extends AppCompatActivity {
         appPackListBackup.addAll(appPackList);
 
         appTable.setOnItemClickListener((parent, view, position, id) -> {
-            view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_primary));
+            //view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_primary));
             String selectedP= (String) (appTable.getItemAtPosition(position));
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
             for (int i=0; i<appList.size(); i++) {
                 String appp = appList.get(i);
                 if (Objects.equals(appp, selectedP)) {
@@ -180,7 +177,7 @@ public class AppListActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
-                    Log.e(DEBUG_TAG, R.string.starting_other_app + " " + appp);
+                    //Log.d(DEBUG_TAG, R.string.starting_other_app + " " + appp);
                 }
             }
         });

@@ -1,6 +1,5 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
@@ -16,7 +15,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +87,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     if (appName.equals(val)) {
                         favAppName.add(appName);
                     }
-                    //Log.e(DEBUG_TAG, val);
+                    //Log.d(DEBUG_TAG, val);
                 }
             }
         }
@@ -101,7 +99,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
         setFavApp();
 
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -111,7 +109,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -225,7 +223,7 @@ public class FavoritesActivity extends AppCompatActivity {
             for (ResolveInfo app : allApplicationsList) {
                 String appName = app.loadLabel(MainActivity.packageMan).toString();
                 String pName = app.activityInfo.packageName;
-                Log.d(DEBUG_TAG, appName);
+                //Log.d(DEBUG_TAG, appName);
                 if (appName.equals(selectedP)) {
                     try {
                         Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
@@ -238,7 +236,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
         });
         favTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (favTable2.getItemAtPosition(position));
@@ -259,7 +257,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
         });
     }
 

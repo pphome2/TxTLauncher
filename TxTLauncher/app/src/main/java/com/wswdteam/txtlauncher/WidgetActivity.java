@@ -1,6 +1,5 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.DEBUG_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_CITY;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_HTML;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -142,7 +140,7 @@ public class WidgetActivity extends AppCompatActivity {
                 WebSettings webSettings = wv2.getSettings();
                 webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
                 webSettings.setJavaScriptEnabled(true);
-                Log.e(DEBUG_TAG, qu);
+                //Log.d(DEBUG_TAG, qu);
             }
             return false;
         });
@@ -177,7 +175,7 @@ public class WidgetActivity extends AppCompatActivity {
         firstLoadAI = true;
         firstLoadWv = true;
 
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -194,7 +192,7 @@ public class WidgetActivity extends AppCompatActivity {
         String text = tv.getText().toString();
         settings.putString(SETTINGS_NOTE, text);
         settings.apply();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 

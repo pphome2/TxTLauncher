@@ -25,7 +25,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -147,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
-        if (isDarkMode) {
-            Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.dark_mode));
+        //if (isDarkMode) {
+            //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.dark_mode));
             //mview.setBackgroundColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_background));
-        } else {
-            Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.light_mode));
+        //} else {
+            //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.light_mode));
             //mview.setBackgroundColor(getResources().getColor(com.google.android.material.R.color.design_default_color_background));
-        }
+        //}
 
         AppContext = this.getApplicationContext();
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
@@ -291,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
         startedHelp = false;
         dateReady = false;
 
-        Log.e(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -301,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(DEBUG_TAG, getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
+        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -410,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             Bitmap newBitmap = Bitmap.createBitmap(bitmap, cutStartW, cutStartH, cutEndW, cutEndH);
-                            //Log.e(DEBUG_TAG, screenWidth+" "+screenHeight+" "+screenRatio+" "+iWidth+" "+iHeight+" "+cutStartW+" "+cutEndW+" "+xWidth+" "+xHeight);
+                            //Log.d(DEBUG_TAG, screenWidth+" "+screenHeight+" "+screenRatio+" "+iWidth+" "+iHeight+" "+cutStartW+" "+cutEndW+" "+xWidth+" "+xHeight);
                             savedBackgroundImage = newBitmap;
                             drawable = new BitmapDrawable(getResources(), newBitmap);
                             mv.setBackground(drawable);
@@ -627,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
             for (ResolveInfo app : MainActivity.allApplicationsList) {
                 String appName = app.loadLabel(pmx).toString();
                 String pName = app.activityInfo.packageName;
-                Log.d(DEBUG_TAG, appName);
+                //Log.d(DEBUG_TAG, appName);
                 if (appName.equals(selectedP)) {
                     try {
                         Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
@@ -637,7 +636,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
         });
         homeTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (homeTable2.getItemAtPosition(position));
@@ -655,7 +654,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.e(DEBUG_TAG, selectedP);
+            //Log.d(DEBUG_TAG, selectedP);
         });
     }
 
@@ -731,27 +730,27 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: gombok lenyomása, app start
     //
     public void startButtonApp(View view) {
-        String msg = "";
+        //String msg = "";
         var appp = "";
         if (view.getId() == R.id.dialButton) {
             appp = MainActivity.packName.get(0);
-            msg = "Button start: dial";
+            //msg = "Button start: dial";
         }
         if (view.getId() == R.id.mailButton) {
             appp = MainActivity.packName.get(1);
-            msg = "Button start: e-mail";
+            //msg = "Button start: e-mail";
         }
         if (view.getId() == R.id.browserButton) {
             appp = MainActivity.packName.get(2);
-            msg = "Button start: browser";
+            //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {
             appp = MainActivity.packName.get(3);
-            msg = "Button start: camera";
+            //msg = "Button start: camera";
         }
         if (view.getId() == R.id.applistButton) {
             openAppListActivity();
-            msg = "Button start: applist";
+            //msg = "Button start: applist";
         }
         if (!appp.isEmpty()) {
             try {
