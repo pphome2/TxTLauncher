@@ -5,7 +5,7 @@ Amire nekem szükségem van.
 (HUN/ENG)
 
 <p align=center>
-  <kbd><img width=50% src="./img/screen-hu-1.png"></kbd>
+  <kbd width=50%><img width=50% src="./img/screen-hu-1.png"></kbd>
   <br /><br />
   <kbd><img width=50% src="./img/screen-hu-2.png"></kbd>
   <br /><br />
