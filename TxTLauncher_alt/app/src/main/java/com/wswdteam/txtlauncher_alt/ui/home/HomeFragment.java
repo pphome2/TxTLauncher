@@ -127,16 +127,13 @@ public class HomeFragment extends Fragment {
         ImageView hbut = view.findViewById(R.id.helpButton);
         hbut.setOnClickListener(this::openHelp);
 
-        ImageView sbut = view.findViewById(R.id.searchButton);
-        sbut.setOnClickListener(this::startSearch);
-
         ImageView telbut = view.findViewById(R.id.dialButton);
         telbut.setOnClickListener(this::startButtonApp0);
 
         ImageView mailbut = view.findViewById(R.id.mailButton);
         mailbut.setOnClickListener(this::startButtonApp1);
 
-        ImageView listbut = view.findViewById(R.id.applistButton);
+        ImageView listbut = view.findViewById(R.id.searchButton);
         listbut.setOnClickListener(this::startButtonApp2);
 
         ImageView brobut = view.findViewById(R.id.browserButton);
@@ -353,7 +350,7 @@ public class HomeFragment extends Fragment {
         defaultIcons.add(ivone.getDrawable());
         ivone = getView().findViewById(R.id.mailButton);
         defaultIcons.add(ivone.getDrawable());
-        ivone = getView().findViewById(R.id.applistButton);
+        ivone = getView().findViewById(R.id.searchButton);
         defaultIcons.add(ivone.getDrawable());
         ivone = getView().findViewById(R.id.browserButton);
         defaultIcons.add(ivone.getDrawable());
@@ -594,7 +591,7 @@ public class HomeFragment extends Fragment {
         }
         MainActivity.packName.add(packI);
         // app list
-        ImageView appF = getView().findViewById(R.id.applistButton);
+        ImageView appF = getView().findViewById(R.id.searchButton);
         appF.setImageDrawable(defaultIcons.get(2));
         // browser
         Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
@@ -656,9 +653,9 @@ public class HomeFragment extends Fragment {
     //
     public void startButtonApp2(View view) {
         try {
-            Intent dialIn = new Intent(Intent.ACTION_DIAL, null);
-            dialIn.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(dialIn);
+            Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+            searchintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(searchintent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }

@@ -43,10 +43,10 @@
     <string name="error_bitmap">Hiba a háttérkép beállításakor</string>
     <string name="background_file_not_found">Háttérkép nem található</string>
     <string name="button_close_help">Vissza</string>
-    <string name="help_text_1">Leírás 1 # 1</string>
-    <string name="help_text_2">Leírás 2 # 2</string>
-    <string name="help_text_3">Leírás 3 # 3</string>
-    <string name="help_text_4">Leírás 4 # 4</string>
+    <string name="help_text_1">Kezdőképernyő: # - felfelé húzás: app lista # - lefelé húzás: kedvencek # jobbra vagy balra húzás: felfedezés # - két koppintás: zárolás</string>
+    <string name="help_text_2">Beállítások: # - app hozzáadása a kezdőlépernyőhöz # - app hozzáadása a kedvencek közé # - ikonok rajzolása a rendszeralkalmazásokhoz # - ikonok a kezdpképernyős alkalmazásoknál</string>
+    <string name="help_text_3">Privát MI URL: # - MI-t használó weboldal URL-je # - internetes kereső szolgáltatlás URL-je # - háttérkép neve a letöltések mappájában # - időjárás URL-je, @CITY@ helyére a település neve kerül</string>
+    <string name="help_text_4">\"Magamnak készült.\"</string>
     <string name="licence">GPLv3</string>
     <string name="note_title">Jegyzet</string>
     <string name="widgat_map">Tegyél a térképre</string>
