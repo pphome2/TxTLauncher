@@ -5,13 +5,13 @@ Amire nekem szükségem van.
 (HUN/ENG)
 
 <p align=center>
-  <kbd><br /><img width=50% src="./img/screen-hu-1.png"><br /></kbd>
+  <kbd><br /><img width=50% src="./img/screen-hu-1.png"><br /><br /></kbd>
   <br /><br />
-  <kbd><br /><img width=50% src="./img/screen-hu-2.png"><br /></kbd>
+  <kbd><br /><img width=50% src="./img/screen-hu-2.png"><br /><br /></kbd>
   <br /><br />
-  <kbd><br /><img width=50% src="./img/screen-alt-hu-1.png"><br /></kbd>
+  <kbd><br /><img width=50% src="./img/screen-alt-hu-1.png"><br /><br /></kbd>
   <br /><br />
-  <kbd><br /><img width=50% src="./img/screen-alt-hu-2.png"><br /></kbd>
+  <kbd><br /><img width=50% src="./img/screen-alt-hu-2.png"><br /><br /></kbd>
   <br /><br />
   <kbd><img src="./img/screen1.png"></kbd>
   <br /><br />
