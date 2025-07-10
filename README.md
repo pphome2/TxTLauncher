@@ -5,7 +5,7 @@ Amire nekem szükségem van.
 (HUN/ENG)
 
 <br /><br />
->TxTLauncher
+#TxTLauncher
 <br /><br />
 
 <p align=center>
@@ -16,7 +16,7 @@ Amire nekem szükségem van.
 </p>
 
 <br /><br />
->TxTLauncher-alt
+#TxTLauncher_alt
 <br /><br />
 
 <p align=center>
@@ -28,7 +28,7 @@ Amire nekem szükségem van.
 
 
 <br /><br />
->TxTLauncher
+#TxTLauncher
 <br /><br />
 
 <p align=center>
