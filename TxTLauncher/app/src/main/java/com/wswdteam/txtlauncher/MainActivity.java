@@ -22,9 +22,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean startedHelp = false;
     private boolean dateReady = false;
     private boolean firstPermissionRequest = true;
-    public String backgroundImageBackup = "";
+    public static String backgroundImageBackup = "";
     public Bitmap savedBackgroundImage = null;
     public int screenHeight;
     public int screenWidth;
@@ -126,11 +126,14 @@ public class MainActivity extends AppCompatActivity {
     public static float defaultFontSize = 0;
     public static float defaultPlusFontSize = 2;
     public static float defaultPlusFontSizeTitle = 1;
+    public static int defaultBackGroundColor = 0;
+    public static int defaultSelectColor = 0;
 
 
     //
     //  Fő nézet létrehozása
     //
+    @SuppressLint("PrivateResource")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,13 +149,17 @@ public class MainActivity extends AppCompatActivity {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
-        //if (isDarkMode) {
+        if (isDarkMode) {
             //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.dark_mode));
-            //mview.setBackgroundColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_background));
-        //} else {
+            findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_dark_default_color_background));
+            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
+            defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
+        } else {
             //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.light_mode));
-            //mview.setBackgroundColor(getResources().getColor(com.google.android.material.R.color.design_default_color_background));
-        //}
+            findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
+            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
+            defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
+        }
 
         AppContext = this.getApplicationContext();
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
@@ -164,7 +171,14 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.applistButton);
         imageView.setOnLongClickListener(v -> {
             //Log.d(DEBUG_TAG, "Action long tap: open settings");
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+            return true;
+        });
+
+        ImageView imageView2 = findViewById(R.id.settingsButton);
+        imageView2.setOnLongClickListener(v -> {
+            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            openAndroidSystemSettingsButton(v);
             return true;
         });
 
@@ -189,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onLongPress(@NonNull MotionEvent event) {
-                    //Log.d(DEBUG_TAG, "Action long tap: setting");
-                    openSettingsActivity();
+                    //Log.d(DEBUG_TAG, "Action long tap: favorite");
+                    openFavActivity();
                     super.onLongPress(event);
                 }
 
@@ -290,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         startedHelp = false;
         dateReady = false;
 
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
+        Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -383,9 +397,9 @@ public class MainActivity extends AppCompatActivity {
                             int cutEndH;
                             int ch;
                             // fekvő vagy álló
+                            int iw = Math.round((iHeight / screenRatio));
                             if (iWidth > iHeight) {
                                 // fekvó
-                                int iw = Math.round((iHeight / screenRatio));
                                 ch = Math.round((float) ((iWidth - iw) / 2));
                                 cutStartW = ch;
                                 cutEndW = iw;
@@ -393,7 +407,6 @@ public class MainActivity extends AppCompatActivity {
                                 cutEndH = iHeight;
                             } else {
                                 // álló
-                                int iw = Math.round((iHeight / screenRatio));
                                 if (iw < iWidth) {
                                     ch = Math.round((float) ((iWidth - iw) / 2));
                                     cutStartW = ch;
@@ -522,10 +535,10 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<String> appHList2 = new ArrayList<>();
         final ListView homeTable1 = findViewById(R.id.homeAppList1);
         final ListView homeTable2 = findViewById(R.id.homeAppList2);
-        final var adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appHList1) {
+        final var adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appHList1) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
@@ -559,10 +572,10 @@ public class MainActivity extends AppCompatActivity {
                 return row;
             }
         };
-        final var adapter2 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appHList2) {
+        final var adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appHList2) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
@@ -730,8 +743,22 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: gombok lenyomása, app start
     //
     public void startButtonApp(View view) {
-        //String msg = "";
-        var appp = "";
+        String appp = getString(view);
+        if (view.getId() == R.id.applistButton) {
+            openAppListActivity();
+        }
+        if (!appp.isEmpty()) {
+            try {
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
+                startActivity(launchIntent);
+            } catch (Exception e) {
+                systemMessage(getString(R.string.error_startapp));
+            }
+        }
+    }
+
+    private static String getString(View view) {
+        String appp = "";
         if (view.getId() == R.id.dialButton) {
             appp = MainActivity.packName.get(0);
             //msg = "Button start: dial";
@@ -748,18 +775,7 @@ public class MainActivity extends AppCompatActivity {
             appp = MainActivity.packName.get(3);
             //msg = "Button start: camera";
         }
-        if (view.getId() == R.id.applistButton) {
-            openAppListActivity();
-            //msg = "Button start: applist";
-        }
-        if (!appp.isEmpty()) {
-            try {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-                startActivity(launchIntent);
-            } catch (Exception e) {
-                systemMessage(getString(R.string.error_startapp));
-            }
-        }
+        return appp;
     }
 
 
@@ -798,9 +814,6 @@ public class MainActivity extends AppCompatActivity {
                 String currentTime = simpleTimeFormat.format(calendar.getTime());
                 textView.setText(currentTime);
                 if (!dateReady) {
-                    //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.", Locale.getDefault());
-                    //String currentDate = simpleDateFormat.format(calendar.getTime());
                     String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
                     textDateView.setText(currentDate);
                     dateReady = true;
@@ -818,7 +831,7 @@ public class MainActivity extends AppCompatActivity {
     public void startSearch(View view) {
         try {
             Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
-            searchintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            searchintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(searchintent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -870,6 +883,7 @@ public class MainActivity extends AppCompatActivity {
     public void openSettingsActivity() {
         //Log.d(DEBUG_TAG,"Action long tap: open settings");
         startedSettingsAct = true;
+        MainActivity.backgroundImageBackup = MainActivity.backgroundImage;
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     }
 
@@ -922,18 +936,8 @@ public class MainActivity extends AppCompatActivity {
     //
     // Rendszer beállítások indítása
     //
-    public void openAndroidSystemSettings() {
-        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        List<ResolveInfo> packm = getPackageManager().queryIntentActivities(intent, 0);
-        ResolveInfo packmres = packm.get(0);
-        String appp = packmres.activityInfo.packageName;
-        try {
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-            startActivity(launchIntent);
-        } catch (Exception e) {
-            systemMessage(getString(R.string.error_startapp));
-        }
+    public void openAndroidSystemSettings(View v) {
+        openSettingsActivity();
     }
 
 
@@ -942,8 +946,11 @@ public class MainActivity extends AppCompatActivity {
     //
     public void openAndroidSystemSettingsButton(View v) {
         try {
-            Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            // - startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+            // - Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));

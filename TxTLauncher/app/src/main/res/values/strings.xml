@@ -52,7 +52,7 @@
     <string name="help_title">Help</string>
     <string name="news_firstrun_title">First start</string>
     <string name="news_firstrun">Initializing...</string>
-    <string name="help_text_1">Usage: ## Swipe right: Tools # Swipe left: discovery # Sipe up: all app # Swipe down: favorites # Double click: lock # Long press: app settings</string>
+    <string name="help_text_1">Usage: ## Swipe right: Tools # Swipe left: discovery # Sipe up: all app # Swipe down: favorites # Double click: lock # Long press: favorite apps</string>
     <string name="help_text_2">Settings: ## - select home screen apps # - select favorites # - add icons to apps # - private AI link (tools page) # - web search link (search field add to end of link # - background image (in download folder) # - weather web link (copy city name to @CITY@) # - reset settings to default # - read app list when changed apps</string>
     <string name="help_text_3">New version download from web page.</string>
     <string name="help_text_4">Licence: GPLv3</string>

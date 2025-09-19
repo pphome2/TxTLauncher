@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -68,6 +70,22 @@ public class WidgetActivity extends AppCompatActivity {
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
         }
+
+        EditText editText = findViewById(R.id.widgetTextNote);
+        editText.setMovementMethod(new ScrollingMovementMethod());
+        editText.setOnTouchListener((v, event) -> {
+            if (editText.hasFocus()) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (event.getAction() & MotionEvent.ACTION_MASK){
+                    case MotionEvent.ACTION_SCROLL:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    case MotionEvent.ACTION_MASK:
+                        return true;
+                }
+            }
+            return false;
+        });
 
         CalendarView cv = findViewById(R.id.widgetCalendar);
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {

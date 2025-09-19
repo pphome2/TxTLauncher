@@ -110,10 +110,10 @@ public class AddAppActivity extends AppCompatActivity {
     public void appListSelect() {
         final ListView appTable = findViewById(R.id.appListHomeSelect);
         appTable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        final var adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appList) {
+        final var adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appList) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
@@ -132,9 +132,9 @@ public class AddAppActivity extends AppCompatActivity {
                     tvt.setCompoundDrawablePadding(30);
                     tvt.setPadding(10,10,10,10);
                     if (selApp.contains(appN)) {
-                        tvt.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary_variant));
+                        tvt.setBackgroundColor(MainActivity.defaultSelectColor);
                     } else {
-                        tvt.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_on_background));
+                        tvt.setBackgroundColor(MainActivity.defaultBackGroundColor);
                     }
                 }
                 return row;
@@ -153,22 +153,24 @@ public class AddAppActivity extends AppCompatActivity {
         appTable.setOnItemClickListener((parent, view, position, id) -> {
             var del = false;
             String pname;
+            String iname = parent.getItemAtPosition(position).toString();
+            int pos = 0;
             for (int en = 0; en < selApp.size(); en++) {
                 pname = selApp.get(en);
-                String iname = parent.getItemAtPosition(position).toString();
                 if (pname.equals(iname)) {
-                    selApp.remove(en);
-                    view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_on_background));
+                    pos = en;
                     del = true;
                 }
             }
-            if (!del) {
-                String iname = parent.getItemAtPosition(position).toString();
+            if (del) {
+                selApp.remove(pos);
+                view.setBackgroundColor(MainActivity.defaultBackGroundColor);
+            } else {
                 selApp.add(iname);
-                view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_secondary_variant));
+                view.setBackgroundColor(MainActivity.defaultSelectColor);
             }
-            String selectedP = (String) (appTable.getItemAtPosition(position));
-            //Log.d(DEBUG_TAG, selectedP);
+            // - String selectedP = (String) (appTable.getItemAtPosition(position));
+            // - Log.d(DEBUG_TAG, selectedP);
         });
     }
 

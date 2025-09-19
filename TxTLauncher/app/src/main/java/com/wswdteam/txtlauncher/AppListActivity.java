@@ -89,10 +89,10 @@ public class AppListActivity extends AppCompatActivity {
     public void appListView() {
         char first = '\0';
         final ListView appTable = findViewById(R.id.allAppListTable);
-        final var adapterallapp = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appList){
+        final var adapterallapp = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appList){
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull

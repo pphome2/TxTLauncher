@@ -121,10 +121,10 @@ public class FavoritesActivity extends AppCompatActivity {
         final ArrayList<String> appFList2 = new ArrayList<>();
         final ListView favTable1 = findViewById(R.id.favAppList1);
         final ListView favTable2 = findViewById(R.id.favAppList2);
-        final ArrayAdapter adapter1 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appFList1) {
+        final var adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appFList1) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
@@ -158,10 +158,10 @@ public class FavoritesActivity extends AppCompatActivity {
                 return row;
             }
         };
-        final ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appFList2) {
+        final var adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appFList2) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
