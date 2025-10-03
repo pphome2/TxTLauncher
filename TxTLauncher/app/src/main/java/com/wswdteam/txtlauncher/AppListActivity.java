@@ -1,5 +1,6 @@
 package com.wswdteam.txtlauncher;
 
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
@@ -38,6 +39,7 @@ public class AppListActivity extends AppCompatActivity {
     final ArrayList<ResolveInfo> allappListBackup = new ArrayList<>();
     final ArrayList<String> appListBackup = new ArrayList<>();
     final ArrayList<String> appPackListBackup = new ArrayList<>();
+    boolean showicons = true;
 
 
     @SuppressLint("MissingInflatedId")
@@ -52,6 +54,11 @@ public class AppListActivity extends AppCompatActivity {
             return insets;
         });
 
+        String val;
+        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        if (val.isEmpty()) {
+            showicons = false;
+        }
     }
 
 
@@ -114,13 +121,15 @@ public class AppListActivity extends AppCompatActivity {
                         } else {
                             tvt.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_primary, tid));
                             tvt.setText(appN);
-                            ResolveInfo thisApp = allappList.get(position);
-                            Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                            int ts = (int) tvt.getTextSize() + 25;
-                            appI.setBounds(0, 0, ts, ts);
-                            tvt.setCompoundDrawables(appI, null, null, null);
-                            tvt.setCompoundDrawablePadding(30);
-                            tvt.setPadding(10,10,10,10);
+                            if (showicons) {
+                                ResolveInfo thisApp = allappList.get(position);
+                                Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                                int ts = (int) tvt.getTextSize() + 25;
+                                appI.setBounds(0, 0, ts, ts);
+                                tvt.setCompoundDrawables(appI, null, null, null);
+                                tvt.setCompoundDrawablePadding(30);
+                                tvt.setPadding(10, 10, 10, 10);
+                            }
                         }
                     }
                 }

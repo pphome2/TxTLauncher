@@ -10,6 +10,7 @@ import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -88,6 +89,9 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         CalendarView cv = findViewById(R.id.widgetCalendar);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cv.setDate(calendar.getTimeInMillis(), false, true);
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             try {
                 Intent cal = new Intent(Intent.ACTION_MAIN);

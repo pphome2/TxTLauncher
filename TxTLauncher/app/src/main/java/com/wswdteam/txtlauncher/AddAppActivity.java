@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class AddAppActivity extends AppCompatActivity {
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
+    boolean showicons = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,12 @@ public class AddAppActivity extends AppCompatActivity {
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
+        }
+
+        String val;
+        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        if (val.isEmpty()) {
+            showicons = false;
         }
     }
 
@@ -124,13 +132,15 @@ public class AddAppActivity extends AppCompatActivity {
                 TextView tvt = row.findViewById(android.R.id.text1);
                 if (appN != null) {
                     tvt.setText(appN);
-                    ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
-                    Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                    int ts = (int) tvt.getTextSize() + 25;
-                    appI.setBounds(0, 0, ts, ts);
-                    tvt.setCompoundDrawables(appI, null, null, null);
-                    tvt.setCompoundDrawablePadding(30);
-                    tvt.setPadding(10,10,10,10);
+                    if (showicons) {
+                        ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
+                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                        int ts = (int) tvt.getTextSize() + 25;
+                        appI.setBounds(0, 0, ts, ts);
+                        tvt.setCompoundDrawables(appI, null, null, null);
+                        tvt.setCompoundDrawablePadding(30);
+                        tvt.setPadding(10, 10, 10, 10);
+                    }
                     if (selApp.contains(appN)) {
                         tvt.setBackgroundColor(MainActivity.defaultSelectColor);
                     } else {
