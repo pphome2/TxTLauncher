@@ -90,8 +90,9 @@ public class WidgetActivity extends AppCompatActivity {
 
         CalendarView cv = findViewById(R.id.widgetCalendar);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         cv.setDate(calendar.getTimeInMillis(), false, true);
+        cv.setFirstDayOfWeek(calendar.getFirstDayOfWeek());
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             try {
                 Intent cal = new Intent(Intent.ACTION_MAIN);

@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     public int screenWidth;
     public static long packageUpdateTime;
     public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 2;
+    public static float defaultPlusFontSize = 3;
     public static float defaultPlusFontSizeTitle = 1;
     public static int defaultBackGroundColor = 0;
     public static int defaultSelectColor = 0;

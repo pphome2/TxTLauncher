@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class AddAppActivity extends AppCompatActivity {
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
-    boolean showicons = true;
+    boolean showicons = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,8 @@ public class AddAppActivity extends AppCompatActivity {
 
         String val;
         val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (val.isEmpty()) {
-            showicons = false;
+        if (!val.isEmpty()) {
+            showicons = !val.equals("0");
         }
     }
 

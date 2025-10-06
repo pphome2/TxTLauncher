@@ -39,7 +39,7 @@ public class AppListActivity extends AppCompatActivity {
     final ArrayList<ResolveInfo> allappListBackup = new ArrayList<>();
     final ArrayList<String> appListBackup = new ArrayList<>();
     final ArrayList<String> appPackListBackup = new ArrayList<>();
-    boolean showicons = true;
+    boolean showicons = false;
 
 
     @SuppressLint("MissingInflatedId")
@@ -56,8 +56,8 @@ public class AppListActivity extends AppCompatActivity {
 
         String val;
         val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (val.isEmpty()) {
-            showicons = false;
+        if (!val.isEmpty()) {
+            showicons = !val.equals("0");
         }
     }
 
