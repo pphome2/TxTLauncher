@@ -5,6 +5,8 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 
+import static java.util.Collections.sort;
+
 import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -95,6 +97,7 @@ public class AddAppActivity extends AppCompatActivity {
     public void onStop() {
         var settings = MainActivity.sharedPreferences.edit();
         String tag;
+        sort(selApp);
         for (var i = 0; i < homeAppNum; i++) {
             tag = SETTINGS_APP_TAG + i;
             if (i < selApp.size()) {

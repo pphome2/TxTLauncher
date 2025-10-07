@@ -243,7 +243,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // Widget jegyzet címre kattintás
     //
-    public void widgetClickNote(View view) {
+    //public void widgetClickNote(View view) {
         //1try {
             //Intent keepIntent = new Intent(Intent.ACTION_VIEW);
             //keepIntent.setPackage("com.google.android.apps.keep");
@@ -252,7 +252,7 @@ public class WidgetActivity extends AppCompatActivity {
         //} catch (Exception e) {
             //systemMessage(getString(R.string.error_startapp));
         //}
-    }
+    //}
 
 
     //

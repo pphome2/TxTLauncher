@@ -196,8 +196,10 @@ public class FavoritesActivity extends AppCompatActivity {
             }
         };
 
-        int anum = Math.min(favAppName.size(), favAppNum);
-        int halfApp = anum / 2;
+        double anum = Math.min(favAppName.size(), favAppNum);
+        double an = anum / 2;
+        long halfA = Math.round(an);
+        int halfApp = (int) halfA;
         for (var i=0; i < halfApp; i++){
             if (favAppName.size() > i) {
                 if (!favAppName.get(i).isEmpty()) {
@@ -211,6 +213,9 @@ public class FavoritesActivity extends AppCompatActivity {
                     appFList2.add(favAppName.get(i));
                 }
             }
+        }
+        if ((halfApp * 2) > favAppName.size()) {
+            appFList2.add("");
         }
 
         favTable1.setAdapter(adapter1);

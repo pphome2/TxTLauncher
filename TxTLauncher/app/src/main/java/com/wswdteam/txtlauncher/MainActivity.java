@@ -1,5 +1,7 @@
 package com.wswdteam.txtlauncher;
 
+import static java.lang.Math.round;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public int screenWidth;
     public static long packageUpdateTime;
     public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 3;
+    public static float defaultPlusFontSize = 0;
     public static float defaultPlusFontSizeTitle = 1;
     public static int defaultBackGroundColor = 0;
     public static int defaultSelectColor = 0;
@@ -397,10 +399,10 @@ public class MainActivity extends AppCompatActivity {
                             int cutEndH;
                             int ch;
                             // fekvő vagy álló
-                            int iw = Math.round((iHeight / screenRatio));
+                            int iw = round((iHeight / screenRatio));
                             if (iWidth > iHeight) {
                                 // fekvó
-                                ch = Math.round((float) ((iWidth - iw) / 2));
+                                ch = round((float) ((iWidth - iw) / 2));
                                 cutStartW = ch;
                                 cutEndW = iw;
                                 cutStartH = 0;
@@ -408,17 +410,17 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 // álló
                                 if (iw < iWidth) {
-                                    ch = Math.round((float) ((iWidth - iw) / 2));
+                                    ch = round((float) ((iWidth - iw) / 2));
                                     cutStartW = ch;
                                     cutEndW = iw;
                                     cutStartH = 0;
                                     cutEndH = iHeight;
                                 } else {
-                                    ch = Math.round((iHeight - (iWidth * screenRatio)) / 2);
+                                    ch = round((iHeight - (iWidth * screenRatio)) / 2);
                                     cutStartW = 0;
                                     cutEndW = iWidth;
                                     cutStartH = iHeight + ch;
-                                    cutEndH = Math.round((iw * screenRatio));
+                                    cutEndH = round((iw * screenRatio));
                                 }
                             }
                             Bitmap newBitmap = Bitmap.createBitmap(bitmap, cutStartW, cutStartH, cutEndW, cutEndH);
@@ -610,8 +612,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        int anum = Math.min(homeAppName.size(), homeAppNum);
-        int halfApp = anum / 2;
+        double anum = Math.min(homeAppName.size(), homeAppNum);
+        double an = anum / 2;
+        long halfA = Math.round(an);
+        int halfApp = (int) halfA;
         for (var i = 0; i < halfApp; i++) {
             if (homeAppName.size() > i) {
                 if (!homeAppName.get(i).isEmpty()) {
