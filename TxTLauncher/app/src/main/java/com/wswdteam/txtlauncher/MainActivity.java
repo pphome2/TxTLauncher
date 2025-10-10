@@ -89,9 +89,6 @@ public class MainActivity extends AppCompatActivity {
     public static String SETTINGS_BACKGROUND_IMAGE = "FormattedBackgroundImage";
     public static String SETTINGS_NOTE = "AppNote";
 
-    public static String SETTINGS_CITY = "AppCity";
-    public static String SETTINGS_WEATHER_HTML = "WHtml1";
-
     public static SharedPreferences sharedPreferences;
     public static PackageManager packageMan;
 
@@ -126,10 +123,12 @@ public class MainActivity extends AppCompatActivity {
     public int screenWidth;
     public static long packageUpdateTime;
     public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 0;
+    public static float defaultPlusFontSize = 2;
     public static float defaultPlusFontSizeTitle = 1;
     public static int defaultBackGroundColor = 0;
     public static int defaultSelectColor = 0;
+    public static int defaultTextColor = 0;
+    public static int defaultLetterColor = 0;
 
 
     //
@@ -152,15 +151,17 @@ public class MainActivity extends AppCompatActivity {
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         if (isDarkMode) {
-            //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.dark_mode));
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_dark_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
+            defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_background);
             defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
+            defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
         } else {
-            //Log.d(MainActivity.DEBUG_TAG, getString(R.string.started) + " " + getString(R.string.light_mode));
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
+            defaultTextColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
             defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
+            defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
         }
 
         AppContext = this.getApplicationContext();
@@ -713,7 +714,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView appF = findViewById(R.id.applistButton);
         appF.setImageDrawable(defaultIcons.get(2));
         // browser
-        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
         broIn.addCategory(Intent.CATEGORY_DEFAULT);
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
         ResolveInfo broD = broDL.get(0);
@@ -747,21 +748,22 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: gombok lenyomása, app start
     //
     public void startButtonApp(View view) {
-        String appp = getString(view);
         if (view.getId() == R.id.applistButton) {
             openAppListActivity();
-        }
-        if (!appp.isEmpty()) {
-            try {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-                startActivity(launchIntent);
-            } catch (Exception e) {
-                systemMessage(getString(R.string.error_startapp));
+        } else {
+            String appp = getString(view);
+            if (!appp.isEmpty()) {
+                try {
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
+                    startActivity(launchIntent);
+                } catch (Exception e) {
+                    systemMessage(getString(R.string.error_startapp));
+                }
             }
         }
     }
 
-    private static String getString(View view) {
+    private String getString(View view) {
         String appp = "";
         if (view.getId() == R.id.dialButton) {
             appp = MainActivity.packName.get(0);
@@ -772,7 +774,14 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: e-mail";
         }
         if (view.getId() == R.id.browserButton) {
-            appp = MainActivity.packName.get(2);
+            //appp = MainActivity.packName.get(2);
+            try {
+                Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+                broIn.addCategory(Intent.CATEGORY_DEFAULT);
+                startActivity(broIn);
+            } catch (Exception e) {
+                systemMessage(getString(R.string.error_startapp));
+            }
             //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {

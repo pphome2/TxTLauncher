@@ -1,13 +1,14 @@
 package com.wswdteam.txtlauncher_alt.ui.allapps;
 
-import static com.wswdteam.txtlauncher_alt.MainActivity.DEBUG_TAG;
+import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher_alt.MainActivity.defaultLetterColor;
+import static com.wswdteam.txtlauncher_alt.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher_alt.MainActivity.systemMessage;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.wswdteam.txtlauncher_alt.MainActivity;
 import com.wswdteam.txtlauncher_alt.R;
 import com.wswdteam.txtlauncher_alt.databinding.FragmentAllappsBinding;
@@ -38,6 +34,7 @@ public class AllappsFragment extends Fragment {
     final ArrayList<ResolveInfo> allappList = new ArrayList<>();
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> appPackList = new ArrayList<>();
+    boolean showicons = false;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,9 +61,14 @@ public class AllappsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        MainActivity.generateAppList();
+        String val;
+        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            showicons = !val.equals("0");
+        }
         char first = '\0';
-        final ListView appTable = view.findViewById(R.id.allAppListTable);
+        final ListView appAATable = view.findViewById(R.id.allAppListTable);
         ArrayAdapter<String> adapterallapp = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1, appList){
             @NonNull
             @Override
@@ -81,19 +83,21 @@ public class AllappsFragment extends Fragment {
                         tvt.setCompoundDrawables(null, null, null, null);
                     } else {
                         if (appN.length() == 1) {
-                            //tvt.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_secondary));
+                            tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
                             tvt.setCompoundDrawables(null, null, null, null);
                         } else {
-                            //tvt.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_primary));
+                            tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
-                            ResolveInfo thisApp = allappList.get(position);
-                            Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                            int ts = (int) tvt.getTextSize() + 25;
-                            appI.setBounds(0, 0, ts, ts);
-                            tvt.setCompoundDrawables(appI, null, null, null);
-                            tvt.setCompoundDrawablePadding(30);
-                            tvt.setPadding(10, 10, 10, 10);
+                            if (showicons) {
+                                ResolveInfo thisApp = allappList.get(position);
+                                Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                                int ts = (int) tvt.getTextSize() + 25;
+                                appI.setBounds(0, 0, ts, ts);
+                                tvt.setCompoundDrawables(appI, null, null, null);
+                                tvt.setCompoundDrawablePadding(30);
+                                tvt.setPadding(10, 10, 10, 10);
+                            }
                         }
                     }
                 }
@@ -124,12 +128,12 @@ public class AllappsFragment extends Fragment {
             appPackList.add(pName);
         }
 
-        appTable.setAdapter(adapterallapp);
+        appAATable.setAdapter(adapterallapp);
         adapterallapp.notifyDataSetChanged();
 
-        appTable.setOnItemClickListener((parent, lview, position, id) -> {
+        appAATable.setOnItemClickListener((parent, lview, position, id) -> {
             //view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_primary));
-            String selectedP = (String) (appTable.getItemAtPosition(position));
+            String selectedP = (String) (appAATable.getItemAtPosition(position));
             //Log.d(DEBUG_TAG, selectedP);
             for (int i = 0; i < appList.size(); i++) {
                 String appp = appList.get(i);
@@ -139,7 +143,7 @@ public class AllappsFragment extends Fragment {
                         Intent launchIntent = MainActivity.packageMan.getLaunchIntentForPackage(appp);
                         if (launchIntent != null) {
                             startActivity(launchIntent);
-                            getActivity().findViewById(R.id.navigation_home).callOnClick();
+                            requireActivity().findViewById(R.id.navigation_home).callOnClick();
                         }
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));

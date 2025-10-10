@@ -1,6 +1,8 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
+import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
@@ -108,18 +110,17 @@ public class AppListActivity extends AppCompatActivity {
                 String appN = getItem(position);
                 View row = super.getView(position, convertView, parent);
                 TextView tvt = row.findViewById(android.R.id.text1);
-                var tid = getTheme();
                 if (appN != null) {
                     if (appN.isEmpty()) {
                         tvt.setText("");
                         tvt.setCompoundDrawables(null, null, null, null);
                     } else {
                         if (appN.length() == 1) {
-                            tvt.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_secondary, tid));
+                            tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
                             tvt.setCompoundDrawables(null, null, null, null);
                         } else {
-                            tvt.setTextColor(getResources().getColor(com.google.android.material.R.color.design_default_color_on_primary, tid));
+                            tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
                             if (showicons) {
                                 ResolveInfo thisApp = allappList.get(position);

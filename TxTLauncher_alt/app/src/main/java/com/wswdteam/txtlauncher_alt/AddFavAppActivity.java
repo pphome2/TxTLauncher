@@ -1,8 +1,13 @@
 package com.wswdteam.txtlauncher_alt;
 
 import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_FAV_APP_TAG;
+import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher_alt.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher_alt.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher_alt.MainActivity.defaultSelectColor;
 import static com.wswdteam.txtlauncher_alt.MainActivity.favAppNum;
+
+import static java.util.Collections.sort;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
@@ -28,6 +33,7 @@ public class AddFavAppActivity extends AppCompatActivity {
 
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
+    boolean showicons = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,10 @@ public class AddFavAppActivity extends AppCompatActivity {
         selApp.clear();
         String tag;
         String val;
+        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            showicons = !val.equals("0");
+        }
         for (var i=0; i<favAppNum; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
             val = MainActivity.sharedPreferences.getString(tag, "");
@@ -81,6 +91,7 @@ public class AddFavAppActivity extends AppCompatActivity {
     public void onStop() {
         var settings = MainActivity.sharedPreferences.edit();
         String tag;
+        sort(selApp);
         for (var i = 0; i < favAppNum; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
             if (i < selApp.size()) {
@@ -100,12 +111,12 @@ public class AddFavAppActivity extends AppCompatActivity {
 //
     @SuppressLint("QueryPermissionsNeeded")
     public void favListSelect() {
-        final ListView appTable = findViewById(R.id.appListFavSelect);
-        appTable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, appList) {
+        final ListView appFTable = findViewById(R.id.appListFavSelect);
+        appFTable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        final var adapterfa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appList) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return super.getItem(position);
             }
 
             @NonNull
@@ -116,18 +127,21 @@ public class AddFavAppActivity extends AppCompatActivity {
                 TextView tvt = row.findViewById(android.R.id.text1);
                 if (appN != null) {
                     tvt.setText(appN);
-                    ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
-                    Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                    int ts = (int) tvt.getTextSize() + 25;
-                    appI.setBounds(0, 0, ts, ts);
-                    tvt.setCompoundDrawables(appI, null, null, null);
-                    tvt.setCompoundDrawablePadding(30);
-                    tvt.setPadding(10,10,10,10);
-                    if (selApp.contains(appN)) {
-                        tvt.setBackgroundColor(getColor(R.color.ic_launcher_background));
-                    } else {
-                        tvt.setBackgroundColor(getColor(R.color.black));
+                    if (showicons) {
+                        ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
+                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                        int ts = (int) tvt.getTextSize() + 25;
+                        appI.setBounds(0, 0, ts, ts);
+                        tvt.setCompoundDrawables(appI, null, null, null);
+                        tvt.setCompoundDrawablePadding(30);
+                        tvt.setPadding(10, 10, 10, 10);
                     }
+                    if (selApp.contains(appN)) {
+                        tvt.setBackgroundColor(MainActivity.defaultSelectColor);
+                    } else {
+                        tvt.setBackgroundColor(MainActivity.defaultBackGroundColor);
+                    }
+
                 }
                 return row;
             }
@@ -139,24 +153,27 @@ public class AddFavAppActivity extends AppCompatActivity {
             appList.add(appName);
         }
 
-        appTable.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        appFTable.setAdapter(adapterfa);
+        adapterfa.notifyDataSetChanged();
 
-        appTable.setOnItemClickListener((parent, view, position, id) -> {
+        appFTable.setOnItemClickListener((adapterfav, view, position, id) -> {
             var del = false;
+            int delitem = 0;
             for (int en = 0; en < selApp.size(); en++) {
                 String pname = selApp.get(en);
-                String iname = parent.getItemAtPosition(position).toString();
+                String iname = adapterfav.getItemAtPosition(position).toString();
                 if (pname.equals(iname)) {
-                    selApp.remove(en);
-                    view.setBackgroundColor(getColor(R.color.black));
+                    delitem = en;
                     del = true;
                 }
             }
             if (!del) {
-                String iname = parent.getItemAtPosition(position).toString();
+                String iname = adapterfav.getItemAtPosition(position).toString();
                 selApp.add(iname);
-                view.setBackgroundColor(getColor(R.color.ic_launcher_background));
+                view.setBackgroundColor(defaultSelectColor);
+            } else {
+                selApp.remove(delitem);
+                view.setBackgroundColor(defaultBackGroundColor);
             }
             //String selectedP = (String) (appTable.getItemAtPosition(position));
         });

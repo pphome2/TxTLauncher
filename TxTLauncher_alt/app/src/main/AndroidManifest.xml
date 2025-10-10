@@ -2,25 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+        tools:ignore="PhotoAndVideoPolicy" />
     <uses-permission
         android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
         tools:ignore="ExtraText" />
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="80"
-        tools:ignore="ScopedStorage" />
-    <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
-        android:name="android.permission.READ_WALLPAPER_INTERNAL"
-        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -33,16 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TxTLauncher_alt">
         <activity
-            android:name=".HelpActivity"
+            android:name="HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".AddAppActivity"
+            android:name="AddAppActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFavAppActivity"
+            android:name="AddFavAppActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +44,7 @@
         </activity>
 
         <receiver
-            android:name=".LDAdmin"
+            android:name="LDAdmin"
             android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
@@ -69,5 +59,4 @@
 
 
     </application>
-
 </manifest>

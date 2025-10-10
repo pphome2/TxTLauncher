@@ -5,12 +5,10 @@ import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_URL_SEARCH_TAG;
-import static com.wswdteam.txtlauncher_alt.MainActivity.SETTINGS_WEATHER_HTML;
 import static com.wswdteam.txtlauncher_alt.MainActivity.backgroundImageOrig;
 import static com.wswdteam.txtlauncher_alt.MainActivity.packageUpdateTime;
 import static com.wswdteam.txtlauncher_alt.MainActivity.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher_alt.MainActivity.privateSearchUrlOrig;
-import static com.wswdteam.txtlauncher_alt.ui.tools.ToolsFragment.queryWeatherHTMLOrig;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -34,7 +32,6 @@ import com.wswdteam.txtlauncher_alt.HelpActivity;
 import com.wswdteam.txtlauncher_alt.MainActivity;
 import com.wswdteam.txtlauncher_alt.R;
 import com.wswdteam.txtlauncher_alt.databinding.FragmentSettingsBinding;
-import com.wswdteam.txtlauncher_alt.ui.tools.ToolsFragment;
 
 public class SettingsFragment extends Fragment {
 
@@ -113,7 +110,6 @@ public class SettingsFragment extends Fragment {
         EditText v1 = view.findViewById(R.id.editPrivateAI);
         EditText v2 = view.findViewById(R.id.editUrlSearch);
         EditText v3 = view.findViewById(R.id.editBackgroundImage);
-        EditText v4 = view.findViewById(R.id.editWeatherHtml);
 
         v1.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -143,16 +139,6 @@ public class SettingsFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        v4.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
-                settings.putString(SETTINGS_WEATHER_HTML, String.valueOf(s).trim());
-                settings.apply();
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
         val = MainActivity.sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
         if (!val.isEmpty()) {
             v1.setText(val);
@@ -170,13 +156,6 @@ public class SettingsFragment extends Fragment {
             v3.setText(val);
         } else {
             v3.setText(MainActivity.backgroundImage);
-        }
-
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_HTML, "");
-        if (!val.isEmpty()) {
-            v4.setText(val);
-        } else {
-            v4.setText(queryWeatherHTMLOrig);
         }
 
     }
@@ -204,14 +183,12 @@ public class SettingsFragment extends Fragment {
     // Beállítások visszaállítása
     //
     public void resetButton(View view) {
-        EditText v1 = getActivity().findViewById(R.id.editPrivateAI);
-        EditText v2 = getActivity().findViewById(R.id.editUrlSearch);
-        EditText v3 = getActivity().findViewById(R.id.editBackgroundImage);
-        EditText v4 = getActivity().findViewById(R.id.editWeatherHtml);
+        EditText v1 = requireActivity().findViewById(R.id.editPrivateAI);
+        EditText v2 = requireActivity().findViewById(R.id.editUrlSearch);
+        EditText v3 = requireActivity().findViewById(R.id.editBackgroundImage);
         v1.setText(privateAIUrlOrig);
         v2.setText(privateSearchUrlOrig);
         v3.setText(backgroundImageOrig);
-        v4.setText(queryWeatherHTMLOrig);
     }
 
 

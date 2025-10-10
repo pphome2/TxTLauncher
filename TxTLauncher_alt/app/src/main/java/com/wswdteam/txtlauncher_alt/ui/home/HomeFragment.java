@@ -23,6 +23,7 @@ import static com.wswdteam.txtlauncher_alt.MainActivity.homeAppNum;
 import static com.wswdteam.txtlauncher_alt.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher_alt.MainActivity.homeSysIcon;
 import static com.wswdteam.txtlauncher_alt.MainActivity.lockApp;
+import static com.wswdteam.txtlauncher_alt.MainActivity.packName;
 import static com.wswdteam.txtlauncher_alt.MainActivity.packageMan;
 import static com.wswdteam.txtlauncher_alt.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher_alt.MainActivity.privateSearchUrl;
@@ -84,6 +85,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -114,6 +116,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView tv = view.findViewById(R.id.mainTitle);
+        defaultFontSize = tv.getTextSize();
+
+        MainActivity.generateAppList();
         // kattintás figyelése
         TextView cl1 = view.findViewById(R.id.digitalDate);
         cl1.setOnClickListener(this::openClock);
@@ -134,7 +140,7 @@ public class HomeFragment extends Fragment {
         mailbut.setOnClickListener(this::startButtonApp1);
 
         ImageView listbut = view.findViewById(R.id.searchButton);
-        listbut.setOnClickListener(this::startButtonApp2);
+        listbut.setOnClickListener(this::startButtonSearch);
 
         ImageView brobut = view.findViewById(R.id.browserButton);
         brobut.setOnClickListener(this::startButtonApp3);
@@ -180,14 +186,7 @@ public class HomeFragment extends Fragment {
                     // vízszintes
                     if ((Math.abs(x2 - x1) > SWIPE_MIN_DISTANCE) && (Math.abs(y2 - y1) < SWIPE_TRESHOLD)) {
                         //
-                        if (x1 < x2) {
-                            // jobbra
-                            openGoogleDiscovery();
-                        } else {
-                            // balra
-                            //openAndroidSystemSettings();
-                            openGoogleDiscovery();
-                        }
+                        openGoogleDiscovery();
                     }
                     return super.onScroll(event, event2, distanceX, distanceY);
                 }
@@ -237,13 +236,12 @@ public class HomeFragment extends Fragment {
     // mentett háttékép beállítása
     //
     public void backgroundSavedImageSet() {
+        assert getView() != null;
         View mv = getView().findViewById(R.id.homeContainer);
         if (savedBackgroundImage != null) {
             Drawable drawable = new BitmapDrawable(getResources(), savedBackgroundImage);
             mv.setBackground(drawable);
             backgroundImageBackup = backgroundImage;
-        } else {
-            //mv.setBackground(null);
         }
     }
 
@@ -257,10 +255,10 @@ public class HomeFragment extends Fragment {
             backgroundSavedImageSet();
         } else {
             // megadott háttér fájl
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED) {
+            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED) {
                 // jogodultdág kérése csak egyszer
                 if (firstPermissionRequest) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PackageManager.PERMISSION_GRANTED);
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PackageManager.PERMISSION_GRANTED);
                     firstPermissionRequest = false;
                 }
             } else {
@@ -270,6 +268,7 @@ public class HomeFragment extends Fragment {
                     File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     File file = new File(dir + "/" + backgroundImage);
                     //View mv = getView().findViewById(R.id.viewPad);
+                    assert getView() != null;
                     View mv = getView().findViewById(R.id.homeContainer);
 
                     if (file.exists()) {
@@ -285,9 +284,9 @@ public class HomeFragment extends Fragment {
                             int cutEndH;
                             int ch;
                             // fekvő vagy álló
+                            int iw = Math.round((iHeight / screenRatio));
                             if (iWidth > iHeight) {
                                 // fekvó
-                                int iw = Math.round((iHeight / screenRatio));
                                 ch = Math.round((float) ((iWidth - iw) / 2));
                                 cutStartW = ch;
                                 cutEndW = iw;
@@ -295,7 +294,6 @@ public class HomeFragment extends Fragment {
                                 cutEndH = iHeight;
                             } else {
                                 // álló
-                                int iw = Math.round((iHeight / screenRatio));
                                 if (iw < iWidth) {
                                     ch = Math.round((float) ((iWidth - iw) / 2));
                                     cutStartW = ch;
@@ -314,9 +312,7 @@ public class HomeFragment extends Fragment {
                             Bitmap newBitmap = Bitmap.createBitmap(bitmap, cutStartW, cutStartH, cutEndW, cutEndH);
                             savedBackgroundImage = newBitmap;
                             Drawable drawable = new BitmapDrawable(getResources(), newBitmap);
-                            if (drawable != null) {
-                                mv.setBackground(drawable);
-                            }
+                            mv.setBackground(drawable);
 
                             // átalakított kép mentése
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -346,6 +342,7 @@ public class HomeFragment extends Fragment {
 //
     public void saveButtonImages() {
         ImageView ivone;
+        assert getView() != null;
         ivone = getView().findViewById(R.id.dialButton);
         defaultIcons.add(ivone.getDrawable());
         ivone = getView().findViewById(R.id.mailButton);
@@ -367,7 +364,7 @@ public class HomeFragment extends Fragment {
         String tag;
         String val;
         String appName;
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
         for (var i = 0; i < homeAppNum; i++) {
             tag = SETTINGS_APP_TAG + i;
             val = sharedPreferences.getString(tag, "");
@@ -419,13 +416,50 @@ public class HomeFragment extends Fragment {
     public void setHomaApp() {
         final ArrayList<String> appHList1 = new ArrayList<>();
         final ArrayList<String> appHList2 = new ArrayList<>();
+        assert getView() != null;
         final ListView homeTable1 = getView().findViewById(R.id.homeAppList1);
         final ListView homeTable2 = getView().findViewById(R.id.homeAppList2);
 
-        final var adapter1 = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, appHList1) {
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, appHList1) {
             @Override
             public String getItem(int position) {
-                return (String) super.getItem(position);
+                return Objects.requireNonNull(super.getItem(position));
+            }
+
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                String appN = getItem(position);
+                View row = super.getView(position, convertView, parent);
+                TextView tvt = row.findViewById(android.R.id.text1);
+                if (homeStartAppIcon) {
+                    for (ResolveInfo app : allApplicationsList) {
+                        String appName = app.loadLabel(packageMan).toString();
+                        if (appName.equals(appN)) {
+                            tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                            Drawable appI = app.loadIcon(packageMan);
+                            int ts = (int) tvt.getTextSize() + 40;
+                            appI.setBounds(0, 0, ts, ts);
+                            tvt.setCompoundDrawables(appI, null, null, null);
+                        }
+                    }
+                } else {
+                    tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                    tvt.setGravity(Gravity.CENTER_HORIZONTAL);
+                }
+                tvt.setText(appN);
+                tvt.setCompoundDrawablePadding(30);
+                tvt.setPadding(10, 10, 10, 10);
+                tvt.setEllipsize(TextUtils.TruncateAt.END);
+                tvt.setMaxLines(1);
+                return row;
+            }
+        };
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, appHList2) {
+            @Override
+            public String getItem(int position) {
+                return super.getItem(position);
             }
 
             @NonNull
@@ -458,47 +492,11 @@ public class HomeFragment extends Fragment {
                 }
                 return row;
             }
-        };
-        final var adapter2 = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, appHList2) {
-            @Override
-            public String getItem(int position) {
-                return (String) super.getItem(position);
-            }
+        };        double anum = Math.min(homeAppName.size(), homeAppNum);
 
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                String appN = getItem(position);
-                View row = super.getView(position, convertView, parent);
-                if (appN != null) {
-                    TextView tvt = row.findViewById(android.R.id.text1);
-                    if (homeStartAppIcon) {
-                        for (ResolveInfo app : allApplicationsList) {
-                            String appName = app.loadLabel(packageMan).toString();
-                            if (appName.equals(appN)) {
-                                tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                                Drawable appI = app.loadIcon(packageMan);
-                                int ts = (int) tvt.getTextSize() + 40;
-                                appI.setBounds(0, 0, ts, ts);
-                                tvt.setCompoundDrawables(appI, null, null, null);
-                            }
-                        }
-                    } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
-                        tvt.setGravity(Gravity.CENTER_HORIZONTAL);
-                    }
-                    tvt.setText(appN);
-                    tvt.setCompoundDrawablePadding(30);
-                    tvt.setPadding(10, 10, 10, 10);
-                    tvt.setEllipsize(TextUtils.TruncateAt.END);
-                    tvt.setMaxLines(1);
-                }
-                return row;
-            }
-        };
-
-        int anum = Math.min(homeAppName.size(), homeAppNum);
-        int halfApp = anum / 2;
+        double an = anum / 2;
+        long halfA = Math.round(an);
+        int halfApp = (int) halfA;
         for (var i = 0; i < halfApp; i++) {
             if (homeAppName.size() > i) {
                 if (!homeAppName.get(i).isEmpty()) {
@@ -561,13 +559,14 @@ public class HomeFragment extends Fragment {
 //  Fő nézet: alapértelmezett gombok előkészítése, alapértelmezett app kéeresése
 //
     public void buttonPrepare() {
-        final PackageManager packageMan = getActivity().getPackageManager();
+        final PackageManager packageMan = requireActivity().getPackageManager();
         // dial
         Intent dialIn = new Intent(Intent.ACTION_DIAL, null);
         dialIn.addCategory(Intent.CATEGORY_DEFAULT);
         List<ResolveInfo> appDL = packageMan.queryIntentActivities(dialIn, 0);
         ResolveInfo appD = appDL.get(0);
         String packD = appD.activityInfo.packageName;
+        assert getView() != null;
         ImageView dialF = getView().findViewById(R.id.dialButton);
         if (homeSysIcon) {
             Drawable dialI = appD.loadIcon(packageMan);
@@ -590,11 +589,23 @@ public class HomeFragment extends Fragment {
             mailF.setImageDrawable(defaultIcons.get(1));
         }
         MainActivity.packName.add(packI);
-        // app list
-        ImageView appF = getView().findViewById(R.id.searchButton);
-        appF.setImageDrawable(defaultIcons.get(2));
+        // keresés
+        Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+        searchintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        List<ResolveInfo> searchDL = packageMan.queryIntentActivities(searchintent, 0);
+        ResolveInfo searchD = searchDL.get(0);
+        String searchB = searchD.activityInfo.packageName;
+        ImageView searchF = getView().findViewById(R.id.searchButton);
+        if (homeSysIcon) {
+            Drawable searchI = searchD.loadIcon(packageMan);
+            searchF.setImageDrawable(searchI);
+        } else {
+            searchF.setImageDrawable(defaultIcons.get(2));
+        }
+        MainActivity.packName.add(searchB);
         // browser
-        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+        //broIn.setData(Uri.parse(privateSearchUrl));
         broIn.addCategory(Intent.CATEGORY_DEFAULT);
         List<ResolveInfo> broDL = packageMan.queryIntentActivities(broIn, 0);
         ResolveInfo broD = broDL.get(0);
@@ -628,58 +639,45 @@ public class HomeFragment extends Fragment {
     //  Fő nézet: gombok lenyomása, app start
     //
     public void startButtonApp0(View view) {
+        final PackageManager pm = requireActivity().getPackageManager();
         try {
-            Intent dialIn = new Intent(Intent.ACTION_DIAL, null);
-            dialIn.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(dialIn);
+            Intent launchIntent = pm.getLaunchIntentForPackage(packName.get(0));
+            assert launchIntent != null;
+            startActivity(launchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
     }
-    //
-    //  Fő nézet: gombok lenyomása, app start
-    //
+
     public void startButtonApp1(View view) {
+        final PackageManager pm = requireActivity().getPackageManager();
         try {
-            Intent mailIn = new Intent(Intent.ACTION_MAIN, null);
-            mailIn.addCategory(Intent.CATEGORY_APP_EMAIL);
-            startActivity(mailIn);
+            Intent launchIntent = pm.getLaunchIntentForPackage(packName.get(1));
+            assert launchIntent != null;
+            startActivity(launchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
     }
-    //
-    //  Fő nézet: gombok lenyomása, app start
-    //
-    public void startButtonApp2(View view) {
-        try {
-            Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
-            searchintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(searchintent);
-        } catch (Exception e) {
-            systemMessage(getString(R.string.error_startapp));
-        }
-    }
-    //
-    //  Fő nézet: gombok lenyomása, app start
-    //
+
     public void startButtonApp3(View view) {
+        final PackageManager pm = requireActivity().getPackageManager();
         try {
-            Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-            broIn.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(broIn);
+            Intent launchIntent = pm.getLaunchIntentForPackage(packName.get(3));
+            assert launchIntent != null;
+            launchIntent.setData(Uri.parse(privateSearchUrl));
+            startActivity(launchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
     }
-    //
-    //  Fő nézet: gombok lenyomása, app start
-    //
+
     public void startButtonApp4(View view) {
+        final PackageManager pm = requireActivity().getPackageManager();
         try {
-            Intent camIn = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            camIn.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(camIn);
+            Intent launchIntent = pm.getLaunchIntentForPackage(packName.get(4));
+            assert launchIntent != null;
+            startActivity(launchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -692,8 +690,8 @@ public class HomeFragment extends Fragment {
     //
     public void timeInScreen() {
         // óra
-        final TextView textView = getActivity().findViewById(R.id.digitalClock);
-        final TextView textDateView = getActivity().findViewById(R.id.digitalDate);
+        final TextView textView = requireActivity().findViewById(R.id.digitalClock);
+        final TextView textDateView = requireActivity().findViewById(R.id.digitalDate);
         final Handler handler = new Handler(Looper.getMainLooper());
         final Runnable runnable = new Runnable() {
             @Override
@@ -703,9 +701,6 @@ public class HomeFragment extends Fragment {
                 String currentTime = simpleTimeFormat.format(calendar.getTime());
                 textView.setText(currentTime);
                 if (!dateReady) {
-                    //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.", Locale.getDefault());
-                    //String currentDate = simpleDateFormat.format(calendar.getTime());
                     String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
                     textDateView.setText(currentDate);
                     dateReady = true;
@@ -717,17 +712,19 @@ public class HomeFragment extends Fragment {
     }
 
 
+
     //
     //  Fő nézet: keresés
     //
-    public void startSearch(View view) {
+    public void startButtonSearch(View view) {
         try {
             Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
-            searchintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            searchintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(searchintent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
+        //Log.d(DEBUG_TAG, "Button start: search");
     }
 
 
@@ -736,8 +733,9 @@ public class HomeFragment extends Fragment {
     //
     public void openGoogleDiscovery() {
         try {
-            final PackageManager packageMan = getActivity().getPackageManager();
+            final PackageManager packageMan = requireActivity().getPackageManager();
             Intent intent = packageMan.getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+            assert intent != null;
             startActivity(intent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -785,7 +783,7 @@ public class HomeFragment extends Fragment {
     // Minden app lapra váltás
     //
     public void openAllApp() {
-        getActivity().findViewById(R.id.navigation_allapps).callOnClick();
+        requireActivity().findViewById(R.id.navigation_allapps).callOnClick();
     }
 
 
@@ -793,7 +791,7 @@ public class HomeFragment extends Fragment {
     // Kedvenc app lapra váltás
     //
     public void openFavApp() {
-        getActivity().findViewById(R.id.navigation_favorites).callOnClick();
+        requireActivity().findViewById(R.id.navigation_favorites).callOnClick();
     }
 
 
