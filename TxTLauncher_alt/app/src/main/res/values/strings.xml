@@ -42,9 +42,9 @@
     <string name="error_bitmap">Error in background image</string>
     <string name="background_file_not_found">Background image file not found</string>
     <string name="button_close_help">Ok</string>
-    <string name="help_text_1">Home scree: # - up swipe: app list # - down swipe: favorite apps # - double click: lock device # - right, left swipe: discover</string>
+    <string name="help_text_1">Home screen: # - up swipe: app list # - down swipe: favorite apps # - double click: lock device # - right, left swipe: discover app</string>
     <string name="help_text_2">Settings: # - select app to home screen # - select apps to favorites # - show icons to system apps # - show icons to home screen apps</string>
-    <string name="help_text_3">- private AI link # - internet search link # - background image file name in download directory # - weather link (@CITY@ = city)</string>
+    <string name="help_text_3">- private AI link # - internet search link # - background image file name in download directory</string>
     <string name="licence">GPLv3</string>
     <string name="note_title">Note</string>
     <string name="widgat_map">Go to map</string>

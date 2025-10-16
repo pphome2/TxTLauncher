@@ -86,7 +86,8 @@
                             android:paddingStart="20dp"
                             android:paddingEnd="2dp"
                             android:onClick="openClock"
-                            android:textAlignment="center"
+                            android:textAlignment="gravity"
+                            android:gravity="end"
                             android:textSize="60sp" />
                         <TextView
                             android:id="@+id/digitalDate"
@@ -95,7 +96,8 @@
                             android:paddingStart="20dp"
                             android:paddingEnd="2dp"
                             android:onClick="openClock"
-                            android:textAlignment="center"
+                            android:textAlignment="gravity"
+                            android:gravity="end"
                             android:textSize="24sp" />
                     </LinearLayout>
                 </LinearLayout>
