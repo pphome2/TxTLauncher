@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widgetLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WidgetActivity">
+
+    <LinearLayout
+        android:id="@+id/widgetQuitFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="closeWidgetButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/widgetTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/title_widget"
+            android:textAlignment="gravity"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/widgetScrollFrame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/widgetLayout"
+        app:layout_constraintTop_toBottomOf="@id/widgetQuitFrame"
+        tools:ignore="ScrollViewCount">
+
+        <LinearLayout
+            android:id="@+id/widgetContLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            android:scrollIndicators="right"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/widgetNoteTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:text="@string/note_title"
+                android:textAlignment="gravity"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/closeWidgetButton" />
+
+            <EditText
+                android:id="@+id/widgetTextNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/material_dynamic_neutral30"
+                android:backgroundTint="@color/material_dynamic_neutral30"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:hint="@string/note_title"
+                android:autofillHints="@string/note_title"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:isScrollContainer="true"
+                android:lines="15"
+                android:maxLines="100"
+                android:minLines="15"
+                android:padding="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/widgetNoteTitle" />
+
+            <View
+                android:id="@+id/widgetDivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/widgetTextNote" />
+
+            <CalendarView
+                android:id="@+id/widgetCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/widgetDivider" />
+
+            <View
+                android:id="@+id/widgetDividerCal"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/widgetCalendar" />
+
+            <Button
+                android:id="@+id/widgetOpenMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="0dp"
+                android:gravity="center|center_horizontal"
+                android:onClick="openWidgetMap"
+                android:text="@string/widgat_map"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/widgetDividerCal" />
+
+            <Button
+                android:id="@+id/startAI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center|center_horizontal"
+                android:onClick="startAI"
+                android:text="@string/start_ai"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/widgetOpenMap" />
+
+
+            <Button
+                android:id="@+id/widgetCloseView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:gravity="center|center_horizontal"
+                android:onClick="closeWidgetButton"
+                android:text="@string/button_close_widget"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/startAI" />
+
+            <View
+                android:id="@+id/widgetDivider3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/widgetCloseView" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:forceDarkAllowed="true"
+    android:orientation="vertical"
+    android:scaleWidth="100%"
+    android:scaleHeight="100%"
+    android:scaleGravity="clip_horizontal|center|clip_vertical|fill|fill_horizontal|center_vertical|fill_vertical"
+    android:tooltipText="@string/applist_button_desc"
+    android:visibility="visible"
+    tools:context=".MainActivity"
+    tools:visibility="visible">
+
+    <ScrollView
+        android:id="@+id/mainScroolView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints" >
+
+            <LinearLayout
+                android:id="@+id/lLayoutMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints" >
+
+                <LinearLayout
+                    android:id="@+id/lLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp" >
+
+                    <ImageView
+                        android:id="@+id/searchButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_help"
+                        android:onClick="startSearch"
+                        app:srcCompat="@drawable/search" />
+
+                    <ImageView
+                        android:id="@+id/settingsButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:layout_rowWeight="2"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_settings"
+                        android:onClick="openAndroidSystemSettings"
+                        app:srcCompat="@drawable/settings" />
+
+                    <LinearLayout
+                        android:id="@+id/lLayout11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints" >
+
+                        <TextView
+                            android:id="@+id/digitalClock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="2dp"
+                            android:onClick="openClock"
+                            android:textAlignment="center"
+                            android:textSize="60sp" />
+                        <TextView
+                            android:id="@+id/digitalDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="2dp"
+                            android:onClick="openClock"
+                            android:textAlignment="center"
+                            android:textSize="24sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/favlistButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_dial"
+                        android:onClick="openFavActivity"
+                        app:srcCompat="@drawable/bookmarks" />
+
+                    <ImageView
+                        android:id="@+id/applistButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:layout_rowWeight="4"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/applist_button_desc"
+                        android:onClick="openAppListButton"
+                        app:srcCompat="@drawable/menu" />
+
+                    <ImageView
+                        android:id="@+id/helpButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_search"
+                        android:onClick="openHelp"
+                        app:srcCompat="@drawable/help" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/dialButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:padding="20dp"
+                        android:layout_rowWeight="5"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_dial"
+                        android:onClick="startButtonApp"
+                        app:srcCompat="@drawable/call" />
+
+                    <ImageView
+                        android:id="@+id/mailButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:layout_rowWeight="5"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_mail"
+                        android:onClick="startButtonApp"
+                        app:srcCompat="@drawable/email" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/browserButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_browser"
+                        android:onClick="startButtonApp"
+                        app:srcCompat="@drawable/internet" />
+
+                    <ImageView
+                        android:id="@+id/cameraButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_camera"
+                        android:onClick="startButtonApp"
+                        app:srcCompat="@drawable/camera" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lLayout5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/lockButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_margin="5dp"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_lock"
+                        android:onClick="lockAppButton"
+                        app:srcCompat="@drawable/lock" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lLayout6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="0dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:id="@+id/aiButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/start_ai"
+                        android:onClick="startAIButton"
+                        app:srcCompat="@drawable/ai" />
+
+                    <ImageView
+                        android:id="@+id/toolsButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_tools"
+                        android:onClick="openWidgetActivity"
+                        app:srcCompat="@drawable/tools" />
+
+                    <ImageView
+                        android:id="@+id/mapButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_map"
+                        android:onClick="startMap"
+                        app:srcCompat="@drawable/map" />
+
+                    <ImageView
+                        android:id="@+id/discoveryButton"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:padding="20dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/button_discovery"
+                        android:onClick="openDiscovery"
+                        app:srcCompat="@drawable/discovery" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/AppFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingTop="0dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:paddingBottom="5dp" >
+
+                <ListView
+                    android:id="@+id/homeAppList1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:divider="@null"
+                    android:dividerHeight="5dp"
+                    android:scrollbars="none"
+                    tools:ignore="NestedScrolling" />
+
+                <ListView
+                    android:id="@+id/homeAppList2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:padding="0dp"
+                    android:divider="@null"
+                    android:dividerHeight="5dp"
+                    android:scrollbars="none"
+                    tools:ignore="NestedScrolling" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

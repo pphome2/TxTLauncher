@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="txt_burgundy">#7E110C</color>
+    <color name="txt_yellow">#C4B11B</color>
+    <color name="txt_purple">#834ED5</color>
+    <color name="txt_green">#3EC435</color>
+    <color name="txt_orange">#D29133</color>
+    <color name="txt_red">#F44336</color>
+    <color name="txt_blue">#2557DC</color>
+    <color name="txt_gray">#B0A9A7</color>
+    <color name="txt_darkgray">#4F4F4F</color>
+    <color name="txt_black">#000000</color>
+</resources>
