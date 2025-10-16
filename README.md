@@ -17,6 +17,7 @@ Amire nekem szükségem van.
 </p>
 
 <br /><br />
+<br /><br />
 # TxTLauncher_alt
 <br /><br />
 
@@ -24,6 +25,16 @@ Amire nekem szükségem van.
   <kbd><br /><img width=50% src="./img/screen-alt-hu-1.png"><br /><br /></kbd>
   <br /><br />
   <kbd><br /><img width=50% src="./img/screen-alt-hu-2.png"><br /><br /></kbd>
+  <br /><br />
+</p>
+
+<br /><br />
+<br /><br />
+# TxTLauncher_2
+<br /><br />
+
+<p align=center>
+  <kbd><br /><img width=50% src="./img/screen-alt-hu-2-1.png"><br /><br /></kbd>
   <br /><br />
 </p>
 
