@@ -481,6 +481,10 @@ public class MainActivity extends AppCompatActivity {
                         border.setCornerRadius(16);
                         tvt.setBackground(border);
                     }
+                    if (!homeStartAppIcon) {
+                        tvt.setMinHeight(listViewItemSize - 50);
+                        tvt.setMaxHeight(listViewItemSize - 50);
+                    }
                     tvt.setText(appN);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
                     tvt.setMaxLines(1);
@@ -538,8 +542,8 @@ public class MainActivity extends AppCompatActivity {
                         tvt.setBackground(border);
                     }
                     if (!homeStartAppIcon) {
-                        tvt.setMinHeight(listViewItemSize - 30);
-                        tvt.setMaxHeight(listViewItemSize - 30);
+                        tvt.setMinHeight(listViewItemSize - 50);
+                        tvt.setMaxHeight(listViewItemSize - 50);
                     }
                     tvt.setText(appN);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
