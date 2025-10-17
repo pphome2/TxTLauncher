@@ -146,7 +146,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        //tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -184,7 +184,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        //tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);

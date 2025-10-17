@@ -18,8 +18,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.admin.DevicePolicyManager;
@@ -263,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
             x = findViewById(R.id.toolsButton);
             x.setBackgroundColor(getColor(R.color.txt_red));
             x = findViewById(R.id.mapButton);
-            x.setBackgroundColor(getColor(R.color.txt_gray));
+            x.setBackgroundColor(getColor(R.color.txt_green));
             x = findViewById(R.id.aiButton);
             x.setBackgroundColor(getColor(R.color.txt_blue));
             x = findViewById(R.id.discoveryButton);
@@ -271,6 +274,28 @@ public class MainActivity extends AppCompatActivity {
             x = findViewById(R.id.lockButton);
             x.setBackgroundColor(getColor(R.color.txt_purple));
         }
+
+        if (!colorHomeButtons) {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(Color.TRANSPARENT);
+            border.setStroke(4, Color.WHITE);
+            border.setCornerRadius(16);
+            ListView lv;
+            lv = findViewById(R.id.homeAppList1);
+            var db = lv.getChildCount();
+            for (var p = 0; p < db; p++) {
+                View v = lv.getChildAt(p);
+                v.setBackground(border);
+            }
+            lv = findViewById(R.id.homeAppList2);
+            db = lv.getChildCount();
+            for (var p = 0; p < db; p++) {
+                View v = lv.getChildAt(p);
+                v.setBackground(border);
+            }
+            //Log.d(DEBUG_TAG, "magglobalx");
+        }
+
     }
 
 
@@ -313,27 +338,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (!colorHomeButtons) {
-            GradientDrawable border = new GradientDrawable();
-            border.setColor(Color.TRANSPARENT);
-            border.setStroke(4, Color.WHITE);
-            border.setCornerRadius(16);
-            ListView lv;
-            lv = findViewById(R.id.homeAppList1);
-            var db = lv.getChildCount();
-            for (var p = 0; p < db; p++) {
-                View v = lv.getChildAt(p);
-                v.setBackground(border);
-            }
-            lv = findViewById(R.id.homeAppList2);
-            db = lv.getChildCount();
-            for (var p = 0; p < db; p++) {
-                View v = lv.getChildAt(p);
-                v.setBackground(border);
-            }
-            Log.d(DEBUG_TAG, "magglobalx");
-        }
-
+        ScrollView sv = findViewById(R.id.mainScroolView);
+        sv.smoothScrollTo(0, 0);
     }
 
 
@@ -455,20 +461,25 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         //tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
-                        tvt.setPadding(45, 45, 45, 45);
+                        tvt.setPadding(50, 50, 50, 50);
                     }
                     if (colorHomeButtons) {
-                        tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                        //if (!homeStartAppIcon) {
+                            if (position % 2 == 0) {
+                                tvt.setBackgroundColor(getColor(R.color.txt_darkgray2));
+
+                            } else {
+                                tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                            }
+                        //} else {
+                        //    tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                        //}
                     } else {
                         GradientDrawable border = new GradientDrawable();
                         border.setColor(Color.TRANSPARENT);
                         border.setStroke(4, Color.WHITE);
                         border.setCornerRadius(16);
                         tvt.setBackground(border);
-                    }
-                    if (!homeStartAppIcon) {
-                        tvt.setMinHeight(listViewItemSize - 30);
-                        tvt.setMaxHeight(listViewItemSize - 30);
                     }
                     tvt.setText(appN);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
@@ -509,7 +520,16 @@ public class MainActivity extends AppCompatActivity {
                         tvt.setPadding(50, 50, 50, 50);
                     }
                     if (colorHomeButtons) {
-                        tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                        //if (!homeStartAppIcon) {
+                            if (!(position % 2 == 0)) {
+                                tvt.setBackgroundColor(getColor(R.color.txt_darkgray2));
+
+                            } else {
+                                tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                            }
+                        //} else {
+                        //    tvt.setBackgroundColor(getColor(R.color.txt_darkgray));
+                        //}
                     } else {
                         GradientDrawable border = new GradientDrawable();
                         border.setColor(Color.TRANSPARENT);
@@ -909,7 +929,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // - startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
             // - Intent intent = new Intent(Settings.ACTION_SETTINGS);
-            Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

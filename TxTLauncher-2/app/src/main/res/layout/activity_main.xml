@@ -315,7 +315,7 @@
                 android:paddingTop="0dp"
                 android:paddingRight="16dp"
                 android:paddingLeft="16dp"
-                android:paddingBottom="5dp" >
+                android:paddingBottom="0dp" >
 
                 <ListView
                     android:id="@+id/homeAppList1"
