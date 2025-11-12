@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
+    //public static String WEATHER_SEARCH_URL = "https://www.google.com/search?q=";
     public static String backgroundImageOrig = "image.png";
 
     public static String DEBUG_TAG = "TxTLauncher_App";
@@ -279,6 +280,21 @@ public class MainActivity extends AppCompatActivity {
         screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         backgroundSavedImageSet();
+
+        ImageView imageView3 = findViewById(R.id.browserButton);
+        imageView3.setOnLongClickListener(v -> {
+            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            try {
+                final PackageManager pm = getPackageManager();
+                Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
+                assert launchIntent != null;
+                startActivity(launchIntent);
+            } catch (Exception e) {
+                systemMessage(getString(R.string.error_startapp));
+            }
+            return true;
+        });
+
     }
 
 
@@ -938,15 +954,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
-    //  Fő nézet: leírás
-    //
-    public void openHelp(View view) {
-        startActivity(new Intent(MainActivity.this, HelpActivity.class));
-    }
-
-
-
-    //
     // Rendszer beállítások indítása
     //
     public void openAndroidSystemSettings(View v) {
@@ -965,6 +972,38 @@ public class MainActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
+    // Időjárás keresás
+    //
+    public void openWeatherSearch(View v) {
+        try {
+            String query = getString(R.string.search_weather);
+            Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
+            searchIntent.putExtra(SearchManager.QUERY, query + "\n");
+            searchIntent.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+            //searchIntent.setPackage("com.google.android.googlequicksearchbox");
+            startActivity(searchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
+    // Térkép mutatása
+    //
+    public void openMap(View view) {
+        try {
+            //Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
+            Uri mapUri = Uri.parse("geo:0,0");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+            startActivity(mapIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }

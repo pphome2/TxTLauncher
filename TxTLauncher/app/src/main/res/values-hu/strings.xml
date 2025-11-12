@@ -60,4 +60,10 @@
     <string name="button_help">Leírás</string>
     <string name="button_settings">Beállítások</string>
     <string name="weather_title">Időjárás (város)</string>
+    <string name="button_weather">Időjárás</string>
+    <string name="search_weather">időjárás</string>
+    <string name="button_map">Térkép mutatása</string>
+    <string name="button_ai">AI indítása</string>
+    <string name="button_discovery">Felfedezés</string>
+    <string name="button_lock">Zárolás</string>
 </resources>

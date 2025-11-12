@@ -25,29 +25,133 @@
         android:gravity="center_vertical"
         android:text="@string/favorite_apps"
         android:textStyle="bold"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/digitalClock"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:id="@+id/lLayout1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="36dp"
-        android:onClick="openClock"
-        android:textAlignment="center"
-        android:textSize="60sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingBottom="5dp"
+        tools:ignore="MissingConstraints">
 
-    <TextView
-        android:id="@+id/digitalDate"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:onClick="openClock"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@id/digitalClock"
-        app:layout_constraintTop_toBottomOf="@id/digitalClock" />
+        <LinearLayout
+            android:id="@+id/lLayout1_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:layout_weight="1"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:id="@+id/digitalClock"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:onClick="openClock"
+                android:textAlignment="center"
+                android:textSize="60sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/digitalDate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:onClick="openClock"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@id/digitalClock"
+                app:layout_constraintTop_toBottomOf="@id/digitalClock" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lLayout1_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:paddingBottom="5dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/weatherButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_weather"
+                android:onClick="openWeatherSearch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/weather" />
+
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_search"
+                android:onClick="startSearch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/search" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lLayout1_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:paddingTop="16dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:paddingBottom="5dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/settingsButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_settings"
+                android:onClick="openAndroidSystemSettings"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/settings" />
+
+            <ImageView
+                android:id="@+id/mapButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_map"
+                android:onClick="openMap"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/map" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/viewPad"
@@ -62,45 +166,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/helpButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="22dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/button_help"
-        android:onClick="openHelp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/help" />
-
-    <ImageView
-        android:id="@+id/settingsButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="64dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/button_settings"
-        android:onClick="openAndroidSystemSettings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settings" />
-
-    <ImageView
-        android:id="@+id/searchButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/button_search"
-        android:onClick="startSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search" />
-
     <LinearLayout
         android:id="@+id/AppFrame"
         android:layout_width="wrap_content"
@@ -111,14 +176,14 @@
         app:layout_constraintBottom_toTopOf="@id/buttonsFrame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/digitalDate">
+        app:layout_constraintTop_toBottomOf="@id/lLayout1">
 
         <ListView
             android:id="@+id/homeAppList1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|clip_horizontal|start|fill_horizontal"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:divider="@null"
             android:dividerHeight="0dp"
@@ -129,7 +194,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|clip_horizontal|fill_horizontal|end"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:divider="@null"
             android:dividerHeight="0dp"
             android:layout_weight="1">
@@ -148,11 +213,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
         <ImageView
             android:id="@+id/dialButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/rounded_button"
             android:contentDescription="@string/button_dial"
@@ -166,6 +231,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/button_mail"
             android:onClick="startButtonApp"
@@ -178,6 +244,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/applist_button_desc"
             android:onClick="openAppListButton"
@@ -190,6 +257,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/button_browser"
             android:onClick="startButtonApp"
@@ -202,6 +270,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/button_camera"
             android:onClick="startButtonApp"

@@ -7,7 +7,10 @@ import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -89,6 +93,44 @@ public class WidgetActivity extends AppCompatActivity {
             }
         });
 
+        if (MainActivity.homeStartAppIcon) {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(Color.TRANSPARENT);
+            border.setStroke(2, Color.WHITE);
+            border.setCornerRadius(10);
+            ImageView lv;
+            lv = findViewById(R.id.wdialButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wmailButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.whelpButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wbrowserButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wcameraButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wapplistButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wfavlistButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.waiButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wdiscoveryButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+            lv = findViewById(R.id.wmapButton);
+            lv.setBackground(border);
+            lv.setPadding(25,25,25,25);
+        }
+
 
     }
 
@@ -155,20 +197,130 @@ public class WidgetActivity extends AppCompatActivity {
 
 
     //
-    // Widget térkép mutatása
+    // App indítása
     //
-    public void openWidgetMap(View view) {
+    public void startButtonApp1(View v) {
+        // dial
+        final PackageManager pm = getPackageManager();
+        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(0));
+        assert launchIntent != null;
         try {
-            //Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
-            Uri mapUri = Uri.parse("geo:0,0");
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-            startActivity(mapIntent);
-            this.finish();
+            startActivity(launchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
     }
 
+    //
+    // App indítása
+    //
+    public void startButtonApp2(View v) {
+        // mail
+        final PackageManager pm = getPackageManager();
+        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(1));
+        assert launchIntent != null;
+        try {
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp3(View v) {
+        // help
+        openHelp(v);
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp4(View v) {
+        // browser
+        final PackageManager pm = getPackageManager();
+        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
+        assert launchIntent != null;
+        try {
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp5(View v) {
+        // camera
+        final PackageManager pm = getPackageManager();
+        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(3));
+        assert launchIntent != null;
+        try {
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp6(View v) {
+        // applist
+        startActivity(new Intent(WidgetActivity.this, AppListActivity.class));
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp7(View v) {
+        // fav
+        startActivity(new Intent(WidgetActivity.this, FavoritesActivity.class));
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp8(View v) {
+        // ai
+        startAI(v);
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp9(View v) {
+        // discovery
+        try {
+            Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+            startActivity(intent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+    //
+    // App indítása
+    //
+    public void startButtonApp10(View v) {
+        // map
+        try {
+            Uri mapUri = Uri.parse("geo:0,0");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+            startActivity(mapIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+    //
+    //  Fő nézet: leírás
+    //
+    public void openHelp(View view) {
+        startActivity(new Intent(WidgetActivity.this, HelpActivity.class));
+    }
 
 
 }

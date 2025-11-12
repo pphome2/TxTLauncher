@@ -62,11 +62,165 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <LinearLayout
+                android:id="@+id/buttonsFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/wdialButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_button"
+                    android:contentDescription="@string/button_dial"
+                    android:onClick="startButtonApp1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/call" />
+
+                <ImageView
+                    android:id="@+id/wmailButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_mail"
+                    android:onClick="startButtonApp2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/dialButton"
+                    app:srcCompat="@drawable/email" />
+
+                <ImageView
+                    android:id="@+id/whelpButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/applist_button_desc"
+                    android:onClick="startButtonApp3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:srcCompat="@drawable/help"
+                    tools:layout_editor_absoluteX="194dp" />
+
+                <ImageView
+                    android:id="@+id/wbrowserButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_browser"
+                    android:onClick="startButtonApp4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/cameraButton"
+                    app:srcCompat="@drawable/internet" />
+
+                <ImageView
+                    android:id="@+id/wcameraButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_camera"
+                    android:onClick="startButtonApp5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/camera" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buttonsFrame2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/wapplistButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/applist_button_desc"
+                    android:onClick="startButtonApp6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/menu" />
+
+                <ImageView
+                    android:id="@+id/wfavlistButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/favorite_apps"
+                    android:onClick="startButtonApp7"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/dialButton"
+                    app:srcCompat="@drawable/bookmarks" />
+
+                <ImageView
+                    android:id="@+id/waiButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_ai"
+                    android:onClick="startButtonApp8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:srcCompat="@drawable/ai"
+                    tools:layout_editor_absoluteX="194dp" />
+
+                <ImageView
+                    android:id="@+id/wdiscoveryButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_discovery"
+                    android:onClick="startButtonApp9"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/cameraButton"
+                    app:srcCompat="@drawable/discovery" />
+
+                <ImageView
+                    android:id="@+id/wmapButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/button_lock"
+                    android:onClick="startButtonApp10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/map" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/widgetNoteTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:background="@android:color/transparent"
                 android:gravity="start"
                 android:text="@string/note_title"
@@ -119,35 +273,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/widgetCalendar" />
-
-            <Button
-                android:id="@+id/widgetOpenMap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="0dp"
-                android:gravity="center|center_horizontal"
-                android:onClick="openWidgetMap"
-                android:text="@string/widgat_map"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/widgetDividerCal" />
-
-            <Button
-                android:id="@+id/startAI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
-                android:gravity="center|center_horizontal"
-                android:onClick="startAI"
-                android:text="@string/start_ai"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/widgetOpenMap" />
-
 
             <Button
                 android:id="@+id/widgetCloseView"
