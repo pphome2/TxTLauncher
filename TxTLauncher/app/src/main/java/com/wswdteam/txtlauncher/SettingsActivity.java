@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -51,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(SOFT_INPUT_ADJUST_PAN);
 
         TextView tv = findViewById(R.id.settingsViewTitle);
-        tv.setTextSize(tv.getTextSize() + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {

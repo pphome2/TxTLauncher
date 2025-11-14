@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class AddAppActivity extends AppCompatActivity {
         });
 
         TextView tv = findViewById(R.id.addappTitle);
-        tv.setTextSize(tv.getTextSize() + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {

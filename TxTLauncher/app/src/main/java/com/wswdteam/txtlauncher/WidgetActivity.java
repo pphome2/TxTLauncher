@@ -15,12 +15,14 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -51,7 +53,7 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         TextView tv = findViewById(R.id.widgetTitle);
-        tv.setTextSize(tv.getTextSize() + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
@@ -98,37 +100,21 @@ public class WidgetActivity extends AppCompatActivity {
             border.setColor(Color.TRANSPARENT);
             border.setStroke(2, Color.WHITE);
             border.setCornerRadius(10);
-            ImageView lv;
-            lv = findViewById(R.id.wdialButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wmailButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.whelpButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wbrowserButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wcameraButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wapplistButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wfavlistButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.waiButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wdiscoveryButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
-            lv = findViewById(R.id.wmapButton);
-            lv.setBackground(border);
-            lv.setPadding(25,25,25,25);
+            LinearLayout lv = findViewById(R.id.buttonsFrame1);
+            var db = lv.getChildCount();
+            for (var p = 0; p < db; p++) {
+                View v = lv.getChildAt(p);
+                v.setBackground(border);
+                v.setPadding(15,15,15,15);
+            }
+            lv = findViewById(R.id.buttonsFrame2);
+            db = lv.getChildCount();
+            for (var p = 0; p < db; p++) {
+                View v = lv.getChildAt(p);
+                v.setBackground(border);
+                v.setPadding(15,15,15,15);
+            }
+
         }
 
 

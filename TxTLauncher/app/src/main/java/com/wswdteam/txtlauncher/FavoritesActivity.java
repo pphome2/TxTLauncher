@@ -15,6 +15,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,7 @@ public class FavoritesActivity extends AppCompatActivity {
         });
 
         TextView tv = findViewById(R.id.favTitle);
-        defaultFontSize = tv.getTextSize();
-        tv.setTextSize(defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) tv.getTextSize();
@@ -146,7 +146,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -183,7 +183,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);

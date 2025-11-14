@@ -15,8 +15,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,6 +29,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -124,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
     public int screenWidth;
     public static long packageUpdateTime;
     public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 2;
-    public static float defaultPlusFontSizeTitle = 1;
+    public static float defaultPlusFontSize = 30;
+    public static float defaultPlusFontSizeTitle = 40;
     public static int defaultBackGroundColor = 0;
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
@@ -135,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet létrehozása
     //
-    @SuppressLint("PrivateResource")
+    @SuppressLint({"PrivateResource", "CutPasteId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +151,22 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        Configuration configuration = getResources().getConfiguration();
+
+        TextView tv = findViewById(R.id.mainTitle);
+        defaultFontSize = tv.getTextSize();
+        float scaledDensity = configuration.fontScale;
+        // @float defaultTextSize = 14f;
+        defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
+        defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
+
+        tv = findViewById(R.id.digitalClock);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (4 * defaultPlusFontSize));
+        tv = findViewById(R.id.digitalDate);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (1 * defaultPlusFontSize));;
+
+        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         if (isDarkMode) {
@@ -169,22 +187,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
         packageMan = getPackageManager();
 
-        TextView tv = findViewById(R.id.mainTitle);
-        defaultFontSize = tv.getTextSize();
-
-        ImageView imageView = findViewById(R.id.applistButton);
-        imageView.setOnLongClickListener(v -> {
-            //Log.d(DEBUG_TAG, "Action long tap: open settings");
-            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
-            return true;
-        });
-
-        ImageView imageView2 = findViewById(R.id.settingsButton);
-        imageView2.setOnLongClickListener(v -> {
-            //Log.d(DEBUG_TAG, "Action long tap: open settings");
-            openAndroidSystemSettingsButton(v);
-            return true;
-        });
+        getSettings();
 
         // verzió ellenőrzés
         versionCheck();
@@ -273,16 +276,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        saveButtonImages();
-        buttonPrepare();
-        getSettings();
-        setHomaApp();
-        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        backgroundSavedImageSet();
+        ImageView iv;
+        iv = findViewById(R.id.applistButton);
+        iv.setOnLongClickListener(v -> {
+            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+            return true;
+        });
 
-        ImageView imageView3 = findViewById(R.id.browserButton);
-        imageView3.setOnLongClickListener(v -> {
+        iv = findViewById(R.id.settingsButton);
+        iv.setOnLongClickListener(v -> {
+            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            openAndroidSystemSettingsButton(v);
+            return true;
+        });
+
+        iv = findViewById(R.id.browserButton);
+        iv.setOnLongClickListener(v -> {
             //Log.d(DEBUG_TAG, "Action long tap: open settings");
             try {
                 final PackageManager pm = getPackageManager();
@@ -295,6 +305,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+        saveButtonImages();
+        buttonPrepare();
+        getSettings();
+        setHomaApp();
+        backgroundSavedImageSet();
     }
 
 
@@ -311,9 +329,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (startedSettingsAct) {
             getSettings();
-            setHomaApp();
-            buttonPrepare();
             backgroundImageSet();
+            buttonPrepare();
+            setHomaApp();
         }
 
         startedAppAct = false;
@@ -323,6 +341,38 @@ public class MainActivity extends AppCompatActivity {
         startedHelp = false;
         dateReady = false;
 
+        ImageView iv;
+        if (homeSysIcon) {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(Color.TRANSPARENT);
+            border.setStroke(2, Color.WHITE);
+            border.setCornerRadius(10);
+            iv = findViewById(R.id.weatherButton);
+            iv.setBackground(border);
+            iv.setPadding(15, 15, 15, 15);
+            iv = findViewById(R.id.searchButton);
+            iv.setBackground(border);
+            iv.setPadding(15, 15, 15, 15);
+            iv = findViewById(R.id.settingsButton);
+            iv.setBackground(border);
+            iv.setPadding(15, 15, 15, 15);
+            iv = findViewById(R.id.mapButton);
+            iv.setBackground(border);
+            iv.setPadding(15, 15, 15, 15);
+        } else {
+            iv = findViewById(R.id.weatherButton);
+            iv.setBackground(null);
+            iv.setPadding(0, 0, 0, 0);
+            iv = findViewById(R.id.searchButton);
+            iv.setBackground(null);
+            iv.setPadding(0, 0, 0, 0);
+            iv = findViewById(R.id.settingsButton);
+            iv.setBackground(null);
+            iv.setPadding(0, 0, 0, 0);
+            iv = findViewById(R.id.mapButton);
+            iv.setBackground(null);
+            iv.setPadding(0, 0, 0, 0);
+        }
         Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
@@ -579,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -616,7 +666,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(defaultFontSize + defaultPlusFontSize);
+                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -728,6 +778,17 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.packName.add(packI);
         // app list
         ImageView appF = findViewById(R.id.applistButton);
+        if (homeSysIcon) {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(Color.TRANSPARENT);
+            border.setStroke(2, Color.WHITE);
+            border.setCornerRadius(10);
+            appF.setBackground(border);
+            appF.setPadding(15, 15, 15, 15);
+        } else {
+            appF.setBackground(null);
+            appF.setPadding(0, 0, 0, 0);
+        }
         appF.setImageDrawable(defaultIcons.get(2));
         // browser
         Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));

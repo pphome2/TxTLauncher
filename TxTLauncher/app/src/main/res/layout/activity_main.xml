@@ -23,8 +23,7 @@
         android:background="@android:color/transparent"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
-        android:text="@string/favorite_apps"
-        android:textStyle="bold"
+        android:text="@string/app_name"
         android:visibility="invisible"
         tools:ignore="MissingConstraints" />
 
@@ -37,7 +36,7 @@
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         android:paddingBottom="5dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="DisableBaselineAlignment,MissingConstraints">
 
         <LinearLayout
             android:id="@+id/lLayout1_1"
@@ -45,15 +44,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="start"
-            android:layout_weight="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="20dp"
+            android:layout_weight="4"
             tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/digitalClock"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
                 android:onClick="openClock"
                 android:textAlignment="center"
                 android:textSize="60sp"
@@ -62,7 +61,7 @@
 
             <TextView
                 android:id="@+id/digitalDate"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="openClock"
                 android:textAlignment="center"
@@ -80,8 +79,6 @@
             android:gravity="end"
             android:layout_weight="1"
             android:paddingTop="16dp"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
             android:paddingBottom="5dp"
             tools:ignore="MissingConstraints">
 
@@ -117,10 +114,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="end"
+            android:layout_weight="1"
+            android:gravity="center"
             android:paddingTop="16dp"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
             android:paddingBottom="5dp"
             tools:ignore="MissingConstraints">
 
