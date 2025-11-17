@@ -2,6 +2,8 @@ package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
+import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 
@@ -139,11 +141,13 @@ public class AddAppActivity extends AppCompatActivity {
                     if (showicons) {
                         ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
                         Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                        int ts = (int) tvt.getTextSize() + 25;
+                        int ts = (int) tvt.getTextSize() + (int) defaultPlusFontSize;
                         appI.setBounds(0, 0, ts, ts);
                         tvt.setCompoundDrawables(appI, null, null, null);
                         tvt.setCompoundDrawablePadding(30);
                         tvt.setPadding(10, 10, 10, 10);
+                    } else {
+                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                     }
                     if (selApp.contains(appN)) {
                         tvt.setBackgroundColor(MainActivity.defaultSelectColor);

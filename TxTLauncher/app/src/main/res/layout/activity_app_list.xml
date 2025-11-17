@@ -7,57 +7,93 @@
     android:layout_height="match_parent"
     tools:context=".AddAppActivity">
 
-
-    <ImageView
-        android:id="@+id/quitAllAppListButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:clickable="true"
-        android:onClick="closeAppViewButton"
-        android:contentDescription="@string/quit_button_desc"
-        android:orientation="vertical"
-        app:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/allAppListSearch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/arrow_back" />
-
-    <SearchView
-        android:id="@+id/allAppListSearch"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/applistScreen"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:gravity="start"
-        android:queryHint="@string/search"
-        android:textAlignment="gravity"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/quitAllAppListButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
 
-    <ListView
-        android:id="@+id/allAppListTable"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:choiceMode="multipleChoiceModal"
-        android:clickable="true"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:layoutDirection="locale"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quitAllAppListButton"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:id="@+id/applistQuitFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints,UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/quitAllAppListButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="closeAppViewButton"
+                android:contentDescription="@string/quit_button_desc"
+                android:orientation="vertical"
+                app:backgroundTint="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/allAppListSearch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/arrow_back" />
+
+            <SearchView
+                android:id="@+id/allAppListSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:queryHint="@string/search"
+                android:textAlignment="gravity"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/quitAllAppListButton"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/applistFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/applistQuitFrame"
+            tools:ignore="MissingConstraints,NotSibling">
+
+            <ListView
+                android:id="@+id/allAppListTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:layoutDirection="locale"
+                android:scrollbars="none" />
+
+            <ListView
+                android:id="@+id/allLetterListTable"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="7"
+                android:clickable="true"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:layoutDirection="locale"
+                android:scrollbars="none"
+                android:textAlignment="textEnd"
+                tools:ignore="RtlCompat" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

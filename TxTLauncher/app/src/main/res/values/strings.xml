@@ -66,5 +66,6 @@
     <string name="button_ai">Private AI</string>
     <string name="button_discovery">Discovery</string>
     <string name="button_lock">Lock screen</string>
+    <string name="button_aiapp">Start AI</string>
 
 </resources>

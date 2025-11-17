@@ -42,7 +42,7 @@
     <string name="background_file_not_found">Háttérkép fájl nem elérhető</string>
     <string name="button_close_widget">Vissza</string>
     <string name="start_ai">AI indítása</string>
-    <string name="settings_weather_html1">Időjárás lekérdezés HTML (@CITY@ - ahova a település nevet kell illeszteni)</string>
+    <string name="settings_weather_html1">Időjárás lekérdezés</string>
     <string name="version">Verzió</string>
     <string name="widgat_map">Tegyél a térképre</string>
     <string name="error_startapp">App indítása nem sikerült</string>
@@ -53,7 +53,7 @@
     <string name="news_firstrun_title">Első indítás</string>
     <string name="news_firstrun">Előkészítés # Beállítások mentése</string>
     <string name="help_text_1">"Használat: ## Jobbra húzás: eszközök # Balra húzás: felfedezés # Fel húzás: applikációk listája # Lefelé húzás: kedvencek # Dupla érintés: zárolás # Hosszú érintés: kedvencek "</string>
-    <string name="help_text_2">Beállítások: ## - fő képenyőre appok választása # - appok választása a kedvencek közé # - ikonok megjelenítésének bekapcsolása # - AI link beállítása (Eszközök lap) # - web kereső lbeállítása (a link végére kerül a keresett kifejezés) # - háttérkép (a Letöltések mappából) # - visszaállítás alapértékekre # - appikációk újraolvasása (változás esetén)</string>
+    <string name="help_text_2">Beállítások: ## - fő képenyőre appok választása # - appok választása a kedvencek közé # - ikonok megjelenítésének bekapcsolása # - AI link beállítása (Eszközök lap, ikonként) # - web kereső beállítása (a link végére kerül a keresett kifejezés) # - háttérkép (fájlnév, a Letöltések mappából) # - visszaállítás alapértékekre # - appikációk újraolvasása (változás esetén)</string>
     <string name="help_text_4">Licenc: GPLv3</string>
     <string name="licence">GPLv3</string>
     <string name="help_text_3">Új verzió letölthető a weboldalról.</string>
@@ -66,4 +66,5 @@
     <string name="button_ai">AI indítása</string>
     <string name="button_discovery">Felfedezés</string>
     <string name="button_lock">Zárolás</string>
+    <string name="button_aiapp">MI indítása</string>
 </resources>

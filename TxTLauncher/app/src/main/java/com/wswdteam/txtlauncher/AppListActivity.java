@@ -1,7 +1,9 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
+import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
@@ -10,9 +12,11 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ public class AppListActivity extends AppCompatActivity {
     final ArrayList<ResolveInfo> allappList = new ArrayList<>();
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> appPackList = new ArrayList<>();
+    final ArrayList<String> letterList = new ArrayList<>();
 
     final ArrayList<ResolveInfo> allappListBackup = new ArrayList<>();
     final ArrayList<String> appListBackup = new ArrayList<>();
@@ -60,6 +65,17 @@ public class AppListActivity extends AppCompatActivity {
         val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
         if (!val.isEmpty()) {
             showicons = !val.equals("0");
+        }
+
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
+        //ImageView iv = findViewById(R.id.quitAllAppListButton);
+        if (appI != null) {
+            appI.setBounds(0, 0, (int) defaultFontSize, (int) defaultFontSize);
+            ImageView iv = findViewById(R.id.quitAllAppListButton);
+            ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();
+            layoutParams.width = layoutParams.width + (int) defaultPlusFontSize;
+            layoutParams.height = layoutParams.height + (int) defaultPlusFontSize;
+            iv.setLayoutParams(layoutParams);
         }
     }
 
@@ -119,6 +135,9 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
                             tvt.setCompoundDrawables(null, null, null, null);
+                            if (!showicons) {
+                                tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                            }
                         } else {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
@@ -130,7 +149,40 @@ public class AppListActivity extends AppCompatActivity {
                                 tvt.setCompoundDrawables(appI, null, null, null);
                                 tvt.setCompoundDrawablePadding(30);
                                 tvt.setPadding(10, 10, 10, 10);
+                            } else {
+                                tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                             }
+                        }
+                    }
+                }
+                return row;
+            }
+        };
+
+        final ListView letterTable = findViewById(R.id.allLetterListTable);
+        final var adapterletters = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, letterList){
+            @Override
+            public String getItem(int position) {
+                return super.getItem(position);
+            }
+
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                String appN = getItem(position);
+                View row = super.getView(position, convertView, parent);
+                TextView tvt = row.findViewById(android.R.id.text1);
+                if (appN != null) {
+                    if (!appN.isEmpty()) {
+                        if (appN.length() == 1) {
+                            tvt.setTextColor(defaultLetterColor);
+                            tvt.setText(appN);
+                            tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                            tvt.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                            tvt.setCompoundDrawablePadding(0);
+                            ViewGroup.LayoutParams params = tvt.getLayoutParams();
+                            params.height = (int) defaultFontSize + (int) defaultPlusFontSize + 10;
+                            tvt.setLayoutParams(params);
                         }
                     }
                 }
@@ -150,11 +202,8 @@ public class AppListActivity extends AppCompatActivity {
                 String s = String.valueOf(first);
                 if (firstapp) {
                     firstapp = false;
-                //} else {
-                    //appList.add("");
-                    //appPackList.add("");
-                    //allappList.add(null);
                 }
+                letterList.add(s);
                 appList.add(s);
                 appPackList.add("");
                 allappList.add(null);
@@ -166,12 +215,13 @@ public class AppListActivity extends AppCompatActivity {
 
         appTable.setAdapter(adapterallapp);
         adapterallapp.notifyDataSetChanged();
+        letterTable.setAdapter(adapterletters);
+        adapterletters.notifyDataSetChanged();
         appListBackup.addAll(appList);
         allappListBackup.addAll(allappList);
         appPackListBackup.addAll(appPackList);
 
         appTable.setOnItemClickListener((parent, view, position, id) -> {
-            //view.setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_primary));
             String selectedP= (String) (appTable.getItemAtPosition(position));
             //Log.d(DEBUG_TAG, selectedP);
             for (int i=0; i<appList.size(); i++) {
@@ -187,8 +237,20 @@ public class AppListActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
-                    //Log.d(DEBUG_TAG, R.string.starting_other_app + " " + appp);
                 }
+            }
+        });
+
+        letterTable.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedL = (String) (letterTable.getItemAtPosition(position));
+            ListView lv = findViewById(R.id.allAppListTable);
+            var i = 0;
+            while (i < appList.size()) {
+                if (selectedL.equals(appList.get(i))) {
+                    lv.setSelection(i);
+                    i = appList.size();
+                }
+                i++;
             }
         });
 

@@ -140,11 +140,11 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="0dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/button_map"
-                android:onClick="openMap"
+                android:contentDescription="@string/button_aiapp"
+                android:onClick="openAI"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/map" />
+                app:srcCompat="@drawable/ai_star" />
 
         </LinearLayout>
     </LinearLayout>
