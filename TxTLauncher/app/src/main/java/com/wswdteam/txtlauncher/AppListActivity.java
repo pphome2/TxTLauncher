@@ -4,6 +4,7 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
+import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
@@ -135,9 +136,7 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
                             tvt.setCompoundDrawables(null, null, null, null);
-                            if (!showicons) {
-                                tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
-                            }
+                            tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
                         } else {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
@@ -268,11 +267,14 @@ public class AppListActivity extends AppCompatActivity {
                 appList.clear();
                 allappList.clear();
                 appPackList.clear();
+                ListView lv = findViewById(R.id.allLetterListTable);
                 if (nt.isEmpty()) {
+                    lv.setVisibility(View.VISIBLE);
                     appList.addAll(appListBackup);
                     allappList.addAll(allappListBackup);
                     appPackList.addAll(appPackListBackup);
                 } else {
+                    lv.setVisibility(View.INVISIBLE);
                     for (ResolveInfo app : MainActivity.allApplicationsList) {
                         String appName = app.loadLabel(MainActivity.packageMan).toString();
                         String pName = app.activityInfo.packageName;

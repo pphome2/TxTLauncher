@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
+import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
@@ -15,7 +16,6 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -54,9 +54,9 @@ public class WidgetActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.widgetTitle);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
-        int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
@@ -292,7 +292,16 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void startButtonApp10(View v) {
         // map
+        openMap(v);
+    }
+
+
+    //
+    // Térkép mutatása
+    //
+    public void openMap(View view) {
         try {
+            //Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
             Uri mapUri = Uri.parse("geo:0,0");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             startActivity(mapIntent);
@@ -300,6 +309,7 @@ public class WidgetActivity extends AppCompatActivity {
             systemMessage(getString(R.string.error_startapp));
         }
     }
+
 
     //
     //  Fő nézet: leírás

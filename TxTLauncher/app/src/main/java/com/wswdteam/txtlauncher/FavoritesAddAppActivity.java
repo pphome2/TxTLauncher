@@ -38,6 +38,8 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
     boolean showicons = false;
+    public int selectedApp = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,9 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.addFavAppTitle);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
-        int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
@@ -156,12 +158,17 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                 }
                 return row;
             }
-
         };
 
         for (ResolveInfo app : MainActivity.allApplicationsList) {
             String appName = app.loadLabel(MainActivity.packageMan).toString();
             appList.add(appName);
+            if (selApp.contains(appName)) {
+                selectedApp++;
+                TextView tv = findViewById(R.id.addFavAppInfo);
+                String st = favAppNum + " / " + selectedApp;
+                tv.setText(st);
+            }
         }
 
         appTable.setAdapter(adapter);
@@ -181,10 +188,15 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             if (del) {
                 selApp.remove(pos);
                 view.setBackgroundColor(MainActivity.defaultBackGroundColor);
+                selectedApp--;
             } else {
                 selApp.add(iname);
                 view.setBackgroundColor(MainActivity.defaultSelectColor);
+                selectedApp++;
             }
+            TextView tv = findViewById(R.id.addFavAppInfo);
+            String st1 = favAppNum + " / " + selectedApp;
+            tv.setText(st1);
             // - String selectedP = (String) (appTable.getItemAtPosition(position));
             // - Log.d(DEBUG_TAG, selectedP);
         });

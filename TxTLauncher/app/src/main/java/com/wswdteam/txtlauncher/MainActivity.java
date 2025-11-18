@@ -127,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
     public int screenWidth;
     public static long packageUpdateTime;
     public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 20;
-    public static float defaultPlusFontSizeTitle = 20;
+    public static float defaultPlusFontSize = 10;
+    public static float defaultPlusFontSizeTitle = 15;
     public static int defaultBackGroundColor = 0;
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
@@ -156,15 +156,18 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.mainTitle);
         defaultFontSize = tv.getTextSize();
-        //float scaledDensity = configuration.fontScale;
+        // float scaledDensity = configuration.fontScale;
         // @float defaultTextSize = 14f;
-        //defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
-        //defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
+        // számítás
+        // defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
+        // defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
 
-        tv = findViewById(R.id.digitalClock);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (5 * defaultPlusFontSize));
-        tv = findViewById(R.id.digitalDate);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (1 * defaultPlusFontSize));
+        // tv = findViewById(R.id.digitalClock);
+        // tv.setTextSize(tv.getTextSize());
+        // tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (5 * defaultPlusFontSize));
+        // tv = findViewById(R.id.digitalDate);
+        // tv.setTextSize(tv.getTextSize());
+        // tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (1 * defaultPlusFontSize));
 
         int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
@@ -1050,21 +1053,6 @@ public class MainActivity extends AppCompatActivity {
             searchIntent.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
             //searchIntent.setPackage("com.google.android.googlequicksearchbox");
             startActivity(searchIntent);
-        } catch (Exception e) {
-            systemMessage(getString(R.string.error_startapp));
-        }
-    }
-
-
-    //
-    // Térkép mutatása
-    //
-    public void openMap(View view) {
-        try {
-            //Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
-            Uri mapUri = Uri.parse("geo:0,0");
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-            startActivity(mapIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }

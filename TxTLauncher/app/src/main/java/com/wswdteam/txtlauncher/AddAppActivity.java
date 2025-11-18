@@ -12,8 +12,7 @@ import static java.util.Collections.sort;
 import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.TypedValue;
+import android.os.Bundle; import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ public class AddAppActivity extends AppCompatActivity {
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
     boolean showicons = false;
+    public int selectedAppNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +52,9 @@ public class AddAppActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.addappTitle);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
-        int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
@@ -136,7 +136,7 @@ public class AddAppActivity extends AppCompatActivity {
                 String appN = getItem(position);
                 View row = super.getView(position, convertView, parent);
                 TextView tvt = row.findViewById(android.R.id.text1);
-                if (appN != null) {
+                if ((appN != null) && (!appN.isEmpty())) {
                     tvt.setText(appN);
                     if (showicons) {
                         ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
@@ -163,6 +163,12 @@ public class AddAppActivity extends AppCompatActivity {
         for (ResolveInfo app : MainActivity.allApplicationsList) {
             String appName = app.loadLabel(MainActivity.packageMan).toString();
             appList.add(appName);
+            if (selApp.contains(appName)) {
+                selectedAppNum++;
+                TextView tv = findViewById(R.id.addappInfo);
+                String st = homeAppNum + " / " + selectedAppNum;
+                tv.setText(st);
+            }
         }
 
         appTable.setAdapter(adapter);
@@ -183,10 +189,15 @@ public class AddAppActivity extends AppCompatActivity {
             if (del) {
                 selApp.remove(pos);
                 view.setBackgroundColor(MainActivity.defaultBackGroundColor);
+                selectedAppNum--;
             } else {
                 selApp.add(iname);
                 view.setBackgroundColor(MainActivity.defaultSelectColor);
+                selectedAppNum++;
             }
+            TextView tv = findViewById(R.id.addappInfo);
+            String st1 = homeAppNum + " / " + selectedAppNum;
+            tv.setText(st1);
             // - String selectedP = (String) (appTable.getItemAtPosition(position));
             // - Log.d(DEBUG_TAG, selectedP);
         });

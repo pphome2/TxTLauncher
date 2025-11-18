@@ -56,7 +56,7 @@ public class FavoritesActivity extends AppCompatActivity {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
-            int ts = (int) tv.getTextSize();
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);

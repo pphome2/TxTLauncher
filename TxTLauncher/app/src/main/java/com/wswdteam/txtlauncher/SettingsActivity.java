@@ -7,6 +7,7 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
+import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.packageUpdateTime;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
@@ -53,9 +54,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.settingsViewTitle);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
-        int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);

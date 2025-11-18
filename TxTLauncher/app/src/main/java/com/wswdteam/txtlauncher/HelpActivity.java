@@ -4,6 +4,7 @@ import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_APP_NAME;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_VERSION;
 import static com.wswdteam.txtlauncher.MainActivity.TXT_WEB_PAGE;
+import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.lineSeparator;
 
@@ -42,9 +43,9 @@ public class HelpActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.helpViewTitle);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
-        int ts = (int) tv.getTextSize();
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
+            int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
