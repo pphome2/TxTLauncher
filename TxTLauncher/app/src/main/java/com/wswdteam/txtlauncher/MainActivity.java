@@ -156,18 +156,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.mainTitle);
         defaultFontSize = tv.getTextSize();
-        // float scaledDensity = configuration.fontScale;
+        // méretezés: float scaledDensity = configuration.fontScale;
         // @float defaultTextSize = 14f;
-        // számítás
-        // defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
-        // defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
-
-        // tv = findViewById(R.id.digitalClock);
-        // tv.setTextSize(tv.getTextSize());
-        // tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (5 * defaultPlusFontSize));
-        // tv = findViewById(R.id.digitalDate);
-        // tv.setTextSize(tv.getTextSize());
-        // tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (1 * defaultPlusFontSize));
+        // - méretezetten: defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
+        // - méretezetten: defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
 
         int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
         isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
@@ -185,6 +177,15 @@ public class MainActivity extends AppCompatActivity {
             defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
             defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
         }
+
+        tv = findViewById(R.id.digitalClock);
+        tv.setTextSize(tv.getTextSize());
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (2 * defaultPlusFontSizeTitle));
+        tv.setTextColor(defaultTextColor);
+        tv = findViewById(R.id.digitalDate);
+        tv.setTextSize(tv.getTextSize());
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (2 * defaultPlusFontSizeTitle));
+        tv.setTextColor(defaultTextColor);
 
         AppContext = this.getApplicationContext();
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
