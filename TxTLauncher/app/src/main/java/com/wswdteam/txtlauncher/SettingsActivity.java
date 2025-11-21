@@ -6,12 +6,14 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_URL;
 import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.packageUpdateTime;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher.MainActivity.privateSearchUrlOrig;
+import static com.wswdteam.txtlauncher.MainActivity.weatherUrlOrig;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -106,7 +108,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         EditText v1 = findViewById(R.id.editPrivateAI);
         EditText v2 = findViewById(R.id.editUrlSearch);
-        EditText v3 = findViewById(R.id.editBackgroundImage);
+        EditText v3 = findViewById(R.id.editWeatherLink);
+        EditText v4 = findViewById(R.id.editBackgroundImage);
 
         v1.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -129,6 +132,15 @@ public class SettingsActivity extends AppCompatActivity {
         v3.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 var settings = MainActivity.sharedPreferences.edit();
+                settings.putString(SETTINGS_WEATHER_URL, String.valueOf(s).trim());
+                settings.apply();
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+        v4.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                var settings = MainActivity.sharedPreferences.edit();
                 settings.putString(SETTINGS_BACKGROUND_IMAGE_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
@@ -148,11 +160,17 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             v2.setText(MainActivity.privateSearchUrl);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
+        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_URL, "");
         if (!val.isEmpty()) {
             v3.setText(val);
         } else {
-            v3.setText(MainActivity.backgroundImage);
+            v3.setText(MainActivity.weatherUrl);
+        }
+        val = MainActivity.sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
+        if (!val.isEmpty()) {
+            v4.setText(val);
+        } else {
+            v4.setText(MainActivity.backgroundImage);
         }
         //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
@@ -190,10 +208,12 @@ public class SettingsActivity extends AppCompatActivity {
     public void resetButton(View view) {
         EditText v1 = findViewById(R.id.editPrivateAI);
         EditText v2 = findViewById(R.id.editUrlSearch);
-        EditText v3 = findViewById(R.id.editBackgroundImage);
+        EditText v3 = findViewById(R.id.editWeatherLink);
+        EditText v4 = findViewById(R.id.editBackgroundImage);
         v1.setText(privateAIUrlOrig);
         v2.setText(privateSearchUrlOrig);
-        v3.setText(backgroundImageOrig);
+        v3.setText(weatherUrlOrig);
+        v4.setText(backgroundImageOrig);
     }
 
 

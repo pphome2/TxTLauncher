@@ -74,10 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static String privateAIUrl = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrl = "https://duckduckgo.com/?q=";
+    public static String weatherUrl = "";
     public static String backgroundImage = "image.png";
 
     public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
+    public static String weatherUrlOrig = "";
     //public static String WEATHER_SEARCH_URL = "https://www.google.com/search?q=";
     public static String backgroundImageOrig = "image.png";
 
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public static String SETTINGS_HOME_ICON_TAG = "AppIcon";
     public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
     public static String SETTINGS_URL_SEARCH_TAG = "Search";
+    public static String SETTINGS_WEATHER_URL = "Weather";
     public static String SETTINGS_BACKGROUND_IMAGE_TAG = "BackgroundImage";
     public static String SETTINGS_BACKGROUND_IMAGE = "FormattedBackgroundImage";
     public static String SETTINGS_NOTE = "AppNote";
@@ -151,6 +154,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        weatherUrl = getString(R.string.search_weather);
+        weatherUrlOrig = getString(R.string.search_weather);
 
         Configuration configuration = getResources().getConfiguration();
 
@@ -584,6 +589,10 @@ public class MainActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             privateSearchUrl = val;
         }
+        val = sharedPreferences.getString(SETTINGS_WEATHER_URL, "");
+        if (!val.isEmpty()) {
+            weatherUrl = val;
+        }
         val = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
         if (!val.isEmpty()) {
             backgroundImage = val;
@@ -795,8 +804,15 @@ public class MainActivity extends AppCompatActivity {
         }
         appF.setImageDrawable(defaultIcons.get(2));
         // browser
-        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
-        broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        Intent broIn;
+        if (privateSearchUrl.contains("://")) {
+            broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+            broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        } else {
+            final PackageManager pm = getPackageManager();
+            broIn = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
+        }
+        assert broIn != null;
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
         ResolveInfo broD = broDL.get(0);
         String broB = broD.activityInfo.packageName;
@@ -1000,7 +1016,6 @@ public class MainActivity extends AppCompatActivity {
         //Log.d(DEBUG_TAG,"Action swipe right: open widgets");
         startedWidgetAct = true;
         startActivity(new Intent(MainActivity.this, WidgetActivity.class));
-
     }
 
 
@@ -1048,11 +1063,18 @@ public class MainActivity extends AppCompatActivity {
     //
     public void openWeatherSearch(View v) {
         try {
-            String query = getString(R.string.search_weather);
-            Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
-            searchIntent.putExtra(SearchManager.QUERY, query + "\n");
-            searchIntent.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
-            //searchIntent.setPackage("com.google.android.googlequicksearchbox");
+            Intent searchIntent;
+            if (weatherUrl.contains("://")) {
+                searchIntent = new Intent(Intent.ACTION_VIEW);
+                searchIntent.setData(Uri.parse(weatherUrl));
+                searchIntent.setPackage(packName.get(2));
+                searchIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            } else {
+                searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
+                searchIntent.putExtra(SearchManager.QUERY, weatherUrl + "\n");
+                searchIntent.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+                //searchIntent.setPackage("com.google.android.googlequicksearchbox");
+            }
             startActivity(searchIntent);
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));

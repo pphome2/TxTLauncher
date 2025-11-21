@@ -67,5 +67,6 @@
     <string name="button_discovery">Discovery</string>
     <string name="button_lock">Lock screen</string>
     <string name="button_aiapp">Start AI</string>
+    <string name="settings_title_weather">Weather URL or key word for search</string>
 
 </resources>

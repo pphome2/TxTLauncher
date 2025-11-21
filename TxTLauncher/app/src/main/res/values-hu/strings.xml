@@ -67,4 +67,5 @@
     <string name="button_discovery">Felfedezés</string>
     <string name="button_lock">Zárolás</string>
     <string name="button_aiapp">MI indítása</string>
+    <string name="settings_title_weather">Időjárás URL vagy kulcsszó kereséshez</string>
 </resources>

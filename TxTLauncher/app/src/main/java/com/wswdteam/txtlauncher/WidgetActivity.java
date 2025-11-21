@@ -7,6 +7,8 @@ import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -172,9 +174,24 @@ public class WidgetActivity extends AppCompatActivity {
     @SuppressLint("SetJavaScriptEnabled")
     public void startAI(View view) {
         try {
-            Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateAIUrl));
-            broIn.addCategory(Intent.CATEGORY_DEFAULT);
-            startActivity(broIn);
+            Intent brIn;
+            if (privateAIUrl.contains("://")) {
+                brIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateAIUrl));
+                brIn.addCategory(Intent.CATEGORY_DEFAULT);
+                brIn = new Intent(Intent.ACTION_VIEW);
+                brIn.setData(Uri.parse(privateAIUrl));
+                brIn.setPackage(MainActivity.packName.get(2));
+                brIn.addCategory(Intent.CATEGORY_DEFAULT);
+            } else {
+                brIn = new Intent(Intent.ACTION_WEB_SEARCH);
+                brIn.addCategory(Intent.CATEGORY_DEFAULT);
+                brIn.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                brIn.putExtra(SearchManager.QUERY, privateAIUrl + "\n");
+                brIn.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+                //searchIntent.setPackage("com.google.android.googlequicksearchbox");
+            }
+            startActivity(brIn);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -187,11 +204,12 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void startButtonApp1(View v) {
         // dial
-        final PackageManager pm = getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(0));
-        assert launchIntent != null;
         try {
+            final PackageManager pm = getPackageManager();
+            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(0));
+            assert launchIntent != null;
             startActivity(launchIntent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -202,11 +220,12 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void startButtonApp2(View v) {
         // mail
-        final PackageManager pm = getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(1));
-        assert launchIntent != null;
         try {
+            final PackageManager pm = getPackageManager();
+            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(1));
+            assert launchIntent != null;
             startActivity(launchIntent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -225,11 +244,12 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void startButtonApp4(View v) {
         // browser
-        final PackageManager pm = getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
-        assert launchIntent != null;
         try {
+            final PackageManager pm = getPackageManager();
+            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
+            assert launchIntent != null;
             startActivity(launchIntent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -240,11 +260,12 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void startButtonApp5(View v) {
         // camera
-        final PackageManager pm = getPackageManager();
-        Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(3));
-        assert launchIntent != null;
         try {
+            final PackageManager pm = getPackageManager();
+            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(3));
+            assert launchIntent != null;
             startActivity(launchIntent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -256,6 +277,7 @@ public class WidgetActivity extends AppCompatActivity {
     public void startButtonApp6(View v) {
         // applist
         startActivity(new Intent(WidgetActivity.this, AppListActivity.class));
+        this.finish();
     }
 
     //
@@ -264,6 +286,7 @@ public class WidgetActivity extends AppCompatActivity {
     public void startButtonApp7(View v) {
         // fav
         startActivity(new Intent(WidgetActivity.this, FavoritesActivity.class));
+        this.finish();
     }
 
     //
@@ -282,6 +305,7 @@ public class WidgetActivity extends AppCompatActivity {
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
             startActivity(intent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -305,6 +329,7 @@ public class WidgetActivity extends AppCompatActivity {
             Uri mapUri = Uri.parse("geo:0,0");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             startActivity(mapIntent);
+            this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -316,6 +341,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     public void openHelp(View view) {
         startActivity(new Intent(WidgetActivity.this, HelpActivity.class));
+        this.finish();
     }
 
 
