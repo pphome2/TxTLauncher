@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
-
-    private boolean accessibilityLock = true;
+    public static boolean accessibilityLock = true;
 
 
     //

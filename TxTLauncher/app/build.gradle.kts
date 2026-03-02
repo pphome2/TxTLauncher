@@ -1,15 +1,18 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     alias(libs.plugins.android.application)
 }
 
 android {
     namespace = "com.wswdteam.txtlauncher"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.wswdteam.txtlauncher"
-        minSdk = 34
-        targetSdk = 35
+        minSdk = 35
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
