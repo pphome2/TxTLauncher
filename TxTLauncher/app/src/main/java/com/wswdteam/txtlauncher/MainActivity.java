@@ -137,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
 
+    private boolean accessibilityLock = true;
+
 
     //
     //  Fő nézet létrehozása
@@ -1034,6 +1036,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
+    //  Fő nézet: naptár app indítása
+    //
+    public void openCalendar(View view) {
+        try {
+            Intent cal = new Intent(Intent.ACTION_MAIN);
+            cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
+            startActivity(cal);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+
+    //
     // Rendszer beállítások indítása
     //
     public void openAndroidSystemSettings(View v) {
@@ -1099,12 +1116,26 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: eszköz zárolása
     //
     public void lockApp() {
-        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        try {
-            devicePolicyManager.lockNow();
-        } catch (Exception e) {
-            Toast.makeText(this, getString(R.string.service_disable), Toast.LENGTH_SHORT).show();
-            adminService();
+        if (accessibilityLock){
+            LDAccessibility service = LDAccessibility.getInstance();
+            if (service != null) {
+                // Ha fut a szerviz, lezárjuk a képernyőt
+                service.lockScreen();
+            } else {
+                // Ha nincs engedélyezve, elküldjük a felhasználót a beállításokba
+                Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Toast.makeText(this, "Kérlek, engedélyezd a kisegítő lehetőségeket a zároláshoz!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+            try {
+                devicePolicyManager.lockNow();
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.service_disable), Toast.LENGTH_SHORT).show();
+                adminService();
+            }
         }
     }
 

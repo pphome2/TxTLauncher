@@ -54,7 +54,7 @@
                 android:id="@+id/digitalDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="openClock"
+                android:onClick="openCalendar"
                 android:gravity="start"
                 android:textAlignment="gravity"
                 android:textStyle="bold" />
