@@ -69,5 +69,16 @@
     <string name="button_aiapp">Start AI</string>
     <string name="settings_title_weather">Weather URL or key word for search</string>
     <string name="accessibility_description">Accessibility service to lock</string>
+    <string name="wbutt_dial">Dial</string>
+    <string name="wbutt_mail">E-mail</string>
+    <string name="wbutt_help">Help</string>
+    <string name="wbutt_browser">Internet</string>
+    <string name="wbutt_camera">Camera</string>
+    <string name="wbutt_applist">Appications</string>
+    <string name="wbutt_favlist">Favorites</string>
+    <string name="wbutt_ai">AI</string>
+    <string name="wbutt_discovery">Discovery</string>
+    <string name="wbutt_map">Map</string>
+    <string name="error_lock">Please enable accessibility right</string>
 
 </resources>

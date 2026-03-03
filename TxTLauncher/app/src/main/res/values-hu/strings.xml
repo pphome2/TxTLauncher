@@ -69,4 +69,15 @@
     <string name="button_aiapp">MI indítása</string>
     <string name="settings_title_weather">Időjárás URL vagy kulcsszó kereséshez</string>
     <string name="accessibility_description">Kisegítő lehetőség zárolásra</string>
+    <string name="wbutt_dial">Hívás</string>
+    <string name="wbutt_mail">Levelezés</string>
+    <string name="wbutt_help">Segítség</string>
+    <string name="wbutt_browser">Internet</string>
+    <string name="wbutt_camera">Kamera</string>
+    <string name="wbutt_applist">Alkalmazások</string>
+    <string name="wbutt_favlist">Kedvencek</string>
+    <string name="wbutt_ai">MI</string>
+    <string name="wbutt_discovery">Felfedezés</string>
+    <string name="wbutt_map">Térkép</string>
+    <string name="error_lock">Kérlek engedélyezd az alkalmazást a kisegítő lehetőségek között.</string>
 </resources>

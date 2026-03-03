@@ -40,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 
 import androidx.activity.EdgeToEdge;
@@ -136,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
-    public static boolean accessibilityLock = true;
 
 
     //
@@ -805,15 +803,17 @@ public class MainActivity extends AppCompatActivity {
         }
         appF.setImageDrawable(defaultIcons.get(2));
         // browser
-        Intent broIn;
-        if (privateSearchUrl.contains("://")) {
-            broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
-            broIn.addCategory(Intent.CATEGORY_DEFAULT);
-        } else {
-            final PackageManager pm = getPackageManager();
-            broIn = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
-        }
-        assert broIn != null;
+        // Intent broIn;
+        // if (privateSearchUrl.contains("://")) {
+        //    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+        //    broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        // } else {
+        //    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        //    broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        // }
+        // assert broIn != null;
+        Intent broIn = new Intent(Intent.ACTION_MAIN);
+        broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
         ResolveInfo broD = broDL.get(0);
         String broB = broD.activityInfo.packageName;
@@ -1115,38 +1115,14 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: eszköz zárolása
     //
     public void lockApp() {
-        if (accessibilityLock){
-            LDAccessibility service = LDAccessibility.getInstance();
-            if (service != null) {
-                // Ha fut a szerviz, lezárjuk a képernyőt
-                service.lockScreen();
-            } else {
-                // Ha nincs engedélyezve, elküldjük a felhasználót a beállításokba
-                Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                Toast.makeText(this, "Kérlek, engedélyezd a kisegítő lehetőségeket a zároláshoz!", Toast.LENGTH_LONG).show();
-            }
+        LDAccessibility service = LDAccessibility.getInstance();
+        if (service != null) {
+            service.lockScreen();
         } else {
-            DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-            try {
-                devicePolicyManager.lockNow();
-            } catch (Exception e) {
-                Toast.makeText(this, getString(R.string.service_disable), Toast.LENGTH_SHORT).show();
-                adminService();
-            }
-        }
-    }
-
-
-    //
-    //  Fő nézet: admin
-    //
-    public void adminService() {
-        try {
-            startActivity(new Intent().setComponent(new ComponentName("com.android.settings", "com.android.settings.DeviceAdminSettings")));
-        } catch (Exception e) {
-            systemMessage(getString(R.string.error_startapp));
+            systemMessage(getString(R.string.error_lock));
+            Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 
