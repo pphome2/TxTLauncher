@@ -2,6 +2,7 @@ package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
@@ -160,8 +161,8 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             }
         };
 
-        for (ResolveInfo app : MainActivity.allApplicationsList) {
-            String appName = app.loadLabel(MainActivity.packageMan).toString();
+        for (String[] allAppDatum : allAppData) {
+            String appName = allAppDatum[0];
             appList.add(appName);
             if (selApp.contains(appName)) {
                 selectedApp++;

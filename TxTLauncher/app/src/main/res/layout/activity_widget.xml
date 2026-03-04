@@ -66,6 +66,7 @@
                 android:id="@+id/buttonsFrame1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:padding="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -81,7 +82,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wdialButton"
                         android:layout_width="40dp"
@@ -99,6 +101,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_dial"
                         android:textAlignment="gravity">
                     </TextView>
@@ -113,7 +118,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wmailButton"
                         android:layout_width="40dp"
@@ -131,6 +137,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_mail"
                         android:textAlignment="gravity">
                     </TextView>
@@ -142,7 +151,8 @@
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/whelpButton"
                         android:layout_width="40dp"
@@ -161,6 +171,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_help"
                         android:textAlignment="gravity">
                     </TextView>
@@ -172,7 +185,8 @@
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wbrowserButton"
                         android:layout_width="40dp"
@@ -190,6 +204,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_browser"
                         android:textAlignment="gravity">
                     </TextView>
@@ -201,7 +218,8 @@
                     android:gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                 <ImageView
                     android:id="@+id/wcameraButton"
                     android:layout_width="40dp"
@@ -219,6 +237,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_camera"
                         android:textAlignment="gravity">
                     </TextView>
@@ -228,6 +249,7 @@
 
             <LinearLayout
                 android:id="@+id/buttonsFrame2"
+                android:baselineAligned="false"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -245,7 +267,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wapplistButton"
                         android:layout_width="40dp"
@@ -263,6 +286,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_applist"
                         android:textAlignment="gravity">
                     </TextView>
@@ -276,7 +302,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wfavlistButton"
                         android:layout_width="40dp"
@@ -294,6 +321,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_favlist"
                         android:textAlignment="gravity">
                     </TextView>
@@ -307,7 +337,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/waiButton"
                         android:layout_width="40dp"
@@ -325,6 +356,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_ai"
                         android:textAlignment="gravity">
                     </TextView>
@@ -338,7 +372,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wdiscoveryButton"
                         android:layout_width="40dp"
@@ -356,6 +391,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_discovery"
                         android:textAlignment="gravity">
                     </TextView>
@@ -369,7 +407,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="UseCompoundDrawables">
                     <ImageView
                         android:id="@+id/wmapButton"
                         android:layout_width="40dp"
@@ -387,6 +426,9 @@
                         android:layout_marginTop="0dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
                         android:text="@string/wbutt_map"
                         android:textAlignment="gravity">
                     </TextView>

@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
+    public static String[][] allAppData;
 
 
     //
@@ -349,38 +350,38 @@ public class MainActivity extends AppCompatActivity {
         startedHelp = false;
         dateReady = false;
 
-        ImageView iv;
-        if (homeSysIcon) {
-            GradientDrawable border = new GradientDrawable();
-            border.setColor(Color.TRANSPARENT);
-            border.setStroke(2, Color.WHITE);
-            border.setCornerRadius(10);
-            iv = findViewById(R.id.weatherButton);
-            iv.setBackground(border);
-            iv.setPadding(15, 15, 15, 15);
-            iv = findViewById(R.id.searchButton);
-            iv.setBackground(border);
-            iv.setPadding(15, 15, 15, 15);
-            iv = findViewById(R.id.settingsButton);
-            iv.setBackground(border);
-            iv.setPadding(15, 15, 15, 15);
-            iv = findViewById(R.id.mapButton);
-            iv.setBackground(border);
-            iv.setPadding(15, 15, 15, 15);
-        } else {
-            iv = findViewById(R.id.weatherButton);
-            iv.setBackground(null);
-            iv.setPadding(0, 0, 0, 0);
-            iv = findViewById(R.id.searchButton);
-            iv.setBackground(null);
-            iv.setPadding(0, 0, 0, 0);
-            iv = findViewById(R.id.settingsButton);
-            iv.setBackground(null);
-            iv.setPadding(0, 0, 0, 0);
-            iv = findViewById(R.id.mapButton);
-            iv.setBackground(null);
-            iv.setPadding(0, 0, 0, 0);
-        }
+        // ! ImageView iv;
+        // ! if (homeSysIcon) {
+        // !     GradientDrawable border = new GradientDrawable();
+        // !     border.setColor(Color.TRANSPARENT);
+        // !     border.setStroke(2, Color.WHITE);
+        // !     border.setCornerRadius(10);
+        // !     iv = findViewById(R.id.weatherButton);
+        // !     iv.setBackground(border);
+        // !     iv.setPadding(15, 15, 15, 15);
+        // !    iv = findViewById(R.id.searchButton);
+        // !     iv.setBackground(border);
+        // !     iv.setPadding(15, 15, 15, 15);
+        // !     iv = findViewById(R.id.settingsButton);
+        // !     iv.setBackground(border);
+        // !     iv.setPadding(15, 15, 15, 15);
+        // !     iv = findViewById(R.id.mapButton);
+        // !     iv.setBackground(border);
+        // !     iv.setPadding(15, 15, 15, 15);
+        // ! } else {
+        // !     iv = findViewById(R.id.weatherButton);
+        // !     iv.setBackground(null);
+        // !     iv.setPadding(0, 0, 0, 0);
+        // !     iv = findViewById(R.id.searchButton);
+        // !     iv.setBackground(null);
+        // !     iv.setPadding(0, 0, 0, 0);
+        // !     iv = findViewById(R.id.settingsButton);
+        // !     iv.setBackground(null);
+        // !     iv.setPadding(0, 0, 0, 0);
+        // !     iv = findViewById(R.id.mapButton);
+        // !     iv.setBackground(null);
+        // !     iv.setPadding(0, 0, 0, 0);
+        // ! }
         Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
@@ -717,37 +718,42 @@ public class MainActivity extends AppCompatActivity {
 
         homeTable1.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (homeTable1.getItemAtPosition(position));
-            //MainActivity.startApp(selectedP);
-            PackageManager pmx = getPackageManager();
-            for (ResolveInfo app : MainActivity.allApplicationsList) {
-                String appName = app.loadLabel(pmx).toString();
-                String pName = app.activityInfo.packageName;
-                //Log.d(DEBUG_TAG, appName);
-                if (appName.equals(selectedP)) {
+            for (int i=0; i<allAppData.length; i++) {
+                String appName;
+                appName = allAppData[i][0];
+                if (selectedP.contains(appName)) {
+                    String pkg = allAppData[i][1];
+                    String cls = allAppData[i][2];
+                    Intent intent = new Intent();
+                    intent.setClassName(pkg, cls);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                        startActivity(launchIntent);
+                        startActivity(intent);
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
+                    i = allAppData.length;
                 }
             }
             //Log.d(DEBUG_TAG, selectedP);
         });
         homeTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (homeTable2.getItemAtPosition(position));
-            //MainActivity.startApp(selectedP);
-            PackageManager pmx = getPackageManager();
-            for (ResolveInfo app : MainActivity.allApplicationsList) {
-                String appName = app.loadLabel(pmx).toString();
-                String pName = app.activityInfo.packageName;
-                if (appName.equals(selectedP)) {
+            for (int i=0; i<allAppData.length; i++) {
+                String appName;
+                appName = allAppData[i][0];
+                if (selectedP.contains(appName)) {
+                    String pkg = allAppData[i][1];
+                    String cls = allAppData[i][2];
+                    Intent intent = new Intent();
+                    intent.setClassName(pkg, cls);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                        startActivity(launchIntent);
+                        startActivity(intent);
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
+                    i = allAppData.length;
                 }
             }
             //Log.d(DEBUG_TAG, selectedP);
@@ -802,16 +808,16 @@ public class MainActivity extends AppCompatActivity {
             appF.setPadding(0, 0, 0, 0);
         }
         appF.setImageDrawable(defaultIcons.get(2));
-        // browser
-        // Intent broIn;
-        // if (privateSearchUrl.contains("://")) {
-        //    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
-        //    broIn.addCategory(Intent.CATEGORY_DEFAULT);
-        // } else {
-        //    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-        //    broIn.addCategory(Intent.CATEGORY_DEFAULT);
-        // }
-        // assert broIn != null;
+        // ! browser
+        // ! Intent broIn;
+        // ! if (privateSearchUrl.contains("://")) {
+        // !    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+        // !    broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        // ! } else {
+        // !    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        // !    broIn.addCategory(Intent.CATEGORY_DEFAULT);
+        // ! }
+        // ! assert broIn != null;
         Intent broIn = new Intent(Intent.ACTION_MAIN);
         broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
@@ -874,8 +880,10 @@ public class MainActivity extends AppCompatActivity {
         if (view.getId() == R.id.browserButton) {
             //appp = MainActivity.packName.get(2);
             try {
-                Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+                Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.EMPTY);
                 broIn.addCategory(Intent.CATEGORY_DEFAULT);
+                // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
+                // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
                 startActivity(broIn);
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
@@ -905,6 +913,24 @@ public class MainActivity extends AppCompatActivity {
             List<ResolveInfo> apps = packageMan.queryIntentActivities(intent, PackageManager.GET_META_DATA);
             apps.sort(new ResolveInfo.DisplayNameComparator(packageMan));
             MainActivity.allApplicationsList.addAll(apps);
+            MainActivity.allAppData = new String[apps.size()][3];
+            String appName;
+            String formerAppName = "";
+            int annum = 0;
+            for (int i=0; i<apps.size(); i++) {
+                ResolveInfo info = apps.get(i);
+                appName = info.loadLabel(packageMan).toString();
+                if (appName.equals(formerAppName)) {
+                    annum++;
+                    appName = appName + " (" + annum + ")";
+                } else {
+                    annum = 0;
+                }
+                formerAppName = appName;
+                allAppData[i][0] = appName;
+                allAppData[i][1] = info.activityInfo.packageName;
+                allAppData[i][2] = info.activityInfo.name;
+            }
         }
     }
 

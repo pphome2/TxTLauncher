@@ -66,11 +66,11 @@
             android:baselineAligned="false"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/applistQuitFrame"
-            tools:ignore="MissingConstraints,NotSibling">
+            tools:ignore="ExtraText,MissingConstraints,NotSibling">
 
             <ListView
                 android:id="@+id/allAppListTable"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -81,15 +81,15 @@
 
             <ListView
                 android:id="@+id/allLetterListTable"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:layout_weight="6"
                 android:clickable="true"
                 android:divider="@null"
                 android:dividerHeight="0dp"
                 android:layoutDirection="locale"
                 android:scrollbars="none"
+                android:listSelector="@android:color/transparent"
                 android:textAlignment="textEnd"
                 tools:ignore="RtlCompat" />
 

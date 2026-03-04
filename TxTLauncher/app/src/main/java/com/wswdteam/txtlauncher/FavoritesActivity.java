@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
@@ -10,7 +11,6 @@ import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -82,8 +82,8 @@ public class FavoritesActivity extends AppCompatActivity {
             tag = SETTINGS_FAV_APP_TAG + i;
             val = MainActivity.sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
-                for (ResolveInfo app : allApplicationsList) {
-                    appName = app.loadLabel(MainActivity.packageMan).toString();
+                for (String[] allAppDatum : allAppData) {
+                    appName = allAppDatum[0];
                     if (appName.equals(val)) {
                         favAppName.add(appName);
                     }
@@ -225,41 +225,44 @@ public class FavoritesActivity extends AppCompatActivity {
 
         favTable1.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (favTable1.getItemAtPosition(position));
-            for (ResolveInfo app : allApplicationsList) {
-                String appName = app.loadLabel(MainActivity.packageMan).toString();
-                String pName = app.activityInfo.packageName;
-                //Log.d(DEBUG_TAG, appName);
-                if (appName.equals(selectedP)) {
+            for (int i=0; i<allAppData.length; i++) {
+                String appName;
+                appName = allAppData[i][0];
+                if (selectedP.contains(appName)) {
+                    String pkg = allAppData[i][1];
+                    String cls = allAppData[i][2];
+                    Intent intent = new Intent();
+                    intent.setClassName(pkg, cls);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                        if (launchIntent != null) {
-                            startActivity(launchIntent);
-                            this.finish();
-                        }
+                        startActivity(intent);
+                        this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
+                    i = allAppData.length;
                 }
             }
             //Log.d(DEBUG_TAG, selectedP);
         });
         favTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (favTable2.getItemAtPosition(position));
-            //MainActivity.startApp(selectedP);
-            PackageManager pmx = getPackageManager();
-            for (ResolveInfo app : allApplicationsList) {
-                String appName = app.loadLabel(pmx).toString();
-                String pName = app.activityInfo.packageName;
-                if (appName.equals(selectedP)) {
+            for (int i=0; i<allAppData.length; i++) {
+                String appName;
+                appName = allAppData[i][0];
+                if (selectedP.contains(appName)) {
+                    String pkg = allAppData[i][1];
+                    String cls = allAppData[i][2];
+                    Intent intent = new Intent();
+                    intent.setClassName(pkg, cls);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pName);
-                        if (launchIntent != null) {
-                            startActivity(launchIntent);
-                            this.finish();
-                        }
+                        startActivity(intent);
+                        this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
+                    i = allAppData.length;
                 }
             }
             //Log.d(DEBUG_TAG, selectedP);

@@ -1,6 +1,8 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.allAppData;
+import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
@@ -31,20 +33,18 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Objects;
-
 
 //
 // App lista előkészítése
 //
 public class AppListActivity extends AppCompatActivity {
 
-    final ArrayList<ResolveInfo> allappList = new ArrayList<>();
+    final ArrayList<String> allappList = new ArrayList<>();
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> appPackList = new ArrayList<>();
     final ArrayList<String> letterList = new ArrayList<>();
 
-    final ArrayList<ResolveInfo> allappListBackup = new ArrayList<>();
+    final ArrayList<String> allappListBackup = new ArrayList<>();
     final ArrayList<String> appListBackup = new ArrayList<>();
     final ArrayList<String> appPackListBackup = new ArrayList<>();
     boolean showicons = false;
@@ -141,7 +141,7 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
                             if (showicons) {
-                                ResolveInfo thisApp = allappList.get(position);
+                                ResolveInfo thisApp = allApplicationsList.get(position);
                                 Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
                                 int ts = (int) tvt.getTextSize() + 25;
                                 appI.setBounds(0, 0, ts, ts);
@@ -180,7 +180,18 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                             tvt.setCompoundDrawablePadding(0);
                             ViewGroup.LayoutParams params = tvt.getLayoutParams();
-                            params.height = (int) defaultFontSize + (int) defaultPlusFontSize + 10;
+                            int totalH = parent.getHeight();
+                            if (totalH > 0) {
+                                int itemC = getCount();
+                                int goodItemHeight = (int) (48 * parent.getContext().getResources().getDisplayMetrics().density);
+                                int maxItemFit = totalH / goodItemHeight;
+                                if (itemC > maxItemFit) {
+                                    params.height = totalH / itemC;
+                                } else {
+                                    // ! params.height = (int) defaultFontSize + (int) defaultPlusFontSize + 3;
+                                    params.height = goodItemHeight;
+                                }
+                            }
                             tvt.setLayoutParams(params);
                         }
                     }
@@ -193,9 +204,9 @@ public class AppListActivity extends AppCompatActivity {
         appPackList.clear();
         allappList.clear();
         boolean firstapp = true;
-        for (ResolveInfo app : MainActivity.allApplicationsList) {
-            String appName = app.loadLabel(MainActivity.packageMan).toString();
-            String pName = app.activityInfo.packageName;
+        for (String[] allAppDatum : allAppData) {
+            String appName = allAppDatum[0];
+            String pName = allAppDatum[1];
             if (first != appName.charAt(0)) {
                 first = appName.charAt(0);
                 String s = String.valueOf(first);
@@ -207,35 +218,37 @@ public class AppListActivity extends AppCompatActivity {
                 appPackList.add("");
                 allappList.add(null);
             }
-            allappList.add(app);
+            allappList.add(allAppDatum[2]);
             appList.add(appName + " ");
             appPackList.add(pName);
         }
 
-        appTable.setAdapter(adapterallapp);
-        adapterallapp.notifyDataSetChanged();
         letterTable.setAdapter(adapterletters);
         adapterletters.notifyDataSetChanged();
+        appTable.setAdapter(adapterallapp);
+        adapterallapp.notifyDataSetChanged();
         appListBackup.addAll(appList);
         allappListBackup.addAll(allappList);
         appPackListBackup.addAll(appPackList);
 
         appTable.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedP= (String) (appTable.getItemAtPosition(position));
-            //Log.d(DEBUG_TAG, selectedP);
-            for (int i=0; i<appList.size(); i++) {
-                String appp = appList.get(i);
-                if (Objects.equals(appp, selectedP)) {
+            String selectedL = (String) (appTable.getItemAtPosition(position));
+            for (int i=0; i<allAppData.length; i++) {
+                String appName;
+                appName = allAppData[i][0];
+                if (selectedL.contains(appName)) {
+                    String pkg = allAppData[i][1];
+                    String cls = allAppData[i][2];
+                    Intent intent = new Intent();
+                    intent.setClassName(pkg, cls);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
-                        appp = appPackList.get(i);
-                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
-                        if (launchIntent != null) {
-                            startActivity(launchIntent);
-                            this.finish();
-                        }
+                        startActivity(intent);
+                        this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
+                    i = allAppData.length;
                 }
             }
         });
@@ -275,13 +288,14 @@ public class AppListActivity extends AppCompatActivity {
                     appPackList.addAll(appPackListBackup);
                 } else {
                     lv.setVisibility(View.INVISIBLE);
-                    for (ResolveInfo app : MainActivity.allApplicationsList) {
-                        String appName = app.loadLabel(MainActivity.packageMan).toString();
-                        String pName = app.activityInfo.packageName;
+                    for (String[] allAppDatum : allAppData) {
+                        String appName = allAppDatum[0];
+                        String pName = allAppDatum[1];
+                        String aName = allAppDatum[2];
                         if (appName.toLowerCase().contains(nt)) {
                             appList.add(appName);
                             appPackList.add(pName);
-                            allappList.add(app);
+                            allappList.add(aName);
                         }
                     }
                 }
