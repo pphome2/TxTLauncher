@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
@@ -198,7 +199,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp1(View v) {
+    public void startButtonAppDial(View v) {
         // dial
         try {
             final PackageManager pm = getPackageManager();
@@ -214,7 +215,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp2(View v) {
+    public void startButtonAppMail(View v) {
         // mail
         try {
             final PackageManager pm = getPackageManager();
@@ -230,7 +231,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp3(View v) {
+    public void startButtonAppHelp(View v) {
         // help
         openHelp(v);
     }
@@ -238,13 +239,19 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp4(View v) {
+    public void startButtonAppBrowser(View v) {
         // browser
         try {
-            final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
-            assert launchIntent != null;
-            startActivity(launchIntent);
+            String url = MainActivity.sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
+            if (url.isEmpty()) {
+                url = MainActivity.privateSearchUrl;
+            }
+            Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            broIn.addCategory(Intent.CATEGORY_DEFAULT);
+            // ! final PackageManager pm = getPackageManager();
+            // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
+            // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
+            startActivity(broIn);
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -254,7 +261,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp5(View v) {
+    public void startButtonAppCamera(View v) {
         // camera
         try {
             final PackageManager pm = getPackageManager();
@@ -270,7 +277,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp6(View v) {
+    public void startButtonAppList(View v) {
         // applist
         startActivity(new Intent(WidgetActivity.this, AppListActivity.class));
         this.finish();
@@ -279,7 +286,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp7(View v) {
+    public void startButtonAppFav(View v) {
         // fav
         startActivity(new Intent(WidgetActivity.this, FavoritesActivity.class));
         this.finish();
@@ -288,7 +295,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp8(View v) {
+    public void startButtonAppAI(View v) {
         // ai
         startAI(v);
     }
@@ -296,7 +303,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp9(View v) {
+    public void startButtonAppDiscovery(View v) {
         // discovery
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
@@ -310,7 +317,7 @@ public class WidgetActivity extends AppCompatActivity {
     //
     // App indítása
     //
-    public void startButtonApp10(View v) {
+    public void startButtonAppMap(View v) {
         // map
         openMap(v);
     }

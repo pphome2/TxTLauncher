@@ -58,6 +58,8 @@
             android:choiceMode="multipleChoiceModal"
             android:clickable="true"
             android:divider="@null"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:dividerHeight="0dp"
             android:layoutDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"

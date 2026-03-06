@@ -4,7 +4,6 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
@@ -135,9 +134,12 @@ public class FavoritesActivity extends AppCompatActivity {
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
                     if (favAppIcon) {
-                        for (ResolveInfo app : allApplicationsList) {
-                            String appName = app.loadLabel(MainActivity.packageMan).toString();
+                        ResolveInfo app;
+                        String appName;
+                        for (int i = 0; i < allAppData.length; i++) {
+                            appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(MainActivity.packageMan);
                                 int ts = (int) tvt.getTextSize() + 40;
@@ -146,7 +148,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                        // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -172,9 +174,12 @@ public class FavoritesActivity extends AppCompatActivity {
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
                     if (favAppIcon) {
-                        for (ResolveInfo app : allApplicationsList) {
-                            String appName = app.loadLabel(MainActivity.packageMan).toString();
+                        ResolveInfo app;
+                        String appName;
+                        for (int i = 0; i < allAppData.length; i++) {
+                            appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(MainActivity.packageMan);
                                 int ts = (int) tvt.getTextSize() + 40;
@@ -183,7 +188,7 @@ public class FavoritesActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                        // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -228,7 +233,7 @@ public class FavoritesActivity extends AppCompatActivity {
             for (int i=0; i<allAppData.length; i++) {
                 String appName;
                 appName = allAppData[i][0];
-                if (selectedP.contains(appName)) {
+                if (selectedP.equals(appName)) {
                     String pkg = allAppData[i][1];
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();
@@ -250,7 +255,7 @@ public class FavoritesActivity extends AppCompatActivity {
             for (int i=0; i<allAppData.length; i++) {
                 String appName;
                 appName = allAppData[i][0];
-                if (selectedP.contains(appName)) {
+                if (selectedP.equals(appName)) {
                     String pkg = allAppData[i][1];
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();

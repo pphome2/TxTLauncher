@@ -90,7 +90,7 @@
                         android:layout_height="40dp"
                         android:background="@drawable/rounded_button"
                         android:contentDescription="@string/button_dial"
-                        android:onClick="startButtonApp1"
+                        android:onClick="startButtonAppDial"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/call" />
@@ -126,7 +126,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/button_mail"
-                        android:onClick="startButtonApp2"
+                        android:onClick="startButtonAppMail"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/email" />
@@ -159,7 +159,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/applist_button_desc"
-                        android:onClick="startButtonApp3"
+                        android:onClick="startButtonAppHelp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/help"
@@ -193,7 +193,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/button_browser"
-                        android:onClick="startButtonApp4"
+                        android:onClick="startButtonAppBrowser"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/internet" />
@@ -226,7 +226,7 @@
                     android:layout_height="40dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/button_camera"
-                    android:onClick="startButtonApp5"
+                    android:onClick="startButtonAppCamera"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/camera" />
@@ -275,7 +275,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/applist_button_desc"
-                        android:onClick="startButtonApp6"
+                        android:onClick="startButtonAppList"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@drawable/menu" />
@@ -310,7 +310,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/favorite_apps"
-                        android:onClick="startButtonApp7"
+                        android:onClick="startButtonAppFav"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@id/dialButton"
                         app:srcCompat="@drawable/bookmarks" />
@@ -345,7 +345,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/button_ai"
-                        android:onClick="startButtonApp8"
+                        android:onClick="startButtonAppAI"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:srcCompat="@drawable/ai"
                         tools:layout_editor_absoluteX="194dp" />
@@ -380,7 +380,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/button_discovery"
-                        android:onClick="startButtonApp9"
+                        android:onClick="startButtonAppDiscovery"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/cameraButton"
                         app:srcCompat="@drawable/discovery" />
@@ -415,7 +415,7 @@
                         android:layout_height="40dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/button_lock"
-                        android:onClick="startButtonApp10"
+                        android:onClick="startButtonAppMap"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:srcCompat="@drawable/map" />

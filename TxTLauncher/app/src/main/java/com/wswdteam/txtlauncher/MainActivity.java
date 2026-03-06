@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
     public static String[][] allAppData;
+    public boolean developerMode = false;
 
 
     //
@@ -196,13 +197,13 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
         packageMan = getPackageManager();
 
-        getSettings();
 
         // verzió ellenőrzés
         versionCheck();
 
         timeInScreen();
         generateAppList();
+        getSettings();
 
         // sötét téma beállítása
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -382,7 +383,10 @@ public class MainActivity extends AppCompatActivity {
         // !     iv.setBackground(null);
         // !     iv.setPadding(0, 0, 0, 0);
         // ! }
-        Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
+
+        if (developerMode) {
+            Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
+        }
     }
 
 
@@ -563,8 +567,8 @@ public class MainActivity extends AppCompatActivity {
             tag = SETTINGS_APP_TAG + i;
             val = sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
-                for (ResolveInfo app : allApplicationsList) {
-                    appName = app.loadLabel(packageMan).toString();
+                for (String[] allAppDatum : allAppData) {
+                    appName = allAppDatum[0];
                     if (appName.equals(val)) {
                         homeAppName.add(appName);
                     }
@@ -631,9 +635,12 @@ public class MainActivity extends AppCompatActivity {
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
                     if (homeStartAppIcon) {
-                        for (ResolveInfo app : MainActivity.allApplicationsList) {
-                            String appName = app.loadLabel(packageMan).toString();
+                        ResolveInfo app;
+                        String appName;
+                        for (int i = 0; i < allAppData.length; i++) {
+                            appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
                                 int ts = (int) tvt.getTextSize() + 40;
@@ -642,7 +649,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
+                        // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -668,9 +675,12 @@ public class MainActivity extends AppCompatActivity {
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
                     if (homeStartAppIcon) {
-                        for (ResolveInfo app : MainActivity.allApplicationsList) {
-                            String appName = app.loadLabel(packageMan).toString();
+                        ResolveInfo app;
+                        String appName;
+                        for (int i = 0; i < allAppData.length; i++) {
+                            appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
                                 int ts = (int) tvt.getTextSize() + 40;
@@ -679,7 +689,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
+                        // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + defaultPlusFontSize);
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
@@ -721,7 +731,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i=0; i<allAppData.length; i++) {
                 String appName;
                 appName = allAppData[i][0];
-                if (selectedP.contains(appName)) {
+                if (selectedP.equals(appName)) {
                     String pkg = allAppData[i][1];
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();
@@ -742,7 +752,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i=0; i<allAppData.length; i++) {
                 String appName;
                 appName = allAppData[i][0];
-                if (selectedP.contains(appName)) {
+                if (selectedP.equals(appName)) {
                     String pkg = allAppData[i][1];
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();
@@ -880,10 +890,10 @@ public class MainActivity extends AppCompatActivity {
         if (view.getId() == R.id.browserButton) {
             //appp = MainActivity.packName.get(2);
             try {
-                Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.EMPTY);
-                broIn.addCategory(Intent.CATEGORY_DEFAULT);
-                // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
-                // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
+                // ! Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+                // ! broIn.addCategory(Intent.CATEGORY_DEFAULT);
+                Intent broIn = new Intent(Intent.ACTION_MAIN);
+                broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
                 startActivity(broIn);
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
@@ -915,18 +925,28 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.allApplicationsList.addAll(apps);
             MainActivity.allAppData = new String[apps.size()][3];
             String appName;
+            String pkgName;
+            String[] parts;
             String formerAppName = "";
-            int annum = 0;
+            String formerPkgName = "";
             for (int i=0; i<apps.size(); i++) {
                 ResolveInfo info = apps.get(i);
                 appName = info.loadLabel(packageMan).toString();
-                if (appName.equals(formerAppName)) {
-                    annum++;
-                    appName = appName + " (" + annum + ")";
+                pkgName= info.activityInfo.packageName;
+                parts = pkgName.split("\\.");
+                if (parts.length < 2) {
+                    pkgName = "0";
                 } else {
-                    annum = 0;
+                    pkgName = parts[1];
+                }
+                if (appName.equals(formerAppName)) {
+                    appName = appName + " (" + pkgName + ")";
+                    if (i > 0) {
+                        allAppData[i - 1][0] = formerAppName + " (" + formerPkgName + ")";
+                    }
                 }
                 formerAppName = appName;
+                formerPkgName = pkgName;
                 allAppData[i][0] = appName;
                 allAppData[i][1] = info.activityInfo.packageName;
                 allAppData[i][2] = info.activityInfo.name;

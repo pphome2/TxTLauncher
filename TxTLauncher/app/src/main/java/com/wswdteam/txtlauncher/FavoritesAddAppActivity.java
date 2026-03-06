@@ -148,9 +148,8 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                         tvt.setCompoundDrawables(appI, null, null, null);
                         tvt.setCompoundDrawablePadding(30);
                         tvt.setPadding(10, 10, 10, 10);
-                    } else {
-                        tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                     }
+                    // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                     if (selApp.contains(appN)) {
                         tvt.setBackgroundColor(MainActivity.defaultSelectColor);
                     } else {

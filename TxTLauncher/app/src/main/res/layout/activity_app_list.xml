@@ -72,17 +72,20 @@
                 android:id="@+id/allAppListTable"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="8"
                 android:clickable="true"
                 android:divider="@null"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:dividerHeight="0dp"
                 android:layoutDirection="locale"
                 android:scrollbars="none" />
 
             <ListView
                 android:id="@+id/allLetterListTable"
-                android:layout_width="48dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:divider="@null"

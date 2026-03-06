@@ -6,7 +6,6 @@ import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
@@ -15,7 +14,6 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -136,21 +134,27 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
                             tvt.setCompoundDrawables(null, null, null, null);
-                            tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
+                            // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
                         } else {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
                             if (showicons) {
-                                ResolveInfo thisApp = allApplicationsList.get(position);
-                                Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                                int ts = (int) tvt.getTextSize() + 25;
-                                appI.setBounds(0, 0, ts, ts);
-                                tvt.setCompoundDrawables(appI, null, null, null);
-                                tvt.setCompoundDrawablePadding(30);
-                                tvt.setPadding(10, 10, 10, 10);
-                            } else {
-                                tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                                ResolveInfo thisApp;
+                                String appName;
+                                for (int i = 0; i < allAppData.length; i++) {
+                                    appName = allAppData[i][0];
+                                    if ((appN.equals(appName))||(appN.equals(appName + " "))) {
+                                        thisApp = allApplicationsList.get(i);
+                                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                                        int ts = (int) tvt.getTextSize() + 25;
+                                        appI.setBounds(0, 0, ts, ts);
+                                        tvt.setCompoundDrawables(appI, null, null, null);
+                                        tvt.setCompoundDrawablePadding(30);
+                                        tvt.setPadding(10, 10, 10, 10);
+                                    }
+                                }
                             }
+                            // ! Ftvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                         }
                     }
                 }
@@ -176,7 +180,7 @@ public class AppListActivity extends AppCompatActivity {
                         if (appN.length() == 1) {
                             tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
-                            tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
+                            // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                             tvt.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                             tvt.setCompoundDrawablePadding(0);
                             ViewGroup.LayoutParams params = tvt.getLayoutParams();
@@ -236,7 +240,7 @@ public class AppListActivity extends AppCompatActivity {
             for (int i=0; i<allAppData.length; i++) {
                 String appName;
                 appName = allAppData[i][0];
-                if (selectedL.contains(appName)) {
+                if ((selectedL.equals(appName))||(selectedL.equals(appName + " "))) {
                     String pkg = allAppData[i][1];
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();
