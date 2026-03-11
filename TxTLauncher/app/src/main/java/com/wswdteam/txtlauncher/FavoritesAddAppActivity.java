@@ -1,10 +1,12 @@
 package com.wswdteam.txtlauncher;
 
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 
@@ -12,7 +14,10 @@ import static java.util.Collections.sort;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -25,6 +30,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -91,6 +97,17 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                 selApp.add(val);
             }
         }
+
+        int buttonId;
+        buttonId = MainActivity.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
+        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
+        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
+        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
+        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
+        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
+        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
+        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
+
         favListSelect();
         //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
@@ -143,11 +160,11 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                     if (showicons) {
                         ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
                         Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                        int ts = (int) tvt.getTextSize() + (int) defaultPlusFontSize;
-                        appI.setBounds(0, 0, ts, ts);
-                        tvt.setCompoundDrawables(appI, null, null, null);
-                        tvt.setCompoundDrawablePadding(30);
-                        tvt.setPadding(10, 10, 10, 10);
+                        int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
+                        int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
+                        Drawable iconToDisplay = getDrawable(appI, iconSize);
+                        tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                        tvt.setCompoundDrawablePadding(padding);
                     }
                     // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                     if (selApp.contains(appN)) {
@@ -157,6 +174,31 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                     }
                 }
                 return row;
+            }
+
+            @NonNull
+            private Drawable getDrawable(Drawable appI, int iconSize) {
+                Drawable iconToDisplay;
+                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+                    Drawable monoIcon = adaptI.getMonochrome();
+                    if (monoIcon != null) {
+                        monoIcon.mutate();
+                        monoIcon.setTint(adaptiveIconColor);
+                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
+                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                        layer.setLayerSize(0, iconSize, iconSize);
+                        layer.setBounds(0, 0, iconSize, iconSize);
+                        iconToDisplay = layer;
+                    } else {
+                        iconToDisplay = appI;
+                    }
+                } else {
+                    iconToDisplay = appI;
+                }
+                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+                return iconToDisplay;
             }
         };
 

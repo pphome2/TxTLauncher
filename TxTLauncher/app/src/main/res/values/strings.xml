@@ -80,5 +80,7 @@
     <string name="wbutt_discovery">Discovery</string>
     <string name="wbutt_map">Map</string>
     <string name="error_lock">Please enable accessibility right</string>
+    <string name="settings_adapticon">Use adaptive icons</string>
+    <string name="settings_onecolfav">One column favorites</string>
 
 </resources>

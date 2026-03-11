@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static java.lang.Math.round;
+import static java.security.AccessController.getContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,9 +17,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +30,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -88,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
     public static String SETTINGS_FAV_APP_TAG = "FavApp";
     public static String SETTINGS_SYS_ICON_TAG = "SysIcon";
     public static String SETTINGS_HOME_ICON_TAG = "AppIcon";
+    public static String SETTINGS_ADAPTIVE_ICON_TAG = "AdaptiveIcon";
+    public static String SETTINGS_ADAPTIVE_ICON_COLOR_TAG = "AdaptiveIconColor";
+    public static String SETTINGS_ONE_COLUMN_FAVORITES_TAG = "oneColFavorites";
     public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
     public static String SETTINGS_URL_SEARCH_TAG = "Search";
     public static String SETTINGS_WEATHER_URL = "Weather";
@@ -101,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isDarkMode = true;
     public static boolean homeSysIcon = false;
     public static boolean homeStartAppIcon = false;
+    public static boolean adaptiveIcon = false;
+    public static boolean onecolFavorites = false;
+    public static int adaptiveIconColor = 0;
 
     public static int homeAppNum = 10;
     public static int favAppNum = 20;
@@ -584,6 +595,25 @@ public class MainActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             homeStartAppIcon = !val.equals("0");
         }
+        val = sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            adaptiveIcon = !val.equals("0");
+        }
+
+        int buttonId;
+        buttonId = sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
+        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
+        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
+        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
+        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
+        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
+        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
+        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
+
+        val = sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
+        if (!val.isEmpty()) {
+            onecolFavorites = !val.equals("0");
+        }
 
         val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
         if (!val.isEmpty()) {
@@ -643,9 +673,11 @@ public class MainActivity extends AppCompatActivity {
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int ts = (int) tvt.getTextSize() + 40;
-                                appI.setBounds(0, 0, ts, ts);
-                                tvt.setCompoundDrawables(appI, null, null, null);
+                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
+                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
+                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                                tvt.setCompoundDrawablePadding(padding);
                             }
                         }
                     } else {
@@ -659,6 +691,31 @@ public class MainActivity extends AppCompatActivity {
                     tvt.setMaxLines(1);
                 }
                 return row;
+            }
+
+            @NonNull
+            private Drawable getDrawable(Drawable appI, int iconSize) {
+                Drawable iconToDisplay;
+                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+                    Drawable monoIcon = adaptI.getMonochrome();
+                    if (monoIcon != null) {
+                        monoIcon.mutate();
+                        monoIcon.setTint(adaptiveIconColor);
+                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
+                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                        layer.setLayerSize(0, iconSize, iconSize);
+                        layer.setBounds(0, 0, iconSize, iconSize);
+                        iconToDisplay = layer;
+                    } else {
+                        iconToDisplay = appI;
+                    }
+                } else {
+                    iconToDisplay = appI;
+                }
+                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+                return iconToDisplay;
             }
         };
         final var adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appHList2) {
@@ -683,9 +740,12 @@ public class MainActivity extends AppCompatActivity {
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int ts = (int) tvt.getTextSize() + 40;
-                                appI.setBounds(0, 0, ts, ts);
-                                tvt.setCompoundDrawables(appI, null, null, null);
+                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
+                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
+                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                                tvt.setCompoundDrawablePadding(padding);
+
                             }
                         }
                     } else {
@@ -700,11 +760,36 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return row;
             }
+
+            @NonNull
+            private Drawable getDrawable(Drawable appI, int iconSize) {
+                Drawable iconToDisplay;
+                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+                    Drawable monoIcon = adaptI.getMonochrome();
+                    if (monoIcon != null) {
+                        monoIcon.mutate();
+                        monoIcon.setTint(adaptiveIconColor);
+                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
+                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                        layer.setLayerSize(0, iconSize, iconSize);
+                        layer.setBounds(0, 0, iconSize, iconSize);
+                        iconToDisplay = layer;
+                    } else {
+                        iconToDisplay = appI;
+                    }
+                } else {
+                    iconToDisplay = appI;
+                }
+                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+                return iconToDisplay;
+            }
         };
 
         double anum = Math.min(homeAppName.size(), homeAppNum);
         double an = anum / 2;
-        long halfA = Math.round(an);
+        long halfA = round(an);
         int halfApp = (int) halfA;
         for (var i = 0; i < halfApp; i++) {
             if (homeAppName.size() > i) {
@@ -771,6 +856,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // fő ikonok kirajzolása
+    private Drawable mainDrawable(Drawable appI) {
+        Drawable iconToDisplay;
+        int iconSize = (int) (32 * this.getResources().getDisplayMetrics().density);
+        int padding2 = (int) (-16 * this.getResources().getDisplayMetrics().density);
+        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+            Drawable monoIcon = adaptI.getMonochrome();
+            if (monoIcon != null) {
+                monoIcon.mutate();
+                monoIcon.setTint(adaptiveIconColor);
+                InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                layer.setLayerSize(0, iconSize, iconSize);
+                layer.setBounds(0, 0, iconSize, iconSize);
+                iconToDisplay = layer;
+            } else {
+                iconToDisplay = appI;
+            }
+        } else {
+            iconToDisplay = appI;
+        }
+        iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+        return iconToDisplay;
+    }
+
+
+
     //
     //  Fő nézet: alapértelmezett gombok előkészítése, alapértelmezett app kéeresése
     //
@@ -785,7 +898,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView dialF = findViewById(R.id.dialButton);
         if (homeSysIcon) {
             Drawable dialI = appD.loadIcon(packageMan);
-            dialF.setImageDrawable(dialI);
+            Drawable dialI2 = mainDrawable(dialI);
+            dialF.setImageDrawable(dialI2);
         } else {
             dialF.setImageDrawable(defaultIcons.get(0));
         }
@@ -799,14 +913,15 @@ public class MainActivity extends AppCompatActivity {
         ImageView mailF = findViewById(R.id.mailButton);
         if (homeSysIcon) {
             Drawable mailI = mailD.loadIcon(packageMan);
-            mailF.setImageDrawable(mailI);
+            Drawable mailI2 = mainDrawable(mailI);
+            mailF.setImageDrawable(mailI2);
         } else {
             mailF.setImageDrawable(defaultIcons.get(1));
         }
         MainActivity.packName.add(packI);
         // app list
         ImageView appF = findViewById(R.id.applistButton);
-        if (homeSysIcon) {
+        if ((homeSysIcon) && (!adaptiveIcon)) {
             GradientDrawable border = new GradientDrawable();
             border.setColor(Color.TRANSPARENT);
             border.setStroke(2, Color.WHITE);
@@ -836,7 +951,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView broF = findViewById(R.id.browserButton);
         if (homeSysIcon) {
             Drawable broI = broD.loadIcon(packageMan);
-            broF.setImageDrawable(broI);
+            Drawable broI2 = mainDrawable(broI);
+            broF.setImageDrawable(broI2);
         } else {
             broF.setImageDrawable(defaultIcons.get(3));
         }
@@ -850,7 +966,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView camF = findViewById(R.id.cameraButton);
         if (homeSysIcon) {
             Drawable camI = camD.loadIcon(packageMan);
-            camF.setImageDrawable(camI);
+            Drawable camI2 = mainDrawable(camI);
+            camF.setImageDrawable(camI2);
         } else {
             camF.setImageDrawable(defaultIcons.get(4));
         }
@@ -1110,7 +1227,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // - startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
             // - Intent intent = new Intent(Settings.ACTION_SETTINGS);
-            Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -1166,7 +1283,7 @@ public class MainActivity extends AppCompatActivity {
             service.lockScreen();
         } else {
             systemMessage(getString(R.string.error_lock));
-            Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }

@@ -1,6 +1,8 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
@@ -12,7 +14,10 @@ import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +30,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -65,6 +71,17 @@ public class AppListActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             showicons = !val.equals("0");
         }
+
+        int buttonId;
+        buttonId = MainActivity.sharedPreferences.getInt(MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
+        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
+        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
+        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
+        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
+        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
+        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
+        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
+
 
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         //ImageView iv = findViewById(R.id.quitAllAppListButton);
@@ -146,11 +163,25 @@ public class AppListActivity extends AppCompatActivity {
                                     if ((appN.equals(appName))||(appN.equals(appName + " "))) {
                                         thisApp = allApplicationsList.get(i);
                                         Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                                        int ts = (int) tvt.getTextSize() + 25;
-                                        appI.setBounds(0, 0, ts, ts);
-                                        tvt.setCompoundDrawables(appI, null, null, null);
-                                        tvt.setCompoundDrawablePadding(30);
-                                        tvt.setPadding(10, 10, 10, 10);
+                                        int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
+                                        int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
+                                        Drawable iconToDisplay;
+                                        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+                                            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+                                            Drawable monoIcon = adaptI.getMonochrome();
+                                            if (monoIcon != null) {
+                                                monoIcon.mutate();
+                                                monoIcon.setTint(adaptiveIconColor);
+                                                iconToDisplay = getLayerDrawable(monoIcon, iconSize);
+                                            } else {
+                                                iconToDisplay = appI;
+                                            }
+                                        } else {
+                                            iconToDisplay = appI;
+                                        }
+                                        iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+                                        tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                                        tvt.setCompoundDrawablePadding(padding);
                                     }
                                 }
                             }
@@ -159,6 +190,16 @@ public class AppListActivity extends AppCompatActivity {
                     }
                 }
                 return row;
+            }
+
+            @NonNull
+            private LayerDrawable getLayerDrawable(Drawable monoIcon, int iconSize) {
+                int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
+                InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                layer.setLayerSize(0, iconSize, iconSize);
+                layer.setBounds(0, 0, iconSize, iconSize);
+                return layer;
             }
         };
 
