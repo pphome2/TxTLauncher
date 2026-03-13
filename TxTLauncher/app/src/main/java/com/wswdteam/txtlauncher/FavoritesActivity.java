@@ -2,11 +2,7 @@ package com.wswdteam.txtlauncher;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
@@ -14,6 +10,7 @@ import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
+import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.onecolFavorites;
 import static com.wswdteam.txtlauncher.MainActivity.packageMan;
 import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
@@ -54,7 +51,6 @@ import java.util.List;
 //
 public class FavoritesActivity extends AppCompatActivity {
     public static List<String> favAppName = new ArrayList<>();
-    public static boolean favAppIcon = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,32 +102,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 }
             }
         }
-
-        val = sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            favAppIcon = !val.equals("0");
-        }
-        val = sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
-        if (!val.isEmpty()) {
-            onecolFavorites = !val.equals("0");
-        }
-        val = sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            adaptiveIcon = !val.equals("0");
-        }
-        int buttonId;
-        buttonId = sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
-        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
-        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
-        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
-        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
-        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
-        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
-
-
         setFavApp();
-
         //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -167,7 +138,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 View row = super.getView(position, convertView, parent);
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
-                    if (favAppIcon) {
+                    if (homeStartAppIcon) {
                         ResolveInfo app;
                         String appName;
                         for (int i = 0; i < allAppData.length; i++) {
@@ -212,11 +183,20 @@ public class FavoritesActivity extends AppCompatActivity {
                         layer.setBounds(0, 0, iconSize, iconSize);
                         iconToDisplay = layer;
                     } else {
-                        iconToDisplay = appI;
+                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
                     }
                 } else {
-                    iconToDisplay = appI;
+                    if (adaptiveIcon) {
+                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
+                    } else {
+                        iconToDisplay = appI;
+                    }
                 }
+                assert iconToDisplay != null;
                 iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                 return iconToDisplay;
             }
@@ -234,7 +214,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 View row = super.getView(position, convertView, parent);
                 if (appN != null) {
                     TextView tvt = row.findViewById(android.R.id.text1);
-                    if (favAppIcon) {
+                    if (homeStartAppIcon) {
                         ResolveInfo app;
                         String appName;
                         for (int i = 0; i < allAppData.length; i++) {
@@ -279,11 +259,20 @@ public class FavoritesActivity extends AppCompatActivity {
                         layer.setBounds(0, 0, iconSize, iconSize);
                         iconToDisplay = layer;
                     } else {
-                        iconToDisplay = appI;
+                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
                     }
                 } else {
-                    iconToDisplay = appI;
+                    if (adaptiveIcon) {
+                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
+                    } else {
+                        iconToDisplay = appI;
+                    }
                 }
+                assert iconToDisplay != null;
                 iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                 return iconToDisplay;
             }

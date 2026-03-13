@@ -115,8 +115,6 @@ public class WidgetActivity extends AppCompatActivity {
         // !        v.setPadding(15,15,15,15);
         // !     }
         // ! }
-
-
     }
 
 
@@ -134,7 +132,6 @@ public class WidgetActivity extends AppCompatActivity {
             EditText tv = findViewById(R.id.widgetTextNote);
             tv.setText(val);
         }
-
         firstLoadAI = true;
         //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
@@ -165,6 +162,7 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
 
+
     //
     // Widget AI indítása
     //
@@ -192,7 +190,6 @@ public class WidgetActivity extends AppCompatActivity {
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
-
     }
 
 
@@ -212,6 +209,8 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+
+
     //
     // App indítása
     //
@@ -228,6 +227,8 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+
+
     //
     // App indítása
     //
@@ -235,6 +236,8 @@ public class WidgetActivity extends AppCompatActivity {
         // help
         openHelp(v);
     }
+
+
 
     //
     // App indítása
@@ -258,6 +261,8 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+
+
     //
     // App indítása
     //
@@ -274,6 +279,8 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+
+
     //
     // App indítása
     //
@@ -282,6 +289,8 @@ public class WidgetActivity extends AppCompatActivity {
         startActivity(new Intent(WidgetActivity.this, AppListActivity.class));
         this.finish();
     }
+
+
 
     //
     // App indítása
@@ -292,6 +301,8 @@ public class WidgetActivity extends AppCompatActivity {
         this.finish();
     }
 
+
+
     //
     // App indítása
     //
@@ -299,6 +310,8 @@ public class WidgetActivity extends AppCompatActivity {
         // ai
         startAI(v);
     }
+
+
 
     //
     // App indítása
@@ -314,6 +327,8 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+
+
     //
     // App indítása
     //
@@ -321,6 +336,7 @@ public class WidgetActivity extends AppCompatActivity {
         // map
         openMap(v);
     }
+
 
 
     //
@@ -339,6 +355,7 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
 
+
     //
     //  Fő nézet: leírás
     //
@@ -346,6 +363,5 @@ public class WidgetActivity extends AppCompatActivity {
         startActivity(new Intent(WidgetActivity.this, HelpActivity.class));
         this.finish();
     }
-
 
 }

@@ -1,6 +1,5 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
@@ -9,6 +8,8 @@ import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
+import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.MainActivity.isDarkMode;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
@@ -51,10 +52,10 @@ public class AppListActivity extends AppCompatActivity {
     final ArrayList<String> allappListBackup = new ArrayList<>();
     final ArrayList<String> appListBackup = new ArrayList<>();
     final ArrayList<String> appPackListBackup = new ArrayList<>();
-    boolean showicons = false;
 
 
-    @SuppressLint("MissingInflatedId")
+
+    @SuppressLint({"MissingInflatedId", "PrivateResource"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,22 +67,15 @@ public class AppListActivity extends AppCompatActivity {
             return insets;
         });
 
-        String val;
-        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            showicons = !val.equals("0");
+        if (adaptiveIcon) {
+            defaultLetterColor = ContextCompat.getColor(this, R.color.yellow);
+        } else {
+            if (isDarkMode) {
+                defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
+            } else {
+                defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
+            }
         }
-
-        int buttonId;
-        buttonId = MainActivity.sharedPreferences.getInt(MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
-        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
-        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
-        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
-        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
-        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
-        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
-
 
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         //ImageView iv = findViewById(R.id.quitAllAppListButton);
@@ -155,7 +149,7 @@ public class AppListActivity extends AppCompatActivity {
                         } else {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
-                            if (showicons) {
+                            if (homeStartAppIcon) {
                                 ResolveInfo thisApp;
                                 String appName;
                                 for (int i = 0; i < allAppData.length; i++) {
@@ -174,11 +168,20 @@ public class AppListActivity extends AppCompatActivity {
                                                 monoIcon.setTint(adaptiveIconColor);
                                                 iconToDisplay = getLayerDrawable(monoIcon, iconSize);
                                             } else {
-                                                iconToDisplay = appI;
+                                                iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                                                assert iconToDisplay != null;
+                                                iconToDisplay.setTint(adaptiveIconColor);
                                             }
                                         } else {
-                                            iconToDisplay = appI;
+                                            if (adaptiveIcon) {
+                                                iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                                                assert iconToDisplay != null;
+                                                iconToDisplay.setTint(adaptiveIconColor);
+                                            } else {
+                                                iconToDisplay = appI;
+                                            }
                                         }
+                                        assert iconToDisplay != null;
                                         iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                                         tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                         tvt.setCompoundDrawablePadding(padding);
@@ -201,6 +204,7 @@ public class AppListActivity extends AppCompatActivity {
                 layer.setBounds(0, 0, iconSize, iconSize);
                 return layer;
             }
+
         };
 
         final ListView letterTable = findViewById(R.id.allLetterListTable);
@@ -221,7 +225,6 @@ public class AppListActivity extends AppCompatActivity {
                         if (appN.length() == 1) {
                             tvt.setTextColor(defaultLetterColor);
                             tvt.setText(appN);
-                            // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                             tvt.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                             tvt.setCompoundDrawablePadding(0);
                             ViewGroup.LayoutParams params = tvt.getLayoutParams();
@@ -233,7 +236,6 @@ public class AppListActivity extends AppCompatActivity {
                                 if (itemC > maxItemFit) {
                                     params.height = totalH / itemC;
                                 } else {
-                                    // ! params.height = (int) defaultFontSize + (int) defaultPlusFontSize + 3;
                                     params.height = goodItemHeight;
                                 }
                             }

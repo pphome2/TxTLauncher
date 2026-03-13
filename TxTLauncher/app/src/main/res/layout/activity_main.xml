@@ -108,7 +108,7 @@
                 app:srcCompat="@drawable/settings" />
 
             <ImageView
-                android:id="@+id/mapButton"
+                android:id="@+id/aiButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -116,7 +116,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/button_aiapp"
                 android:onClick="openAI"
-                app:srcCompat="@drawable/ai_star" />
+                app:srcCompat="@drawable/ai" />
 
     </LinearLayout>
 
@@ -249,7 +249,7 @@
             android:onClick="startButtonApp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/camera" />
+            app:srcCompat="@drawable/photo" />
 
     </LinearLayout>
 

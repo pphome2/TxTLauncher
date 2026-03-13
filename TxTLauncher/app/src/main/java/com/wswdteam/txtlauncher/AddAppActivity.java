@@ -1,14 +1,13 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
+import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 
 import static java.util.Collections.sort;
 
@@ -42,7 +41,6 @@ import java.util.ArrayList;
 public class AddAppActivity extends AppCompatActivity {
     final ArrayList<String> appList = new ArrayList<>();
     final ArrayList<String> selApp = new ArrayList<>();
-    boolean showicons = false;
     public int selectedAppNum = 0;
 
     @Override
@@ -66,23 +64,6 @@ public class AddAppActivity extends AppCompatActivity {
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
         }
-
-        String val;
-        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            showicons = !val.equals("0");
-        }
-
-        int buttonId;
-        buttonId = MainActivity.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
-        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
-        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
-        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
-        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
-        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
-        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
-
     }
 
 
@@ -155,7 +136,7 @@ public class AddAppActivity extends AppCompatActivity {
                 TextView tvt = row.findViewById(android.R.id.text1);
                 if ((appN != null) && (!appN.isEmpty())) {
                     tvt.setText(appN);
-                    if (showicons) {
+                    if (homeStartAppIcon) {
                         ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
                         Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
                         int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
@@ -190,11 +171,20 @@ public class AddAppActivity extends AppCompatActivity {
                         layer.setBounds(0, 0, iconSize, iconSize);
                         iconToDisplay = layer;
                     } else {
-                        iconToDisplay = appI;
+                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
                     }
                 } else {
-                    iconToDisplay = appI;
+                    if (adaptiveIcon) {
+                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
+                    } else {
+                        iconToDisplay = appI;
+                    }
                 }
+                assert iconToDisplay != null;
                 iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                 return iconToDisplay;
             }

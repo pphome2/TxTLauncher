@@ -82,5 +82,6 @@
     <string name="error_lock">Please enable accessibility right</string>
     <string name="settings_adapticon">Use adaptive icons</string>
     <string name="settings_onecolfav">One column favorites</string>
+    <string name="button_resetbackground">Delete saved background image (before change)</string>
 
 </resources>

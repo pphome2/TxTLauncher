@@ -3,6 +3,7 @@ package com.wswdteam.txtlauncher;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
@@ -264,6 +265,19 @@ public class SettingsActivity extends AppCompatActivity {
         v1.setText(privateAIUrlOrig);
         v2.setText(privateSearchUrlOrig);
         v3.setText(weatherUrlOrig);
+        v4.setText(backgroundImageOrig);
+    }
+
+
+
+    //
+    // Beállítások visszaállítása
+    //
+    public void resetButtonBackground(View view) {
+        var settings = MainActivity.sharedPreferences.edit();
+        settings.putString(SETTINGS_BACKGROUND_IMAGE, "");
+        settings.apply();
+        EditText v4 = findViewById(R.id.editBackgroundImage);
         v4.setText(backgroundImageOrig);
     }
 

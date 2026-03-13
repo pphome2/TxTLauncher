@@ -1,7 +1,6 @@
 package com.wswdteam.txtlauncher;
 
 import static java.lang.Math.round;
-import static java.security.AccessController.getContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,6 +53,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -79,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
     public static String privateAIUrl = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrl = "https://duckduckgo.com/?q=";
     public static String weatherUrl = "";
-    public static String backgroundImage = "image.png";
+    public static String backgroundImage = "";
 
     public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
     public static String weatherUrlOrig = "";
     //public static String WEATHER_SEARCH_URL = "https://www.google.com/search?q=";
-    public static String backgroundImageOrig = "image.png";
+    public static String backgroundImageOrig = "";
 
     public static String DEBUG_TAG = "TxTLauncher_App";
     public static String PRIVATE_SETTINGS_TAG = "TxTLauncher_App";
@@ -112,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean adaptiveIcon = false;
     public static boolean onecolFavorites = false;
     public static int adaptiveIconColor = 0;
+    public static int defaultIconColor = 0;
 
     public static int homeAppNum = 10;
     public static int favAppNum = 20;
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         weatherUrl = getString(R.string.search_weather);
         weatherUrlOrig = getString(R.string.search_weather);
 
-        Configuration configuration = getResources().getConfiguration();
+
 
         TextView tv = findViewById(R.id.mainTitle);
         defaultFontSize = tv.getTextSize();
@@ -178,8 +178,10 @@ public class MainActivity extends AppCompatActivity {
         // - méretezetten: defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
         // - méretezetten: defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
 
-        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+        // sötét mód beállítása
+        // ! Configuration configuration = getResources().getConfiguration();
+        // ! int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        // ! isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         if (isDarkMode) {
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_dark_default_color_background));
@@ -187,17 +189,19 @@ public class MainActivity extends AppCompatActivity {
             defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_background);
             defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
             defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
+            defaultIconColor  = getColor(com.google.android.material.R.color.design_default_color_background);
         } else {
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
             defaultTextColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
             defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
             defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
+            defaultIconColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
         }
 
         tv = findViewById(R.id.digitalClock);
         tv.setTextSize(tv.getTextSize());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,defaultFontSize + (2 * defaultPlusFontSizeTitle));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (2 * defaultPlusFontSizeTitle));
         tv.setTextColor(defaultTextColor);
         tv = findViewById(R.id.digitalDate);
         tv.setTextSize(tv.getTextSize());
@@ -331,7 +335,6 @@ public class MainActivity extends AppCompatActivity {
 
         saveButtonImages();
         buttonPrepare();
-        getSettings();
         setHomaApp();
         backgroundSavedImageSet();
     }
@@ -349,7 +352,10 @@ public class MainActivity extends AppCompatActivity {
         generateAppList();
 
         if (startedSettingsAct) {
+            backgroundImage = "";
+            savedBackgroundImage = null;
             getSettings();
+            backgroundSavedImageSet();
             backgroundImageSet();
             buttonPrepare();
             setHomaApp();
@@ -598,21 +604,47 @@ public class MainActivity extends AppCompatActivity {
         val = sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
         if (!val.isEmpty()) {
             adaptiveIcon = !val.equals("0");
+            if (adaptiveIcon) {
+                int buttonId;
+                buttonId = sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
+                if (buttonId == R.id.btnRed) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.red);
+                }
+                if (buttonId == R.id.btnWhite) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.white);
+                }
+                if (buttonId == R.id.btnBlack) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.black);
+                }
+                if (buttonId == R.id.btnGray) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.gray);
+                }
+                if (buttonId == R.id.btnBlue) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.blue);
+                }
+                if (buttonId == R.id.btnGreen) {
+                    adaptiveIconColor = ContextCompat.getColor(this, R.color.green);
+                }
+                homeSysIcon = adaptiveIcon;
+                homeStartAppIcon = adaptiveIcon;
+                if (adaptiveIconColor == 0) {
+                    adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400);
+                }
+            }
         }
 
-        int buttonId;
-        buttonId = sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-        if (buttonId == R.id.btnRed) { adaptiveIconColor = ContextCompat.getColor(this, R.color.red); }
-        if (buttonId == R.id.btnWhite) { adaptiveIconColor = ContextCompat.getColor(this, R.color.white); }
-        if (buttonId == R.id.btnBlack) { adaptiveIconColor = ContextCompat.getColor(this, R.color.black); }
-        if (buttonId == R.id.btnGray) { adaptiveIconColor = ContextCompat.getColor(this, R.color.gray); }
-        if (buttonId == R.id.btnBlue) { adaptiveIconColor = ContextCompat.getColor(this, R.color.blue); }
-        if (buttonId == R.id.btnGreen) { adaptiveIconColor = ContextCompat.getColor(this, R.color.green); }
-        if (adaptiveIconColor == 0) { adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400); }
-
-        val = sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
-        if (!val.isEmpty()) {
-            onecolFavorites = !val.equals("0");
+        if (adaptiveIcon) {
+            setIconColor(R.id.searchButton, adaptiveIconColor);
+            setIconColor(R.id.weatherButton, adaptiveIconColor);
+            setIconColor(R.id.settingsButton, adaptiveIconColor);
+            setIconColor(R.id.aiButton, adaptiveIconColor);
+            setIconColor(R.id.applistButton, adaptiveIconColor);
+        } else {
+            setIconColor(R.id.searchButton, defaultIconColor);
+            setIconColor(R.id.weatherButton, defaultIconColor);
+            setIconColor(R.id.settingsButton, defaultIconColor);
+            setIconColor(R.id.aiButton, defaultIconColor);
+            setIconColor(R.id.applistButton, defaultIconColor);
         }
 
         val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
@@ -641,6 +673,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    //
+    //  Fő nézet: alapértelmezett gombok beállítása
+    //
+    public void setIconColor(int id, int color) {
+        ImageView btn;
+        Drawable drw;
+        btn = findViewById(id);
+        drw =btn.getDrawable();
+        if(drw !=null) {
+            drw = DrawableCompat.wrap(drw).mutate();
+            DrawableCompat.setTint(drw, color);
+            btn.setImageDrawable(drw);
+        }
+    }
+
 
 
     //
@@ -709,11 +759,20 @@ public class MainActivity extends AppCompatActivity {
                         layer.setBounds(0, 0, iconSize, iconSize);
                         iconToDisplay = layer;
                     } else {
-                        iconToDisplay = appI;
+                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
                     }
                 } else {
-                    iconToDisplay = appI;
+                    if (adaptiveIcon) {
+                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
+                    } else {
+                        iconToDisplay = appI;
+                    }
                 }
+                assert iconToDisplay != null;
                 iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                 return iconToDisplay;
             }
@@ -745,7 +804,6 @@ public class MainActivity extends AppCompatActivity {
                                 Drawable iconToDisplay = getDrawable(appI, iconSize);
                                 tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                 tvt.setCompoundDrawablePadding(padding);
-
                             }
                         }
                     } else {
@@ -777,11 +835,20 @@ public class MainActivity extends AppCompatActivity {
                         layer.setBounds(0, 0, iconSize, iconSize);
                         iconToDisplay = layer;
                     } else {
-                        iconToDisplay = appI;
+                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
                     }
                 } else {
-                    iconToDisplay = appI;
+                    if (adaptiveIcon) {
+                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
+                        assert iconToDisplay != null;
+                        iconToDisplay.setTint(adaptiveIconColor);
+                    } else {
+                        iconToDisplay = appI;
+                    }
                 }
+                assert iconToDisplay != null;
                 iconToDisplay.setBounds(0, 0, iconSize, iconSize);
                 return iconToDisplay;
             }
@@ -857,26 +924,35 @@ public class MainActivity extends AppCompatActivity {
 
 
     // fő ikonok kirajzolása
-    private Drawable mainDrawable(Drawable appI) {
+    private Drawable mainDrawable(Drawable appI, Drawable drawable) {
         Drawable iconToDisplay;
         int iconSize = (int) (32 * this.getResources().getDisplayMetrics().density);
         int padding2 = (int) (-16 * this.getResources().getDisplayMetrics().density);
-        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-            Drawable monoIcon = adaptI.getMonochrome();
-            if (monoIcon != null) {
-                monoIcon.mutate();
-                monoIcon.setTint(adaptiveIconColor);
-                InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                layer.setLayerSize(0, iconSize, iconSize);
-                layer.setBounds(0, 0, iconSize, iconSize);
-                iconToDisplay = layer;
+        if (adaptiveIcon) {
+            if (appI instanceof AdaptiveIconDrawable) {
+                AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+                Drawable monoIcon = adaptI.getMonochrome();
+                if (monoIcon != null) {
+                    monoIcon.mutate();
+                    monoIcon.setTint(adaptiveIconColor);
+                    InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                    LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                    layer.setLayerSize(0, iconSize, iconSize);
+                    layer.setBounds(0, 0, iconSize, iconSize);
+                    iconToDisplay = layer;
+                } else {
+                    iconToDisplay = drawable;
+                    assert iconToDisplay != null;
+                    iconToDisplay.setTint(adaptiveIconColor);
+                }
             } else {
-                iconToDisplay = appI;
+                iconToDisplay = drawable;
+                assert iconToDisplay != null;
+                iconToDisplay.setTint(adaptiveIconColor);
             }
         } else {
             iconToDisplay = appI;
+            iconToDisplay.setTint(defaultIconColor);
         }
         iconToDisplay.setBounds(0, 0, iconSize, iconSize);
         return iconToDisplay;
@@ -898,7 +974,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView dialF = findViewById(R.id.dialButton);
         if (homeSysIcon) {
             Drawable dialI = appD.loadIcon(packageMan);
-            Drawable dialI2 = mainDrawable(dialI);
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable dialI2 = mainDrawable(dialI, getDrawable(R.drawable.call));
             dialF.setImageDrawable(dialI2);
         } else {
             dialF.setImageDrawable(defaultIcons.get(0));
@@ -913,7 +989,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView mailF = findViewById(R.id.mailButton);
         if (homeSysIcon) {
             Drawable mailI = mailD.loadIcon(packageMan);
-            Drawable mailI2 = mainDrawable(mailI);
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable mailI2 = mainDrawable(mailI, getDrawable(R.drawable.email));
             mailF.setImageDrawable(mailI2);
         } else {
             mailF.setImageDrawable(defaultIcons.get(1));
@@ -951,7 +1027,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView broF = findViewById(R.id.browserButton);
         if (homeSysIcon) {
             Drawable broI = broD.loadIcon(packageMan);
-            Drawable broI2 = mainDrawable(broI);
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable broI2 = mainDrawable(broI, getDrawable(R.drawable.internet));
             broF.setImageDrawable(broI2);
         } else {
             broF.setImageDrawable(defaultIcons.get(3));
@@ -966,7 +1042,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView camF = findViewById(R.id.cameraButton);
         if (homeSysIcon) {
             Drawable camI = camD.loadIcon(packageMan);
-            Drawable camI2 = mainDrawable(camI);
+            @SuppressLint("UseCompatLoadingForDrawables") Drawable camI2 = mainDrawable(camI, getDrawable(R.drawable.photo));
             camF.setImageDrawable(camI2);
         } else {
             camF.setImageDrawable(defaultIcons.get(4));

@@ -325,6 +325,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
 
             <Button
+                android:id="@+id/buttonResetBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:gravity="center|center_horizontal"
+                android:onClick="resetButtonBackground"
+                android:text="@string/button_resetbackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editBackgroundImage" />
+            <View
+                android:id="@+id/settingsDivider1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintTop_toBottomOf="@+id/buttonResetBackground" />
+
+            <Button
                 android:id="@+id/buttonReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -335,10 +357,11 @@
                 android:text="@string/button_reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBackgroundImage" />
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider0" />
+
 
             <View
-                android:id="@+id/settingsDivider1"
+                android:id="@+id/settingsDivider2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="16dp"
@@ -358,10 +381,10 @@
                 android:text="@string/settings_read_applist"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsDivider1" />
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
 
             <View
-                android:id="@+id/settingsDivider2"
+                android:id="@+id/settingsDivider3"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="16dp"
@@ -381,7 +404,7 @@
                 android:text="@string/help_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider3" />
 
             <View
                 android:id="@+id/settingsDividerX"

@@ -82,4 +82,5 @@
     <string name="error_lock">Kérlek engedélyezd az alkalmazást a kisegítő lehetőségek között.</string>
     <string name="settings_adapticon">Adaptiv ikonok használata</string>
     <string name="settings_onecolfav">Egy oszlopos kedvencek</string>
+    <string name="button_resetbackground">Mentett háttérkép törlése (új használata előtt)</string>
 </resources>
