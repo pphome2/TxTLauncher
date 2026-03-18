@@ -1,9 +1,12 @@
 # TxTLauncher - Android launcher
 
+<p>
 Indító app - nekem
-
+</p>
+<p>
 Amire nekem szükségem van.
 (HUN/ENG)
+</p>
 
 <br /><br />
 # TxTLauncher
@@ -39,6 +42,16 @@ Amire nekem szükségem van.
 
 <p align=center>
   <kbd><br /><img width=50% src="./img/screen-hu-2-1.png"><br /><br /></kbd>
+  <br /><br />
+</p>
+
+<br /><br />
+<br /><br />
+# LockDevice
+<br /><br />
+
+<p>
+Azonnal zárolja a készüléket. Tedd ki az asztalra az ikonját és indítsd el amikor szükséges.
   <br /><br />
 </p>
 
