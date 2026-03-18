@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">LockDevice</string>
+    <string name="lockdev">Lock device and screen off</string>
+    <string name="title">Lock device app</string>
+    <string name="quit">Quit</string>
+    <string name="adminutton">Enable/disable</string>
+    <string name="devadmin">Acessibility rights</string>
+</resources>

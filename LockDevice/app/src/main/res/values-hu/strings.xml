@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LockDevice</string>
+    <string name="lockdev">Eszköz zárolása és a kijelző kikapcsolása</string>
+    <string name="title">Eszköz zárolása</string>
+    <string name="quit">Kilépés</string>
+    <string name="adminutton">Engedélyezés/letiltás</string>
+    <string name="devadmin">Kisegítő lehetőségeknél engedélyezni kell az applikációt</string>
+</resources>
