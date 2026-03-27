@@ -1,22 +1,20 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
+import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.MainActivity.iconSize;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
 
 import static java.util.Collections.sort;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle; import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -28,7 +26,6 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -87,7 +84,7 @@ public class AddAppActivity extends AppCompatActivity {
             }
         }
         appListSelect();
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -103,7 +100,7 @@ public class AddAppActivity extends AppCompatActivity {
             tag = SETTINGS_APP_TAG + i;
             if (i < selApp.size()) {
                 settings.putString(tag, selApp.get(i));
-                //Log.d(DEBUG_TAG, selApp.get(i));
+                //syslog(selApp.get(i));
             } else {
                 settings.putString(tag, "");
             }
@@ -111,7 +108,6 @@ public class AddAppActivity extends AppCompatActivity {
         settings.apply();
 
         super.onStop();
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -137,12 +133,11 @@ public class AddAppActivity extends AppCompatActivity {
                 if ((appN != null) && (!appN.isEmpty())) {
                     tvt.setText(appN);
                     if (homeStartAppIcon) {
-                        ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
-                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                        int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                        int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                        Drawable iconToDisplay = getDrawable(appI, iconSize);
-                        tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                        int padding = iconSize / 2;
+                        ResolveInfo info = allApplicationsList.get(position);
+                        Drawable appI = info.loadIcon(MainActivity.packageMan);
+                        Drawable ic = MainActivity.getDrawable(row, appI, iconSize);
+                        tvt.setCompoundDrawablesRelative(ic, null, null, null);
                         tvt.setCompoundDrawablePadding(padding);
                     }
                     // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
@@ -153,40 +148,6 @@ public class AddAppActivity extends AppCompatActivity {
                     }
                 }
                 return row;
-            }
-
-            @NonNull
-            private Drawable getDrawable(Drawable appI, int iconSize) {
-                Drawable iconToDisplay;
-                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                    Drawable monoIcon = adaptI.getMonochrome();
-                    if (monoIcon != null) {
-                        monoIcon.mutate();
-                        monoIcon.setTint(adaptiveIconColor);
-                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                        layer.setLayerSize(0, iconSize, iconSize);
-                        layer.setBounds(0, 0, iconSize, iconSize);
-                        iconToDisplay = layer;
-                    } else {
-                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    }
-                } else {
-                    if (adaptiveIcon) {
-                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    } else {
-                        iconToDisplay = appI;
-                    }
-                }
-                assert iconToDisplay != null;
-                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                return iconToDisplay;
             }
 
         };
@@ -230,7 +191,6 @@ public class AddAppActivity extends AppCompatActivity {
             String st1 = homeAppNum + " / " + selectedAppNum;
             tv.setText(st1);
             // - String selectedP = (String) (appTable.getItemAtPosition(position));
-            // - Log.d(DEBUG_TAG, selectedP);
         });
     }
 

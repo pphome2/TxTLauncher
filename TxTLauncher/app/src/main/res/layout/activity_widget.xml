@@ -42,6 +42,8 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_marginTop="16dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="@id/widgetLayout"
         app:layout_constraintTop_toBottomOf="@id/widgetQuitFrame"
         tools:ignore="ScrollViewCount">
@@ -470,7 +472,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/widgetNoteTitle" />
 
             <View
-                android:id="@+id/widgetDivider"
+                android:id="@+id/widgetDivider1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="16dp"

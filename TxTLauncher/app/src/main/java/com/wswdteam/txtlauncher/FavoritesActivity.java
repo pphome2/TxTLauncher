@@ -3,27 +3,24 @@ package com.wswdteam.txtlauncher;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.onecolFavorites;
 import static com.wswdteam.txtlauncher.MainActivity.packageMan;
 import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -37,7 +34,6 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -98,12 +94,11 @@ public class FavoritesActivity extends AppCompatActivity {
                     if (appName.equals(val)) {
                         favAppName.add(appName);
                     }
-                    //Log.d(DEBUG_TAG, val);
                 }
             }
         }
         setFavApp();
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -113,7 +108,6 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -144,12 +138,11 @@ public class FavoritesActivity extends AppCompatActivity {
                         for (int i = 0; i < allAppData.length; i++) {
                             appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                int padding = iconSize / 2;
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                Drawable iconToDisplay = MainActivity.getDrawable(row, appI, iconSize);
                                 tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                 tvt.setCompoundDrawablePadding(padding);
                             }
@@ -166,41 +159,8 @@ public class FavoritesActivity extends AppCompatActivity {
                 }
                 return row;
             }
-
-            @NonNull
-            private Drawable getDrawable(Drawable appI, int iconSize) {
-                Drawable iconToDisplay;
-                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                    Drawable monoIcon = adaptI.getMonochrome();
-                    if (monoIcon != null) {
-                        monoIcon.mutate();
-                        monoIcon.setTint(adaptiveIconColor);
-                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                        layer.setLayerSize(0, iconSize, iconSize);
-                        layer.setBounds(0, 0, iconSize, iconSize);
-                        iconToDisplay = layer;
-                    } else {
-                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    }
-                } else {
-                    if (adaptiveIcon) {
-                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    } else {
-                        iconToDisplay = appI;
-                    }
-                }
-                assert iconToDisplay != null;
-                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                return iconToDisplay;
-            }
         };
+
         final var adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appFList2) {
             @Override
             public String getItem(int position) {
@@ -220,12 +180,11 @@ public class FavoritesActivity extends AppCompatActivity {
                         for (int i = 0; i < allAppData.length; i++) {
                             appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                int padding = iconSize / 2;
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                Drawable iconToDisplay = MainActivity.getDrawable(row, appI, iconSize);
                                 tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                 tvt.setCompoundDrawablePadding(padding);
                             }
@@ -241,40 +200,6 @@ public class FavoritesActivity extends AppCompatActivity {
                     tvt.setMaxLines(1);
                 }
                 return row;
-            }
-
-            @NonNull
-            private Drawable getDrawable(Drawable appI, int iconSize) {
-                Drawable iconToDisplay;
-                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                    Drawable monoIcon = adaptI.getMonochrome();
-                    if (monoIcon != null) {
-                        monoIcon.mutate();
-                        monoIcon.setTint(adaptiveIconColor);
-                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                        layer.setLayerSize(0, iconSize, iconSize);
-                        layer.setBounds(0, 0, iconSize, iconSize);
-                        iconToDisplay = layer;
-                    } else {
-                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    }
-                } else {
-                    if (adaptiveIcon) {
-                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    } else {
-                        iconToDisplay = appI;
-                    }
-                }
-                assert iconToDisplay != null;
-                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                return iconToDisplay;
             }
         };
 
@@ -346,7 +271,6 @@ public class FavoritesActivity extends AppCompatActivity {
                     i = allAppData.length;
                 }
             }
-            //Log.d(DEBUG_TAG, selectedP);
         });
         favTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (favTable2.getItemAtPosition(position));
@@ -368,7 +292,6 @@ public class FavoritesActivity extends AppCompatActivity {
                     i = allAppData.length;
                 }
             }
-            //Log.d(DEBUG_TAG, selectedP);
         });
     }
 

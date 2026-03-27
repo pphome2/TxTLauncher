@@ -7,6 +7,7 @@ import static com.wswdteam.txtlauncher.MainActivity.TXT_WEB_PAGE;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.lineSeparator;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -77,7 +78,7 @@ public class HelpActivity extends AppCompatActivity {
         help = findViewById(R.id.helpText4);
         help.setText(getString(R.string.help_text_4).replaceAll(lineSeparator, "\n"));
 
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -86,8 +87,6 @@ public class HelpActivity extends AppCompatActivity {
     //
     public void onStop() {
         super.onStop();
-
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 

@@ -1,7 +1,6 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
@@ -9,16 +8,15 @@ import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.isDarkMode;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,7 +101,9 @@ public class AppListActivity extends AppCompatActivity {
         SearchView sv = findViewById(R.id.allAppListSearch);
         sv.setQuery("", false);
         sv.setIconified(true);
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -113,7 +113,6 @@ public class AppListActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -150,40 +149,15 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setTextColor(defaultTextColor);
                             tvt.setText(appN);
                             if (homeStartAppIcon) {
-                                ResolveInfo thisApp;
                                 String appName;
                                 for (int i = 0; i < allAppData.length; i++) {
                                     appName = allAppData[i][0];
                                     if ((appN.equals(appName))||(appN.equals(appName + " "))) {
-                                        thisApp = allApplicationsList.get(i);
-                                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
-                                        int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                                        int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                                        Drawable iconToDisplay;
-                                        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                                            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                                            Drawable monoIcon = adaptI.getMonochrome();
-                                            if (monoIcon != null) {
-                                                monoIcon.mutate();
-                                                monoIcon.setTint(adaptiveIconColor);
-                                                iconToDisplay = getLayerDrawable(monoIcon, iconSize);
-                                            } else {
-                                                iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                                                assert iconToDisplay != null;
-                                                iconToDisplay.setTint(adaptiveIconColor);
-                                            }
-                                        } else {
-                                            if (adaptiveIcon) {
-                                                iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                                                assert iconToDisplay != null;
-                                                iconToDisplay.setTint(adaptiveIconColor);
-                                            } else {
-                                                iconToDisplay = appI;
-                                            }
-                                        }
-                                        assert iconToDisplay != null;
-                                        iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                                        tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
+                                        int padding = iconSize / 2;
+                                        ResolveInfo info = allApplicationsList.get(i);
+                                        Drawable appI = info.loadIcon(MainActivity.packageMan);
+                                        Drawable ic = MainActivity.getDrawable(row, appI, iconSize);
+                                        tvt.setCompoundDrawablesRelative(ic, null, null, null);
                                         tvt.setCompoundDrawablePadding(padding);
                                     }
                                 }
@@ -193,16 +167,6 @@ public class AppListActivity extends AppCompatActivity {
                     }
                 }
                 return row;
-            }
-
-            @NonNull
-            private LayerDrawable getLayerDrawable(Drawable monoIcon, int iconSize) {
-                int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                layer.setLayerSize(0, iconSize, iconSize);
-                layer.setBounds(0, 0, iconSize, iconSize);
-                return layer;
             }
 
         };

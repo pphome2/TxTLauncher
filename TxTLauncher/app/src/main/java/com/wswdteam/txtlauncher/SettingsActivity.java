@@ -18,6 +18,8 @@ import static com.wswdteam.txtlauncher.MainActivity.packageUpdateTime;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher.MainActivity.privateSearchUrlOrig;
 import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
+import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 import static com.wswdteam.txtlauncher.MainActivity.weatherUrlOrig;
 
 import android.annotation.SuppressLint;
@@ -41,6 +43,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.File;
 
 
 //
@@ -202,12 +205,6 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             v3.setText(MainActivity.weatherUrl);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
-        if (!val.isEmpty()) {
-            v4.setText(val);
-        } else {
-            v4.setText(MainActivity.backgroundImage);
-        }
 
         if (buttonId > 0) {
             RadioButton rb = findViewById(buttonId);
@@ -226,7 +223,7 @@ public class SettingsActivity extends AppCompatActivity {
             sharedPreferences.edit().putInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, checkedId).apply();
         });
 
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -235,9 +232,9 @@ public class SettingsActivity extends AppCompatActivity {
     //
     public void onStop() {
         super.onStop();
-
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
     }
+
+
     //
     // App választás indítása
     //
@@ -279,6 +276,12 @@ public class SettingsActivity extends AppCompatActivity {
         settings.apply();
         EditText v4 = findViewById(R.id.editBackgroundImage);
         v4.setText(backgroundImageOrig);
+        File imgFile = new File(MainActivity.savedBackgroundImage);
+        if (imgFile.exists()) {
+            if (!imgFile.delete()) {
+                systemMessage(getString(R.string.background_file_not_found));
+            }
+        }
     }
 
 

@@ -42,6 +42,8 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_marginTop="16dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="@id/settingsLayout"
         app:layout_constraintTop_toBottomOf="@id/settingsQuitFrame"
         tools:ignore="ScrollViewCount">

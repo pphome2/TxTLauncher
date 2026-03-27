@@ -2,9 +2,12 @@ package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
+import static com.wswdteam.txtlauncher.MainActivity.defaultIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
+import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 
 import android.annotation.SuppressLint;
@@ -23,13 +26,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 
 //
@@ -95,26 +101,29 @@ public class WidgetActivity extends AppCompatActivity {
             }
         });
 
-        // ! if (MainActivity.homeStartAppIcon) {
-        // !     GradientDrawable border = new GradientDrawable();
-        // !     border.setColor(Color.TRANSPARENT);
-        // !     border.setStroke(2, Color.WHITE);
-        // !     border.setCornerRadius(10);
-        // !     LinearLayout lv = findViewById(R.id.buttonsFrame1);
-        // !     var db = lv.getChildCount();
-        // !     for (var p = 0; p < db; p++) {
-        // !         View v = lv.getChildAt(p);
-        // !         v.setBackground(border);
-        // !         v.setPadding(15,15,15,15);
-        // !     }
-        // !    lv = findViewById(R.id.buttonsFrame2);
-        // !    db = lv.getChildCount();
-        // !    for (var p = 0; p < db; p++) {
-        // !        View v = lv.getChildAt(p);
-        // !        v.setBackground(border);
-        // !        v.setPadding(15,15,15,15);
-        // !     }
-        // ! }
+        if (MainActivity.adaptiveIcon) {
+            setIconColorW(R.id.wdialButton, adaptiveIconColor);
+            setIconColorW(R.id.wmailButton, adaptiveIconColor);
+            setIconColorW(R.id.whelpButton, adaptiveIconColor);
+            setIconColorW(R.id.wbrowserButton, adaptiveIconColor);
+            setIconColorW(R.id.wcameraButton, adaptiveIconColor);
+            setIconColorW(R.id.wapplistButton, adaptiveIconColor);
+            setIconColorW(R.id.wfavlistButton, adaptiveIconColor);
+            setIconColorW(R.id.waiButton, adaptiveIconColor);
+            setIconColorW(R.id.wdiscoveryButton, adaptiveIconColor);
+            setIconColorW(R.id.wmapButton, adaptiveIconColor);
+        } else {
+            setIconColorW(R.id.wdialButton, defaultIconColor);
+            setIconColorW(R.id.wmailButton, defaultIconColor);
+            setIconColorW(R.id.whelpButton, defaultIconColor);
+            setIconColorW(R.id.wbrowserButton, defaultIconColor);
+            setIconColorW(R.id.wcameraButton, defaultIconColor);
+            setIconColorW(R.id.wapplistButton, defaultIconColor);
+            setIconColorW(R.id.wfavlistButton, defaultIconColor);
+            setIconColorW(R.id.waiButton, defaultIconColor);
+            setIconColorW(R.id.wdiscoveryButton, defaultIconColor);
+            setIconColorW(R.id.wmapButton, defaultIconColor);
+        }
     }
 
 
@@ -125,6 +134,7 @@ public class WidgetActivity extends AppCompatActivity {
     public void onStart(){
         overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_left, R.anim.exit_to_right);
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_right, R.anim.exit_to_left);
+
         super.onStart();
 
         String val = MainActivity.sharedPreferences.getString(SETTINGS_NOTE, "");
@@ -133,7 +143,8 @@ public class WidgetActivity extends AppCompatActivity {
             tv.setText(val);
         }
         firstLoadAI = true;
-        //Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+
+        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
 
@@ -150,7 +161,22 @@ public class WidgetActivity extends AppCompatActivity {
         String text = tv.getText().toString();
         settings.putString(SETTINGS_NOTE, text);
         settings.apply();
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": "+ this.getClass().getSimpleName());
+    }
+
+
+    //
+    //  Fő nézet: alapértelmezett gombok beállítása
+    //
+    public void setIconColorW(int id, int color) {
+        ImageView btn;
+        Drawable drw;
+        btn = findViewById(id);
+        drw =btn.getDrawable();
+        if(drw !=null) {
+            drw = DrawableCompat.wrap(drw).mutate();
+            DrawableCompat.setTint(drw, color);
+            btn.setImageDrawable(drw);
+        }
     }
 
 

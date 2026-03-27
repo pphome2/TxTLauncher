@@ -30,7 +30,6 @@ import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -49,7 +48,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -57,14 +55,15 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean dateReady = false;
     private boolean firstPermissionRequest = true;
     public static String backgroundImageBackup = "";
-    public Bitmap savedBackgroundImage = null;
+    public static String savedBackgroundImage = "";
     public int screenHeight;
     public int screenWidth;
     public static long packageUpdateTime;
@@ -147,7 +146,12 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
     public static String[][] allAppData;
-    public boolean developerMode = false;
+    public static int iconSize;
+    public static int iconPadding;
+    //
+    // Log üzenetekhez használható
+    //
+    public static boolean developerMode = true;
 
 
     //
@@ -169,14 +173,18 @@ public class MainActivity extends AppCompatActivity {
         weatherUrl = getString(R.string.search_weather);
         weatherUrlOrig = getString(R.string.search_weather);
 
-
-
         TextView tv = findViewById(R.id.mainTitle);
         defaultFontSize = tv.getTextSize();
         // méretezés: float scaledDensity = configuration.fontScale;
         // @float defaultTextSize = 14f;
         // - méretezetten: defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
         // - méretezetten: defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
+
+        iconSize = (int) (32 * this.getResources().getDisplayMetrics().density);
+        float density = ((float) iconSize / 2);// * getContext().getResources().getDisplayMetrics().density;
+        iconPadding = (int) (-1 * density);
+
+        savedBackgroundImage = String.format("%s/launcher_bg.png", getFilesDir());
 
         // sötét mód beállítása
         // ! Configuration configuration = getResources().getConfiguration();
@@ -189,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_background);
             defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
             defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
-            defaultIconColor  = getColor(com.google.android.material.R.color.design_default_color_background);
+            defaultIconColor = getColor(com.google.android.material.R.color.design_default_color_background);
         } else {
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
@@ -212,30 +220,19 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
         packageMan = getPackageManager();
 
-
-        // verzió ellenőrzés
-        versionCheck();
-
-        timeInScreen();
-        generateAppList();
-        getSettings();
-
-        // sötét téma beállítása
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
         // touch
         findViewById(R.id.mainView).setOnTouchListener(new View.OnTouchListener() {
             private final GestureDetector gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(@NonNull MotionEvent event) {
-                    //Log.d(DEBUG_TAG, "Action double tap: lock");
+                    //syslog("Action double tap: lock");
                     lockApp();
                     return super.onDoubleTap(event);
                 }
 
                 @Override
                 public void onLongPress(@NonNull MotionEvent event) {
-                    //Log.d(DEBUG_TAG, "Action long tap: favorite");
+                    //syslog("Action long tap: favorite");
                     openFavActivity();
                     super.onLongPress(event);
                 }
@@ -304,21 +301,21 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv;
         iv = findViewById(R.id.applistButton);
         iv.setOnLongClickListener(v -> {
-            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            //syslog("Action long tap: open settings");
             startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
             return true;
         });
 
         iv = findViewById(R.id.settingsButton);
         iv.setOnLongClickListener(v -> {
-            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            //syslog("Action long tap: open settings");
             openAndroidSystemSettingsButton(v);
             return true;
         });
 
         iv = findViewById(R.id.browserButton);
         iv.setOnLongClickListener(v -> {
-            //Log.d(DEBUG_TAG, "Action long tap: open settings");
+            //syslog("Action long tap: open settings");
             try {
                 final PackageManager pm = getPackageManager();
                 Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
@@ -330,13 +327,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-
+        // verzió ellenőrzés
+        versionCheck();
+        generateAppList();
+        getSettings();
+        // első indulás: nincs új háttér
+        backgroundImageBackup = backgroundImage;
+        timeInScreen();
         saveButtonImages();
         buttonPrepare();
         setHomaApp();
-        backgroundSavedImageSet();
+        backgroundPrepare();
+        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+
     }
 
 
@@ -349,16 +353,11 @@ public class MainActivity extends AppCompatActivity {
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
 
-        generateAppList();
-
         if (startedSettingsAct) {
-            backgroundImage = "";
-            savedBackgroundImage = null;
             getSettings();
-            backgroundSavedImageSet();
-            backgroundImageSet();
             buttonPrepare();
             setHomaApp();
+            backgroundPrepare();
         }
 
         startedAppAct = false;
@@ -368,42 +367,7 @@ public class MainActivity extends AppCompatActivity {
         startedHelp = false;
         dateReady = false;
 
-        // ! ImageView iv;
-        // ! if (homeSysIcon) {
-        // !     GradientDrawable border = new GradientDrawable();
-        // !     border.setColor(Color.TRANSPARENT);
-        // !     border.setStroke(2, Color.WHITE);
-        // !     border.setCornerRadius(10);
-        // !     iv = findViewById(R.id.weatherButton);
-        // !     iv.setBackground(border);
-        // !     iv.setPadding(15, 15, 15, 15);
-        // !    iv = findViewById(R.id.searchButton);
-        // !     iv.setBackground(border);
-        // !     iv.setPadding(15, 15, 15, 15);
-        // !     iv = findViewById(R.id.settingsButton);
-        // !     iv.setBackground(border);
-        // !     iv.setPadding(15, 15, 15, 15);
-        // !     iv = findViewById(R.id.mapButton);
-        // !     iv.setBackground(border);
-        // !     iv.setPadding(15, 15, 15, 15);
-        // ! } else {
-        // !     iv = findViewById(R.id.weatherButton);
-        // !     iv.setBackground(null);
-        // !     iv.setPadding(0, 0, 0, 0);
-        // !     iv = findViewById(R.id.searchButton);
-        // !     iv.setBackground(null);
-        // !     iv.setPadding(0, 0, 0, 0);
-        // !     iv = findViewById(R.id.settingsButton);
-        // !     iv.setBackground(null);
-        // !     iv.setPadding(0, 0, 0, 0);
-        // !     iv = findViewById(R.id.mapButton);
-        // !     iv.setBackground(null);
-        // !     iv.setPadding(0, 0, 0, 0);
-        // ! }
-
-        if (developerMode) {
-            Log.d(DEBUG_TAG, getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
-        }
+        syslog(getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -413,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //Log.d(DEBUG_TAG, getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
+        //syslog(getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
     }
 
 
@@ -446,130 +410,95 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
-    // mentett háttékép beállítása
+    // a háttér előkészítése
     //
-    public void backgroundSavedImageSet() {
-        View mv = findViewById(R.id.mainView);
-        if (savedBackgroundImage != null) {
-            Drawable drawable = new BitmapDrawable(getResources(), savedBackgroundImage);
-            mv.setBackground(drawable);
-            backgroundImageBackup = backgroundImage;
-        } else {
-            mv.setBackground(null);
-        }
-    }
-
-
-    //
-    // háttérkép beállítása
-    //
-    public void backgroundImageSet() {
-        if (backgroundImage.isEmpty()) {
-            // nincs megadott háttér fájl
-            backgroundSavedImageSet();
-        } else {
-            // megadott háttér fájl
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED) {
-                // jogodultdág kérése csak egyster
-                if (firstPermissionRequest) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PackageManager.PERMISSION_GRANTED);
-                    firstPermissionRequest = false;
+    private void backgroundPrepare() {
+        if (Objects.equals(backgroundImage, backgroundImageBackup)) {
+            View view = findViewById(R.id.mainView);
+            if (view == null) return;
+            // régi kép
+            File imgFile = new File(savedBackgroundImage);
+            if (imgFile.exists()) {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    if (bitmap != null) {
+                        view.setBackground(new BitmapDrawable(getResources(), bitmap));
+                    } else {
+                        view.setBackground(null);
+                    }
+                } catch (OutOfMemoryError e) {
+                    //e.printStackTrace();
+                    systemMessage(getString(R.string.background_file_not_found));
+                    view.setBackground(null);
                 }
             } else {
-                if (!backgroundImage.equals(backgroundImageBackup)) {
-                    // változott a beállításokban
-                    backgroundImageBackup = backgroundImage;
-                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File file = new File(dir + "/" + backgroundImage);
-                    View mv = findViewById(R.id.mainView);
-                    if (file.exists()) {
-                        // létező fájl, átalakítás
-                        Drawable drawable = null;
-                        try {
-                            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                            int iWidth = bitmap.getWidth();
-                            int iHeight = bitmap.getHeight();
-                            float screenRatio = (float) screenHeight / screenWidth;
-                            int cutStartW;
-                            int cutStartH;
-                            int cutEndW;
-                            int cutEndH;
-                            int ch;
-                            // fekvő vagy álló
-                            int iw = round((iHeight / screenRatio));
-                            if (iWidth > iHeight) {
-                                // fekvó
-                                ch = round((float) ((iWidth - iw) / 2));
-                                cutStartW = ch;
-                                cutEndW = iw;
-                                cutStartH = 0;
-                                cutEndH = iHeight;
-                            } else {
-                                // álló
-                                if (iw < iWidth) {
-                                    ch = round((float) ((iWidth - iw) / 2));
-                                    cutStartW = ch;
-                                    cutEndW = iw;
-                                    cutStartH = 0;
-                                    cutEndH = iHeight;
-                                } else {
-                                    ch = round((iHeight - (iWidth * screenRatio)) / 2);
-                                    cutStartW = 0;
-                                    cutEndW = iWidth;
-                                    cutStartH = iHeight + ch;
-                                    cutEndH = round((iw * screenRatio));
-                                }
-                            }
-                            Bitmap newBitmap = Bitmap.createBitmap(bitmap, cutStartW, cutStartH, cutEndW, cutEndH);
-                            //Log.d(DEBUG_TAG, screenWidth+" "+screenHeight+" "+screenRatio+" "+iWidth+" "+iHeight+" "+cutStartW+" "+cutEndW+" "+xWidth+" "+xHeight);
-                            savedBackgroundImage = newBitmap;
-                            drawable = new BitmapDrawable(getResources(), newBitmap);
-                            mv.setBackground(drawable);
-
-                            // átalakított kép mentése
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                            byte[] b = baos.toByteArray();
-                            String encoded = Base64.encodeToString(b, Base64.DEFAULT);
-                            var settings = MainActivity.sharedPreferences.edit();
-                            settings.putString(SETTINGS_BACKGROUND_IMAGE, encoded);
-                            settings.apply();
-                        } catch (Exception e) {
-                            systemMessage(getString(R.string.error_bitmap));
-                            mv.setBackground(null);
-                        }
-
-                        // háttér beállítás
-                        if (drawable != null) {
-                            mv.setBackground(drawable);
-                        }
-                    } else {
-                        // nincs háttér
-                        systemMessage(getString(R.string.background_file_not_found));
-                        //backgroundSavedImageSet();
-                    }
-                }
+                view.setBackground(null);
             }
+        } else {
+            // új kép
+            setupBackground();
         }
     }
 
 
+
     //
-    //  Fő nézet: gombok eredeti képeinek mentése
+    // háttér beállítása és mentése
     //
-    public void saveButtonImages() {
-        ImageView ivone;
-        ivone = findViewById(R.id.dialButton);
-        defaultIcons.add(ivone.getDrawable());
-        ivone = findViewById(R.id.mailButton);
-        defaultIcons.add(ivone.getDrawable());
-        ivone = findViewById(R.id.applistButton);
-        defaultIcons.add(ivone.getDrawable());
-        ivone = findViewById(R.id.browserButton);
-        defaultIcons.add(ivone.getDrawable());
-        ivone = findViewById(R.id.cameraButton);
-        defaultIcons.add(ivone.getDrawable());
+    private void setupBackground() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_DENIED) {
+            // jogodultdág kérése csak egyszer
+            if (firstPermissionRequest) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PackageManager.PERMISSION_GRANTED);
+                firstPermissionRequest = false;
+            }
+        }
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File sourceFile = new File(dir + "/" + backgroundImage);
+        if (!sourceFile.exists()) {
+            systemMessage(getString(R.string.background_file_not_found));
+            backgroundImageBackup = backgroundImage;
+            return;
+        }
+        View view = findViewById(R.id.mainView);
+        int screenWidth = view.getWidth();
+        int screenHeight = view.getHeight();
+        try {
+            Bitmap sourceBitmap = BitmapFactory.decodeFile(sourceFile.getAbsolutePath());
+            if (sourceBitmap == null) throw new Exception(String.valueOf(R.string.background_file_not_found));
+            int iWidth = sourceBitmap.getWidth();
+            int iHeight = sourceBitmap.getHeight();
+            float screenRatio = (float) screenHeight / screenWidth;
+            float imageRatio = (float) iHeight / iWidth;
+            int finalWidth, finalHeight;
+            int startX = 0, startY = 0;
+            if (imageRatio > screenRatio) {
+                // A kép "magasabb", mint a kijelző -> alul-felül vágunk
+                finalWidth = iWidth;
+                finalHeight = Math.round(iWidth * screenRatio);
+                startY = (iHeight - finalHeight) / 2;
+            } else {
+                // A kép "szélesebb", mint a kijelző -> két oldalt vágunk
+                finalHeight = iHeight;
+                finalWidth = Math.round(iHeight / screenRatio);
+                startX = (iWidth - finalWidth) / 2;
+            }
+            Bitmap croppedBitmap = Bitmap.createBitmap(sourceBitmap, startX, startY, finalWidth, finalHeight);
+            try (FileOutputStream out = new FileOutputStream(savedBackgroundImage)) {
+                croppedBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            }
+            // 6. Megjelenítés
+            view.setBackground(new BitmapDrawable(getResources(), croppedBitmap));
+            if (sourceBitmap != croppedBitmap) {
+                sourceBitmap.recycle();
+            }
+            //savedBackgroundImage = croppedBitmap;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            systemMessage(getString(R.string.error_bitmap) + ": " + e.getMessage());
+        }
     }
+
 
 
     //
@@ -593,14 +522,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        val = sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            homeSysIcon = !val.equals("0");
-        }
-        val = sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            homeStartAppIcon = !val.equals("0");
-        }
         val = sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
         if (!val.isEmpty()) {
             adaptiveIcon = !val.equals("0");
@@ -625,11 +546,27 @@ public class MainActivity extends AppCompatActivity {
                 if (buttonId == R.id.btnGreen) {
                     adaptiveIconColor = ContextCompat.getColor(this, R.color.green);
                 }
-                homeSysIcon = adaptiveIcon;
-                homeStartAppIcon = adaptiveIcon;
                 if (adaptiveIconColor == 0) {
                     adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400);
                 }
+            }
+        }
+
+        if (adaptiveIcon) {
+            homeSysIcon = true;
+            homeStartAppIcon = true;
+        } else {
+            val = sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
+            if (!val.isEmpty()) {
+                homeSysIcon = !val.equals("0");
+            } else {
+                homeSysIcon = false;
+            }
+            val = sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+            if (!val.isEmpty()) {
+                homeStartAppIcon = !val.equals("0");
+            } else {
+                homeStartAppIcon = false;
             }
         }
 
@@ -663,16 +600,27 @@ public class MainActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             backgroundImage = val;
         }
-
-        // háttérkép visszaolvasás
-        if (savedBackgroundImage == null) {
-            String encoded = MainActivity.sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE, "");
-            if (!encoded.isEmpty()) {
-                byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-                savedBackgroundImage = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-            }
-        }
     }
+
+
+
+    //
+    //  Fő nézet: gombok eredeti képeinek mentése
+    //
+    public void saveButtonImages() {
+        ImageView ivone;
+        ivone = findViewById(R.id.dialButton);
+        defaultIcons.add(ivone.getDrawable());
+        ivone = findViewById(R.id.mailButton);
+        defaultIcons.add(ivone.getDrawable());
+        ivone = findViewById(R.id.applistButton);
+        defaultIcons.add(ivone.getDrawable());
+        ivone = findViewById(R.id.browserButton);
+        defaultIcons.add(ivone.getDrawable());
+        ivone = findViewById(R.id.cameraButton);
+        defaultIcons.add(ivone.getDrawable());
+    }
+
 
 
 
@@ -720,12 +668,11 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = 0; i < allAppData.length; i++) {
                             appName = allAppData[i][0];
                             if (appName.equals(appN)) {
+                                int padding = iconSize / 2;
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                Drawable iconToDisplay = getDrawable(row, appI, iconSize);
                                 tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                 tvt.setCompoundDrawablePadding(padding);
                             }
@@ -742,41 +689,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return row;
             }
-
-            @NonNull
-            private Drawable getDrawable(Drawable appI, int iconSize) {
-                Drawable iconToDisplay;
-                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                    Drawable monoIcon = adaptI.getMonochrome();
-                    if (monoIcon != null) {
-                        monoIcon.mutate();
-                        monoIcon.setTint(adaptiveIconColor);
-                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                        layer.setLayerSize(0, iconSize, iconSize);
-                        layer.setBounds(0, 0, iconSize, iconSize);
-                        iconToDisplay = layer;
-                    } else {
-                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    }
-                } else {
-                    if (adaptiveIcon) {
-                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    } else {
-                        iconToDisplay = appI;
-                    }
-                }
-                assert iconToDisplay != null;
-                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                return iconToDisplay;
-            }
         };
+
+
         final var adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appHList2) {
             @Override
             public String getItem(int position) {
@@ -793,15 +708,14 @@ public class MainActivity extends AppCompatActivity {
                     if (homeStartAppIcon) {
                         ResolveInfo app;
                         String appName;
+                        int padding = iconSize / 2;
                         for (int i = 0; i < allAppData.length; i++) {
                             appName = allAppData[i][0];
                             if (appName.equals(appN)) {
                                 app = allApplicationsList.get(i);
                                 tvt.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                                 Drawable appI = app.loadIcon(packageMan);
-                                int iconSize = (int) (32 * getContext().getResources().getDisplayMetrics().density);
-                                int padding = (int) (12 * getContext().getResources().getDisplayMetrics().density);
-                                Drawable iconToDisplay = getDrawable(appI, iconSize);
+                                Drawable iconToDisplay = getDrawable(row, appI, iconSize);
                                 tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                                 tvt.setCompoundDrawablePadding(padding);
                             }
@@ -819,39 +733,6 @@ public class MainActivity extends AppCompatActivity {
                 return row;
             }
 
-            @NonNull
-            private Drawable getDrawable(Drawable appI, int iconSize) {
-                Drawable iconToDisplay;
-                if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                    AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                    Drawable monoIcon = adaptI.getMonochrome();
-                    if (monoIcon != null) {
-                        monoIcon.mutate();
-                        monoIcon.setTint(adaptiveIconColor);
-                        int padding2 = (int) (-16 * getContext().getResources().getDisplayMetrics().density);
-                        InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
-                        LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                        layer.setLayerSize(0, iconSize, iconSize);
-                        layer.setBounds(0, 0, iconSize, iconSize);
-                        iconToDisplay = layer;
-                    } else {
-                        iconToDisplay= ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    }
-                } else {
-                    if (adaptiveIcon) {
-                        iconToDisplay = ContextCompat.getDrawable(this.getContext(), R.drawable.app);
-                        assert iconToDisplay != null;
-                        iconToDisplay.setTint(adaptiveIconColor);
-                    } else {
-                        iconToDisplay = appI;
-                    }
-                }
-                assert iconToDisplay != null;
-                iconToDisplay.setBounds(0, 0, iconSize, iconSize);
-                return iconToDisplay;
-            }
         };
 
         double anum = Math.min(homeAppName.size(), homeAppNum);
@@ -897,7 +778,7 @@ public class MainActivity extends AppCompatActivity {
                     i = allAppData.length;
                 }
             }
-            //Log.d(DEBUG_TAG, selectedP);
+            //syslog(selectedP);
         });
         homeTable2.setOnItemClickListener((parent, view, position, id) -> {
             String selectedP = (String) (homeTable2.getItemAtPosition(position));
@@ -918,44 +799,104 @@ public class MainActivity extends AppCompatActivity {
                     i = allAppData.length;
                 }
             }
-            //Log.d(DEBUG_TAG, selectedP);
+            //syslog(selectedP);
         });
+    }
+
+    static Drawable getDrawable(View view, Drawable appI, int iconSize) {
+        Drawable iconToDisplay;
+        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
+            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+            Drawable monoIcon = adaptI.getMonochrome();
+            if (monoIcon != null) {
+                monoIcon.mutate();
+                monoIcon.setTint(adaptiveIconColor);
+                InsetDrawable insetIcon = new InsetDrawable(monoIcon, iconPadding);
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                layer.setLayerSize(0, iconSize, iconSize);
+                iconToDisplay = layer;
+            } else {
+                iconToDisplay = getDefaultIcon(view, iconSize);
+            }
+        } else {
+            if (adaptiveIcon) {
+                iconToDisplay = getDefaultIcon(view, iconSize);
+            } else {
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{appI});
+                layer.setLayerSize(0, iconSize, iconSize);
+                iconToDisplay = layer;
+            }
+        }
+        assert iconToDisplay != null;
+        iconToDisplay.setBounds(0, 0, iconSize, iconSize);
+        return iconToDisplay;
+    }
+
+    // Segédfüggvény a kód tisztaságáért
+    private static Drawable getDefaultIcon(View view, int iconSize) {
+        Drawable d = ContextCompat.getDrawable(view.getContext(), R.drawable.app);
+        if (d != null) {
+            d.mutate();
+            d.setTint(adaptiveIconColor);
+            d.setBounds(0, 0, iconSize, iconSize);
+            LayerDrawable layer = new LayerDrawable(new Drawable[]{d});
+            layer.setLayerSize(0, iconSize, iconSize);
+            return layer;
+        }
+        return null;
     }
 
 
     // fő ikonok kirajzolása
-    private Drawable mainDrawable(Drawable appI, Drawable drawable) {
+    private Drawable mainDrawable(Drawable appI, Drawable drI) {
         Drawable iconToDisplay;
-        int iconSize = (int) (32 * this.getResources().getDisplayMetrics().density);
-        int padding2 = (int) (-16 * this.getResources().getDisplayMetrics().density);
-        if (adaptiveIcon) {
-            if (appI instanceof AdaptiveIconDrawable) {
+        if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
                 AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
                 Drawable monoIcon = adaptI.getMonochrome();
                 if (monoIcon != null) {
                     monoIcon.mutate();
                     monoIcon.setTint(adaptiveIconColor);
-                    InsetDrawable insetIcon = new InsetDrawable(monoIcon, padding2, padding2, padding2, padding2);
+                    InsetDrawable insetIcon = new InsetDrawable(monoIcon, iconPadding);
                     LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
                     layer.setLayerSize(0, iconSize, iconSize);
-                    layer.setBounds(0, 0, iconSize, iconSize);
                     iconToDisplay = layer;
                 } else {
-                    iconToDisplay = drawable;
-                    assert iconToDisplay != null;
-                    iconToDisplay.setTint(adaptiveIconColor);
+                    iconToDisplay = getDefaultIconMain(iconSize);
                 }
             } else {
-                iconToDisplay = drawable;
-                assert iconToDisplay != null;
-                iconToDisplay.setTint(adaptiveIconColor);
+            if (adaptiveIcon) {
+                iconToDisplay = getDefaultIconMain(iconSize);
+            } else {
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{appI});
+                layer.setLayerSize(0, iconSize, iconSize);
+                iconToDisplay = layer;
             }
-        } else {
-            iconToDisplay = appI;
-            iconToDisplay.setTint(defaultIconColor);
         }
+        if (!adaptiveIcon) {
+            if (homeSysIcon) {
+                iconToDisplay = appI;
+            } else {
+                iconToDisplay = drI;
+            }
+        }
+        assert iconToDisplay != null;
         iconToDisplay.setBounds(0, 0, iconSize, iconSize);
         return iconToDisplay;
+    }
+
+
+    // Segédfüggvény a kód tisztaságáért
+    private Drawable getDefaultIconMain(int iconSize) {
+        Drawable d = ContextCompat.getDrawable(this, R.drawable.app);
+        if (d != null) {
+            d.mutate();
+            d.setTint(adaptiveIconColor);
+            d.setBounds(0, 0, iconSize, iconSize);
+            LayerDrawable layer = new LayerDrawable(new Drawable[]{d});
+            layer.setLayerSize(0, iconSize, iconSize);
+            return layer;
+        }
+        return null;
     }
 
 
@@ -1009,16 +950,7 @@ public class MainActivity extends AppCompatActivity {
             appF.setPadding(0, 0, 0, 0);
         }
         appF.setImageDrawable(defaultIcons.get(2));
-        // ! browser
-        // ! Intent broIn;
-        // ! if (privateSearchUrl.contains("://")) {
-        // !    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
-        // !    broIn.addCategory(Intent.CATEGORY_DEFAULT);
-        // ! } else {
-        // !    broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-        // !    broIn.addCategory(Intent.CATEGORY_DEFAULT);
-        // ! }
-        // ! assert broIn != null;
+        // browser
         Intent broIn = new Intent(Intent.ACTION_MAIN);
         broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
@@ -1026,7 +958,10 @@ public class MainActivity extends AppCompatActivity {
         String broB = broD.activityInfo.packageName;
         ImageView broF = findViewById(R.id.browserButton);
         if (homeSysIcon) {
-            Drawable broI = broD.loadIcon(packageMan);
+            Intent bI = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+            ResolveInfo rI = getPackageManager().resolveActivity(bI, PackageManager.MATCH_DEFAULT_ONLY);
+            Drawable broI;
+            broI = Objects.requireNonNullElse(rI, broD).loadIcon(packageMan);
             @SuppressLint("UseCompatLoadingForDrawables") Drawable broI2 = mainDrawable(broI, getDrawable(R.drawable.internet));
             broF.setImageDrawable(broI2);
         } else {
@@ -1081,16 +1016,16 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: e-mail";
         }
         if (view.getId() == R.id.browserButton) {
-            //appp = MainActivity.packName.get(2);
-            try {
+            appp = MainActivity.packName.get(2);
+            // ! try {
                 // ! Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
                 // ! broIn.addCategory(Intent.CATEGORY_DEFAULT);
-                Intent broIn = new Intent(Intent.ACTION_MAIN);
-                broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
-                startActivity(broIn);
-            } catch (Exception e) {
-                systemMessage(getString(R.string.error_startapp));
-            }
+            // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
+            // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
+            // ! startActivity(broIn);
+            // ! } catch (Exception e) {
+            // ! systemMessage(getString(R.string.error_startapp));
+            // ! }
             //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {
@@ -1148,6 +1083,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     //
     //  Fő nézet: idő kiírása a képernyőre
     //
@@ -1186,7 +1122,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
-        //Log.d(DEBUG_TAG, "Button start: search");
+        //syslog("Button start: search");
     }
 
 
@@ -1200,7 +1136,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
-        //Log.d(DEBUG_TAG, "Button start: search");
+        //syslog("Button start: search");
     }
 
 
@@ -1208,7 +1144,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: app lista nézet indítása
     //
     public void openAppListActivity() {
-        //Log.d(DEBUG_TAG,"Action swipe up: openapplist");
+        //syslog("Action swipe up: openapplist");
         startedAppAct = true;
         startActivity(new Intent(MainActivity.this, AppListActivity.class));
     }
@@ -1218,7 +1154,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: app lista nézet indítása gombról
     //
     public void openAppListButton(View view) {
-        //Log.d(DEBUG_TAG,"Action tap button: openapplist");
+        //syslog("Action tap button: openapplist");
         try {
             startActivity(new Intent(MainActivity.this, AppListActivity.class));
         } catch (Exception e) {
@@ -1231,7 +1167,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: beállítás nézet indítása
     //
     public void openSettingsActivity() {
-        //Log.d(DEBUG_TAG,"Action long tap: open settings");
+        //syslog("Action long tap: open settings");
         startedSettingsAct = true;
         MainActivity.backgroundImageBackup = MainActivity.backgroundImage;
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -1242,7 +1178,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: kedvensek nézet indítása
     //
     public void openFavActivity() {
-        //Log.d(DEBUG_TAG,"Action swipe down: open fav avt");
+        //syslog("Action swipe down: open fav avt");
         startedFavAct = true;
         startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
 
@@ -1253,7 +1189,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: widget nézet indítása
     //
     public void openWidgetActivity() {
-        //Log.d(DEBUG_TAG,"Action swipe right: open widgets");
+        //syslog("Action swipe right: open widgets");
         startedWidgetAct = true;
         startActivity(new Intent(MainActivity.this, WidgetActivity.class));
     }
@@ -1436,6 +1372,18 @@ public class MainActivity extends AppCompatActivity {
     public static void systemMessage(String mtext) {
         Toast.makeText(MainActivity.AppContext, mtext, Toast.LENGTH_SHORT).show();
     }
+
+
+    //
+    //  Fő nézet: degug log üzenet
+    //
+    public static void syslog(String mtext) {
+        if (developerMode) {
+            Log.d(DEBUG_TAG, mtext);
+        }
+    }
+
+
 
 }
 
