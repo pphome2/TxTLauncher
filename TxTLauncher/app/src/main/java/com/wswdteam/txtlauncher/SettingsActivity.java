@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -223,6 +224,14 @@ public class SettingsActivity extends AppCompatActivity {
             sharedPreferences.edit().putInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, checkedId).apply();
         });
 
+        ScrollView sv = findViewById(R.id.settingsScrollFrame);
+        sv.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (Math.abs(scrollY - oldScrollY) > 1) {
+                MainActivity.hideKeyboard(this);
+            }
+        });
+
+
         syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -233,6 +242,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
     }
+
 
 
     //

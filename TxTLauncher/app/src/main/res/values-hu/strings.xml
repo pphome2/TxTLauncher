@@ -35,8 +35,8 @@
     <string name="settings_title_privateai">Privát MI URL beállítása</string>
     <string name="settings_title_searchurl">Internet kereső URL beállítása</string>
     <string name="settings_title_background_image">Háttérkép neve (a letöltések mappában)</string>
-    <string name="button_reset">Visszaállítás</string>
-    <string name="settings_read_applist">Applikációk újraolvasása (telepítés, törlés után)</string>
+    <string name="settings_button_reset">Visszaállítás</string>
+    <string name="settings_read_applist_title">Applikációk újraolvasása (telepítés, törlés után)</string>
     <string name="settings_sysbackground">A rendszer háttérképének használata</string>
     <string name="error_bitmap">Hiba a kép átalakításakor</string>
     <string name="background_file_not_found">Háttérkép fájl nem elérhető</string>
@@ -82,5 +82,9 @@
     <string name="error_lock">Kérlek engedélyezd az alkalmazást a kisegítő lehetőségek között.</string>
     <string name="settings_adapticon">Adaptiv ikonok használata</string>
     <string name="settings_onecolfav">Egy oszlopos kedvencek</string>
-    <string name="button_resetbackground">Mentett háttérkép törlése (új használata előtt)</string>
+    <string name="settings_resetbackground_title">Mentett háttérkép törlése (új használata előtt)</string>
+    <string name="settings_backround_image_placeholder">Háttérkép</string>
+    <string name="settings_resetbackground">Törlés</string>
+    <string name="settings_read_applist">Újraolvasása</string>
+    <string name="settings_button_reset_title">Beállítások visszaállítása</string>
 </resources>

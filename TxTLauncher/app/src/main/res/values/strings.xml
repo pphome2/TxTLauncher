@@ -35,8 +35,8 @@
     <string name="settings_title_privateai">Private AI set URL</string>
     <string name="settings_title_searchurl">Web search URL</string>
     <string name="settings_title_background_image">Background image name (in download folder)</string>
-    <string name="button_reset">Reset</string>
-    <string name="settings_read_applist">Re-read app list (after install, delete apps)</string>
+    <string name="settings_button_reset">Reset</string>
+    <string name="settings_read_applist_title">Re-read app list (after install, delete apps)</string>
     <string name="settings_sysbackground">Set system background image</string>
     <string name="error_bitmap">Error with image manipulation</string>
     <string name="background_file_not_found">Not found background image file</string>
@@ -82,6 +82,10 @@
     <string name="error_lock">Please enable accessibility right</string>
     <string name="settings_adapticon">Use adaptive icons</string>
     <string name="settings_onecolfav">One column favorites</string>
-    <string name="button_resetbackground">Delete saved background image (before change)</string>
+    <string name="settings_resetbackground_title">Delete saved background image (before change)</string>
+    <string name="settings_backround_image_placeholder">Background image file name</string>
+    <string name="settings_resetbackground">Delete</string>
+    <string name="settings_read_applist">Read apps</string>
+    <string name="settings_button_reset_title">Settings reset</string>
 
 </resources>

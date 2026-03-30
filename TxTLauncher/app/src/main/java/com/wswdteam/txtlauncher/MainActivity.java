@@ -4,6 +4,7 @@ import static java.lang.Math.round;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -37,6 +38,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -301,29 +303,29 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv;
         iv = findViewById(R.id.applistButton);
         iv.setOnLongClickListener(v -> {
-            //syslog("Action long tap: open settings");
+            //syslog("Action long tap: open favorite apps");
             startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
             return true;
         });
 
         iv = findViewById(R.id.settingsButton);
         iv.setOnLongClickListener(v -> {
-            //syslog("Action long tap: open settings");
+            //syslog("Action long tap: open system settings");
             openAndroidSystemSettingsButton(v);
             return true;
         });
 
         iv = findViewById(R.id.browserButton);
         iv.setOnLongClickListener(v -> {
-            //syslog("Action long tap: open settings");
-            try {
-                final PackageManager pm = getPackageManager();
-                Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(2));
-                assert launchIntent != null;
-                startActivity(launchIntent);
-            } catch (Exception e) {
-                systemMessage(getString(R.string.error_startapp));
-            }
+            //syslog("Action long tap: open private search");
+            openSearchBrowser(v);
+            return true;
+        });
+
+        iv = findViewById(R.id.searchButton);
+        iv.setOnLongClickListener(v -> {
+            //syslog("Action long tap: open internet search");
+            openSearchBrowser(v);
             return true;
         });
 
@@ -832,6 +834,7 @@ public class MainActivity extends AppCompatActivity {
         return iconToDisplay;
     }
 
+
     // Segédfüggvény a kód tisztaságáért
     private static Drawable getDefaultIcon(View view, int iconSize) {
         Drawable d = ContextCompat.getDrawable(view.getContext(), R.drawable.app);
@@ -950,9 +953,12 @@ public class MainActivity extends AppCompatActivity {
             appF.setPadding(0, 0, 0, 0);
         }
         appF.setImageDrawable(defaultIcons.get(2));
+        MainActivity.packName.add("");
         // browser
-        Intent broIn = new Intent(Intent.ACTION_MAIN);
-        broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
+        // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
+        // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
+        Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        broIn.addCategory(Intent.CATEGORY_DEFAULT);
         List<ResolveInfo> broDL = getPackageManager().queryIntentActivities(broIn, 0);
         ResolveInfo broD = broDL.get(0);
         String broB = broD.activityInfo.packageName;
@@ -1016,7 +1022,7 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: e-mail";
         }
         if (view.getId() == R.id.browserButton) {
-            appp = MainActivity.packName.get(2);
+            appp = MainActivity.packName.get(3);
             // ! try {
                 // ! Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
                 // ! broIn.addCategory(Intent.CATEGORY_DEFAULT);
@@ -1029,7 +1035,7 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {
-            appp = MainActivity.packName.get(3);
+            appp = MainActivity.packName.get(4);
             //msg = "Button start: camera";
         }
         return appp;
@@ -1250,6 +1256,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     //
+    // Internet keresás
+    //
+    public void openSearchBrowser(View v) {
+        try {
+            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
+            launchIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            startActivity(launchIntent);
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+    //
     // Időjárás keresás
     //
     public void openWeatherSearch(View v) {
@@ -1284,6 +1304,21 @@ public class MainActivity extends AppCompatActivity {
             systemMessage(getString(R.string.error_startapp));
         }
     }
+
+
+
+    //
+    //  Billentyűzet elrejtése
+    //
+    public static void hideKeyboard(Activity act) {
+        View v = act.getCurrentFocus();
+        if (v != null) {
+            InputMethodManager im = (InputMethodManager) act.getSystemService(INPUT_METHOD_SERVICE);
+            im.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            v.clearFocus();
+        }
+    }
+
 
 
     //

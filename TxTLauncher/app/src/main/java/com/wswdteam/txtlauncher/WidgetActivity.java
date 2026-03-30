@@ -6,6 +6,7 @@ import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.MainActivity.hideKeyboard;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -144,6 +146,14 @@ public class WidgetActivity extends AppCompatActivity {
         }
         firstLoadAI = true;
 
+
+        ScrollView sv = findViewById(R.id.widgetScrollFrame);
+        sv.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (Math.abs(scrollY - oldScrollY) > 1) {
+                hideKeyboard(this);
+            }
+        });
+
         syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -162,6 +172,7 @@ public class WidgetActivity extends AppCompatActivity {
         settings.putString(SETTINGS_NOTE, text);
         settings.apply();
     }
+
 
 
     //

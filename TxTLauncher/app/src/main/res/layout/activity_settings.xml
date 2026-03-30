@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/helpScrollFrame"
+        android:id="@+id/settingsScrollFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -320,11 +320,23 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:autofillHints=""
-                android:hint="@string/settings_title_background_image"
+                android:hint="@string/settings_backround_image_placeholder"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/backgroundImage" />
+
+            <TextView
+                android:id="@+id/backgroundImageDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_resetbackground_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editBackgroundImage" />
 
             <Button
                 android:id="@+id/buttonResetBackground"
@@ -334,10 +346,11 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center|center_horizontal"
                 android:onClick="resetButtonBackground"
-                android:text="@string/button_resetbackground"
+                android:text="@string/settings_resetbackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editBackgroundImage" />
+                app:layout_constraintTop_toBottomOf="@+id/backgroundImageDelete" />
+
             <View
                 android:id="@+id/settingsDivider1"
                 android:layout_width="match_parent"
@@ -348,18 +361,30 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/buttonResetBackground" />
 
+            <TextView
+                android:id="@+id/buttonSettingsResetTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_button_reset_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider1" />
+
             <Button
                 android:id="@+id/buttonReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center|center_horizontal"
                 android:onClick="resetButton"
-                android:text="@string/button_reset"
+                android:text="@string/settings_button_reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsDivider0" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonSettingsResetTitle" />
 
 
             <View
@@ -372,18 +397,30 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/buttonReset" />
 
+            <TextView
+                android:id="@+id/buttonReadAppListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_read_applist_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
+
             <Button
                 android:id="@+id/buttonReadAppList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center|center_horizontal"
                 android:onClick="rereadAppListButton"
                 android:text="@string/settings_read_applist"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsDivider2" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonReadAppListTitle" />
 
             <View
                 android:id="@+id/settingsDivider3"
