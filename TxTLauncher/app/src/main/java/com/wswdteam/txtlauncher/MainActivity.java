@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         // ! isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         if (isDarkMode) {
+            adaptiveIconColor = ContextCompat.getColor(this, R.color.white);
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_dark_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
             defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_background);
@@ -201,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
             defaultIconColor = getColor(com.google.android.material.R.color.design_default_color_background);
         } else {
+            adaptiveIconColor = ContextCompat.getColor(this, R.color.black);
             findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
             defaultTextColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);

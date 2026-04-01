@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -101,7 +102,21 @@ public class AppListActivity extends AppCompatActivity {
         SearchView sv = findViewById(R.id.allAppListSearch);
         sv.setQuery("", false);
         sv.setIconified(true);
-        syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
+        sv.setOnClickListener(v -> sv.setIconified(false));
+
+        ListView scv = findViewById(R.id.allAppListTable);
+        scv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
+                    MainActivity.hideKeyboard(AppListActivity.this);
+                }
+            }
+        });
 
         syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }

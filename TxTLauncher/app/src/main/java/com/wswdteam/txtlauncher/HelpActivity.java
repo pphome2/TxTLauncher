@@ -60,8 +60,8 @@ public class HelpActivity extends AppCompatActivity {
     //
     @SuppressLint("SetTextI18n")
     public void onStart() {
-        // ! -overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
-        // ! -overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_left, R.anim.exit_to_right);
+        overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_top, R.anim.exit_to_bottom);
+        // - overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_left, R.anim.exit_to_right);
         super.onStart();
 
         TextView ver = findViewById(R.id.helpVersion);
