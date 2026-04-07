@@ -2,6 +2,7 @@ package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultIconColor;
@@ -10,6 +11,7 @@ import static com.wswdteam.txtlauncher.MainActivity.hideKeyboard;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
+import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -103,7 +105,7 @@ public class WidgetActivity extends AppCompatActivity {
             }
         });
 
-        if (MainActivity.adaptiveIcon) {
+        if (adaptiveIcon) {
             setIconColorW(R.id.wdialButton, adaptiveIconColor);
             setIconColorW(R.id.wmailButton, adaptiveIconColor);
             setIconColorW(R.id.whelpButton, adaptiveIconColor);
@@ -125,6 +127,40 @@ public class WidgetActivity extends AppCompatActivity {
             setIconColorW(R.id.waiButton, defaultIconColor);
             setIconColorW(R.id.wdiscoveryButton, defaultIconColor);
             setIconColorW(R.id.wmapButton, defaultIconColor);
+        }
+
+        if (textColorMode) {
+            TextView tvx;
+            setIconColorW(R.id.wdialButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wdialButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wmailButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wmailButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.whelpButton, adaptiveIconColor);
+            tvx = findViewById(R.id.whelpButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wbrowserButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wbrowserButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wcameraButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wcameraButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wapplistButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wapplistButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wfavlistButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wfavlistButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.waiButton, adaptiveIconColor);
+            tvx = findViewById(R.id.waiButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wdiscoveryButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wdiscoveryButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
+            setIconColorW(R.id.wmapButton, adaptiveIconColor);
+            tvx = findViewById(R.id.wmapButtonTitle);
+            tvx.setTextColor(adaptiveIconColor);
         }
     }
 

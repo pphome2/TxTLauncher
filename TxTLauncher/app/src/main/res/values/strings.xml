@@ -87,5 +87,6 @@
     <string name="settings_resetbackground">Delete</string>
     <string name="settings_read_applist">Read apps</string>
     <string name="settings_button_reset_title">Settings reset</string>
+    <string name="settings_text_color">Text color mode</string>
 
 </resources>

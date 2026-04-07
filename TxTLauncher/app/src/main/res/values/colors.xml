@@ -7,4 +7,7 @@
     <color name="blue">#007BBB</color>
     <color name="gray">#9E9E9E</color>
     <color name="yellow">#FFD700</color>
+    <color name="purple">#800080</color>
+    <color name="olive">#808000</color>
+    <color name="levander">#915FF0</color>
 </resources>

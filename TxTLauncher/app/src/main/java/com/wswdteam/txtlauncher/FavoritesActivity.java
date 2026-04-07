@@ -3,10 +3,12 @@ package com.wswdteam.txtlauncher;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.iconSize;
@@ -15,6 +17,7 @@ import static com.wswdteam.txtlauncher.MainActivity.packageMan;
 import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
+import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -152,6 +155,11 @@ public class FavoritesActivity extends AppCompatActivity {
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
+                    if (textColorMode) {
+                        tvt.setTextColor(adaptiveIconColor);
+                    } else {
+                        tvt.setTextColor(defaultTextColor);
+                    }
                     tvt.setCompoundDrawablePadding(30);
                     tvt.setPadding(10,10,10,10);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);
@@ -194,6 +202,11 @@ public class FavoritesActivity extends AppCompatActivity {
                         tvt.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     tvt.setText(appN);
+                    if (textColorMode) {
+                        tvt.setTextColor(adaptiveIconColor);
+                    } else {
+                        tvt.setTextColor(defaultTextColor);
+                    }
                     tvt.setCompoundDrawablePadding(30);
                     tvt.setPadding(10,10,10,10);
                     tvt.setEllipsize(TextUtils.TruncateAt.END);

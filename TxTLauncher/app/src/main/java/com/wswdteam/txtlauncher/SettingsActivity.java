@@ -8,6 +8,7 @@ import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE_TA
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_TEXT_COLOR_MODE_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_URL;
@@ -91,6 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c2 = findViewById(R.id.appIconCheck);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c3 = findViewById(R.id.adaptiveIcon);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c4 = findViewById(R.id.onecolFavorites);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c5 = findViewById(R.id.textColorMode);
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             var settings = MainActivity.sharedPreferences.edit();
             if (isChecked) {
@@ -127,6 +129,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
+        c5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            var settings = MainActivity.sharedPreferences.edit();
+            if (isChecked) {
+                settings.putString(SETTINGS_TEXT_COLOR_MODE_TAG, "1");
+            } else {
+                settings.putString(SETTINGS_TEXT_COLOR_MODE_TAG, "0");
+            }
+            settings.apply();
+        });
         val = MainActivity.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
         if (!val.isEmpty()) {
             c1.setChecked(!val.equals("0"));
@@ -143,6 +154,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             c4.setChecked(!val.equals("0"));
         }
+        val = MainActivity.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c5.setChecked(!val.equals("0"));
+        }
+
         int buttonId;
         buttonId = MainActivity.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
 

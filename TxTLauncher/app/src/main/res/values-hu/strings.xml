@@ -87,4 +87,5 @@
     <string name="settings_resetbackground">Törlés</string>
     <string name="settings_read_applist">Újraolvasása</string>
     <string name="settings_button_reset_title">Beállítások visszaállítása</string>
+    <string name="settings_text_color">Szöveg szinezése</string>
 </resources>

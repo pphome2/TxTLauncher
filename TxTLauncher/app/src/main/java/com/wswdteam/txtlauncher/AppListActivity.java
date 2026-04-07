@@ -1,6 +1,7 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
@@ -12,6 +13,7 @@ import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.isDarkMode;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
+import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -66,7 +68,7 @@ public class AppListActivity extends AppCompatActivity {
             return insets;
         });
 
-        if (adaptiveIcon) {
+        if (adaptiveIcon || textColorMode) {
             defaultLetterColor = ContextCompat.getColor(this, R.color.yellow);
         } else {
             if (isDarkMode) {
@@ -161,7 +163,11 @@ public class AppListActivity extends AppCompatActivity {
                             tvt.setCompoundDrawables(null, null, null, null);
                             // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
                         } else {
-                            tvt.setTextColor(defaultTextColor);
+                            if (textColorMode) {
+                                tvt.setTextColor(adaptiveIconColor);
+                            } else {
+                                tvt.setTextColor(defaultTextColor);
+                            }
                             tvt.setText(appN);
                             if (homeStartAppIcon) {
                                 String appName;

@@ -1,14 +1,17 @@
 package com.wswdteam.txtlauncher;
 
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_APP_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.homeAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
+import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
 
 import static java.util.Collections.sort;
 
@@ -132,6 +135,11 @@ public class AddAppActivity extends AppCompatActivity {
                 TextView tvt = row.findViewById(android.R.id.text1);
                 if ((appN != null) && (!appN.isEmpty())) {
                     tvt.setText(appN);
+                    if (textColorMode) {
+                        tvt.setTextColor(adaptiveIconColor);
+                    } else {
+                        tvt.setTextColor(defaultTextColor);
+                    }
                     if (homeStartAppIcon) {
                         int padding = iconSize / 2;
                         ResolveInfo info = allApplicationsList.get(position);
