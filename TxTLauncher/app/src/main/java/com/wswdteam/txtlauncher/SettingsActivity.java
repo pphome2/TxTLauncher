@@ -3,18 +3,21 @@ package com.wswdteam.txtlauncher;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE_TAG;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_DARK_MODE_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_TEXT_COLOR_MODE_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_URL;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_URL_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
+import static com.wswdteam.txtlauncher.MainActivity.darkMode;
+import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.packageUpdateTime;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher.MainActivity.privateSearchUrlOrig;
@@ -65,12 +68,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         this.getWindow().setSoftInputMode(SOFT_INPUT_ADJUST_PAN);
 
+        // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+
         TextView tv = findViewById(R.id.settingsViewTitle);
+        tv.setTextColor(defaultTextColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
+            appI.setTint(defaultTextColor);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
@@ -93,6 +101,7 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c3 = findViewById(R.id.adaptiveIcon);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c4 = findViewById(R.id.onecolFavorites);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c5 = findViewById(R.id.textColorMode);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c6 = findViewById(R.id.darkMode);
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             var settings = MainActivity.sharedPreferences.edit();
             if (isChecked) {
@@ -138,6 +147,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
+        c6.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            var settings = MainActivity.sharedPreferences.edit();
+            if (isChecked) {
+                settings.putString(SETTINGS_DARK_MODE_TAG, "1");
+            } else {
+                settings.putString(SETTINGS_DARK_MODE_TAG, "0");
+            }
+            settings.apply();
+        });
         val = MainActivity.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
         if (!val.isEmpty()) {
             c1.setChecked(!val.equals("0"));
@@ -157,6 +175,12 @@ public class SettingsActivity extends AppCompatActivity {
         val = MainActivity.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
         if (!val.isEmpty()) {
             c5.setChecked(!val.equals("0"));
+        }
+        val = MainActivity.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c6.setChecked(!val.equals("0"));
+        } else {
+            c6.setChecked(darkMode);
         }
 
         int buttonId;
@@ -188,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity {
         v3.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 var settings = MainActivity.sharedPreferences.edit();
-                settings.putString(SETTINGS_WEATHER_URL, String.valueOf(s).trim());
+                settings.putString(SETTINGS_WEATHER_URL_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -216,7 +240,7 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             v2.setText(MainActivity.privateSearchUrl);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_URL, "");
+        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_URL_TAG, "");
         if (!val.isEmpty()) {
             v3.setText(val);
         } else {
@@ -225,7 +249,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (buttonId > 0) {
             RadioButton rb = findViewById(buttonId);
-            rb.setText("✔");
+            if (rb != null) {
+                rb.setText("✔");
+            }
         }
         RadioGroup colorGroup = findViewById(R.id.colorRadioGroup);
         colorGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -297,9 +323,6 @@ public class SettingsActivity extends AppCompatActivity {
     // Beállítások visszaállítása
     //
     public void resetButtonBackground(View view) {
-        var settings = MainActivity.sharedPreferences.edit();
-        settings.putString(SETTINGS_BACKGROUND_IMAGE, "");
-        settings.apply();
         EditText v4 = findViewById(R.id.editBackgroundImage);
         v4.setText(backgroundImageOrig);
         File imgFile = new File(MainActivity.savedBackgroundImage);

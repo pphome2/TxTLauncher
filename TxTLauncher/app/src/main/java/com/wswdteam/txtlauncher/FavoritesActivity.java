@@ -2,14 +2,15 @@ package com.wswdteam.txtlauncher;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
+import static com.wswdteam.txtlauncher.MainActivity.FAV_APP_NUM;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
+import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.onecolFavorites;
@@ -62,12 +63,17 @@ public class FavoritesActivity extends AppCompatActivity {
             return insets;
         });
 
+        // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+
         TextView tv = findViewById(R.id.favTitle);
+        tv.setTextColor(defaultTextColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
+            appI.setTint(defaultTextColor);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
@@ -88,7 +94,7 @@ public class FavoritesActivity extends AppCompatActivity {
         String tag;
         String val;
         String appName;
-        for (var i=0; i<favAppNum; i++) {
+        for (var i = 0; i < FAV_APP_NUM; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
             val = sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
@@ -221,7 +227,7 @@ public class FavoritesActivity extends AppCompatActivity {
             tx1.setVisibility(View.VISIBLE);
             ListView tx2 = findViewById(R.id.favAppList1);
             tx2.setPadding(0,0,0,0);
-            double anum = Math.min(favAppName.size(), favAppNum);
+            double anum = Math.min(favAppName.size(), FAV_APP_NUM);
             double an = anum / 2;
             long halfA = Math.round(an);
             int halfApp = (int) halfA;
@@ -232,7 +238,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     }
                 }
             }
-            for (var i = halfApp; i < favAppNum; i++) {
+            for (var i = halfApp; i < FAV_APP_NUM; i++) {
                 if (favAppName.size() > i) {
                     if (!favAppName.get(i).isEmpty()) {
                         appFList2.add(favAppName.get(i));
@@ -250,7 +256,7 @@ public class FavoritesActivity extends AppCompatActivity {
             ListView t2 = findViewById(R.id.favAppList2);
             t2.setVisibility(INVISIBLE);
             t2.setVisibility(GONE);
-            for (var i = 0; i < favAppNum; i++) {
+            for (var i = 0; i < FAV_APP_NUM; i++) {
                 if (favAppName.size() > i) {
                     if (!favAppName.get(i).isEmpty()) {
                         appFList1.add(favAppName.get(i));

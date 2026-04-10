@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -51,6 +50,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -70,25 +70,31 @@ import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    //
+    // verzió, fejlesztő adatok
+    //
     public static String TXT_VERSION = "1.0.1";
     public static String TXT_APP_NAME = "TxTLauncher";
     public static String TXT_WEB_PAGE = "https://github.com/pphome2/TxTLauncher";
 
+    //
+    // Log üzenetekhez használható
+    //
+    public static boolean developerMode = false;
+
+    // verzió mentése
     public final String SETTINGS_VERSION_TAG = "TxTVersion";
 
-    public static String privateAIUrl = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
-    public static String privateSearchUrl = "https://duckduckgo.com/?q=";
-    public static String weatherUrl = "";
-    public static String backgroundImage = "";
-
-    public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
-    public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
-    public static String weatherUrlOrig = "";
-    //public static String WEATHER_SEARCH_URL = "https://www.google.com/search?q=";
-    public static String backgroundImageOrig = "";
-
+    // debug jelölő a log-ba
     public static String DEBUG_TAG = "TxTLauncher_App";
+
+    // általános constansok
+    public static final int HOME_APP_NUM = 10;
+    public static final int FAV_APP_NUM = 20;
+    private static final int SWIPE_MIN_DISTANCE = 100;
+    private static final int SWIPE_TRESHOLD = 50;
+
+    // beállítások mentése jelölők
     public static String PRIVATE_SETTINGS_TAG = "TxTLauncher_App";
     public static String SETTINGS_APP_TAG = "HomeApp";
     public static String SETTINGS_FAV_APP_TAG = "FavApp";
@@ -97,52 +103,62 @@ public class MainActivity extends AppCompatActivity {
     public static String SETTINGS_ADAPTIVE_ICON_TAG = "AdaptiveIcon";
     public static String SETTINGS_ADAPTIVE_ICON_COLOR_TAG = "AdaptiveIconColor";
     public static String SETTINGS_TEXT_COLOR_MODE_TAG = "TextColorMode";
+    public static String SETTINGS_DARK_MODE_TAG = "DarkMode";
     public static String SETTINGS_ONE_COLUMN_FAVORITES_TAG = "oneColFavorites";
     public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
     public static String SETTINGS_URL_SEARCH_TAG = "Search";
-    public static String SETTINGS_WEATHER_URL = "Weather";
+    public static String SETTINGS_WEATHER_URL_TAG = "Weather";
     public static String SETTINGS_BACKGROUND_IMAGE_TAG = "BackgroundImage";
-    public static String SETTINGS_BACKGROUND_IMAGE = "FormattedBackgroundImage";
-    public static String SETTINGS_NOTE = "AppNote";
+    public static String SETTINGS_NOTE_TAG = "AppNote";
 
+    // beállítások alapértelmezett tartalma
+    public static String privateAIUrl = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
+    public static String privateSearchUrl = "https://duckduckgo.com/?q=";
+    public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
+    public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
+    public static String weatherUrl = "";
+    public static String backgroundImage = "";
+    public static String weatherUrlOrig = "";
+    public static String backgroundImageOrig = "";
+
+    // rendszer változók
     public static SharedPreferences sharedPreferences;
     public static PackageManager packageMan;
 
-    public static boolean isDarkMode = true;
+    // beállítások változói
     public static boolean homeSysIcon = false;
     public static boolean homeStartAppIcon = false;
     public static boolean adaptiveIcon = false;
     public static boolean onecolFavorites = false;
     public static boolean textColorMode = false;
+    public static boolean darkMode = true;
     public static int adaptiveIconColor = 0;
     public static int defaultIconColor = 0;
 
-    public static int homeAppNum = 10;
-    public static int favAppNum = 20;
-
-    public static final String lineSeparator = "#";
-
+    // app-ok kezelése
     public static ArrayList<ResolveInfo> allApplicationsList = new ArrayList<>();
     public static List<String> packName = new ArrayList<>();
     public static List<String> homeAppName = new ArrayList<>();
     public static List<Drawable> defaultIcons = new ArrayList<>();
     public static Context AppContext;
+    public static long packageUpdateTime;
+    public static String[][] allAppData;
 
-    private static final int SWIPE_MIN_DISTANCE = 100;
-    private static final int SWIPE_TRESHOLD = 50;
-
+    // activity figyelés
     public boolean startedAppAct = false;
     public boolean startedWidgetAct = false;
     public boolean startedSettingsAct = false;
     public boolean startedFavAct = false;
     public boolean startedHelp = false;
+
+    // dátum kiírás
     private boolean dateReady = false;
+
     private boolean firstPermissionRequest = true;
     public static String backgroundImageBackup = "";
     public static String savedBackgroundImage = "";
-    public int screenHeight;
-    public int screenWidth;
-    public static long packageUpdateTime;
+
+    // szöveg és szín beállítások
     public static float defaultFontSize = 0;
     public static float defaultPlusFontSize = 10;
     public static float defaultPlusFontSizeTitle = 15;
@@ -150,13 +166,8 @@ public class MainActivity extends AppCompatActivity {
     public static int defaultSelectColor = 0;
     public static int defaultTextColor = 0;
     public static int defaultLetterColor = 0;
-    public static String[][] allAppData;
     public static int iconSize;
     public static int iconPadding;
-    //
-    // Log üzenetekhez használható
-    //
-    public static boolean developerMode = true;
 
 
     //
@@ -194,25 +205,7 @@ public class MainActivity extends AppCompatActivity {
         // sötét mód beállítása
         Configuration configuration = getResources().getConfiguration();
         int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        isDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
-
-        if (isDarkMode) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.white);
-            findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_dark_default_color_background));
-            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
-            defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_background);
-            defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
-            defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
-            defaultIconColor = getColor(com.google.android.material.R.color.design_default_color_background);
-        } else {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.black);
-            findViewById(R.id.mainView).setBackgroundColor(getColor(com.google.android.material.R.color.design_default_color_background));
-            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
-            defaultTextColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
-            defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
-            defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
-            defaultIconColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
-        }
+        darkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         tv = findViewById(R.id.digitalClock);
         tv.setTextSize(tv.getTextSize());
@@ -309,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         iv = findViewById(R.id.applistButton);
         iv.setOnLongClickListener(v -> {
             //syslog("Action long tap: open favorite apps");
-            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+            startActivity(new Intent(this, FavoritesActivity.class));
             return true;
         });
 
@@ -338,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
         versionCheck();
         generateAppList();
         getSettings();
+        setColors();
         // első indulás: nincs új háttér
         backgroundImageBackup = backgroundImage;
         timeInScreen();
@@ -345,9 +339,6 @@ public class MainActivity extends AppCompatActivity {
         buttonPrepare();
         setHomaApp();
         backgroundPrepare();
-        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-
     }
 
 
@@ -361,7 +352,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         if (startedSettingsAct) {
+            generateAppList();
             getSettings();
+            setColors();
+            saveButtonImages();
             buttonPrepare();
             setHomaApp();
             backgroundPrepare();
@@ -516,7 +510,7 @@ public class MainActivity extends AppCompatActivity {
         String tag;
         String val;
         String appName;
-        for (var i = 0; i < homeAppNum; i++) {
+        for (var i = 0; i <  HOME_APP_NUM; i++) {
             tag = SETTINGS_APP_TAG + i;
             val = sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
@@ -564,7 +558,7 @@ public class MainActivity extends AppCompatActivity {
             adaptiveIconColor = ContextCompat.getColor(this, R.color.levander);
         }
         if (adaptiveIconColor == 0) {
-            adaptiveIconColor = ContextCompat.getColor(this, android.R.color.system_accent1_400);
+            adaptiveIconColor = defaultIconColor;
         }
 
         if (adaptiveIcon) {
@@ -592,29 +586,9 @@ public class MainActivity extends AppCompatActivity {
             textColorMode = false;
         }
 
-        if (adaptiveIcon || textColorMode) {
-            setIconColor(R.id.searchButton, adaptiveIconColor);
-            setIconColor(R.id.weatherButton, adaptiveIconColor);
-            setIconColor(R.id.settingsButton, adaptiveIconColor);
-            setIconColor(R.id.aiButton, adaptiveIconColor);
-            setIconColor(R.id.applistButton, adaptiveIconColor);
-        } else {
-            setIconColor(R.id.searchButton, defaultIconColor);
-            setIconColor(R.id.weatherButton, defaultIconColor);
-            setIconColor(R.id.settingsButton, defaultIconColor);
-            setIconColor(R.id.aiButton, defaultIconColor);
-            setIconColor(R.id.applistButton, defaultIconColor);
-        }
-        if (textColorMode) {
-            final TextView tw = findViewById(R.id.digitalClock);
-            tw.setTextColor(adaptiveIconColor);
-            final TextView tdw = findViewById(R.id.digitalDate);
-            tdw.setTextColor(adaptiveIconColor);
-        } else {
-            final TextView tw = findViewById(R.id.digitalClock);
-            tw.setTextColor(defaultTextColor);
-            final TextView tdw = findViewById(R.id.digitalDate);
-            tdw.setTextColor(defaultTextColor);
+        val = sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            darkMode = !val.equals("0");
         }
 
         val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
@@ -625,13 +599,73 @@ public class MainActivity extends AppCompatActivity {
         if (!val.isEmpty()) {
             privateSearchUrl = val;
         }
-        val = sharedPreferences.getString(SETTINGS_WEATHER_URL, "");
+        val = sharedPreferences.getString(SETTINGS_WEATHER_URL_TAG, "");
         if (!val.isEmpty()) {
             weatherUrl = val;
         }
         val = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
         if (!val.isEmpty()) {
             backgroundImage = val;
+        }
+    }
+
+
+    //
+    //  Fő nézet: beállítások betöltése
+    //
+    public void setColors() {
+        if (darkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
+            defaultTextColor = getColor(com.google.android.material.R.color.design_dark_default_color_on_surface);
+            defaultSelectColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
+            defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_secondary_variant);
+            defaultIconColor = getColor(com.google.android.material.R.color.design_dark_default_color_on_surface);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            defaultBackGroundColor = getColor(com.google.android.material.R.color.design_default_color_background);
+            defaultTextColor = getColor(com.google.android.material.R.color.design_default_color_on_surface);
+            defaultSelectColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
+            defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary);
+            defaultIconColor = getColor(com.google.android.material.R.color.design_default_color_on_surface);
+        }
+
+        // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+
+        if (adaptiveIcon || textColorMode) {
+            setIconColor(R.id.searchButton, adaptiveIconColor);
+            setIconColor(R.id.weatherButton, adaptiveIconColor);
+            setIconColor(R.id.settingsButton, adaptiveIconColor);
+            setIconColor(R.id.aiButton, adaptiveIconColor);
+            setIconColor(R.id.applistButton, adaptiveIconColor);
+            setIconColor(R.id.dialButton, adaptiveIconColor);
+            setIconColor(R.id.mailButton, adaptiveIconColor);
+            setIconColor(R.id.applistButton, adaptiveIconColor);
+            setIconColor(R.id.browserButton, adaptiveIconColor);
+            setIconColor(R.id.cameraButton, adaptiveIconColor);
+        } else {
+            setIconColor(R.id.searchButton, defaultIconColor);
+            setIconColor(R.id.weatherButton, defaultIconColor);
+            setIconColor(R.id.settingsButton, defaultIconColor);
+            setIconColor(R.id.aiButton, defaultIconColor);
+            setIconColor(R.id.applistButton, defaultIconColor);
+            setIconColor(R.id.dialButton, defaultIconColor);
+            setIconColor(R.id.mailButton, defaultIconColor);
+            setIconColor(R.id.applistButton, defaultIconColor);
+            setIconColor(R.id.browserButton, defaultIconColor);
+            setIconColor(R.id.cameraButton, defaultIconColor);
+        }
+        if (textColorMode) {
+            final TextView tw = findViewById(R.id.digitalClock);
+            tw.setTextColor(defaultTextColor);
+            final TextView tdw = findViewById(R.id.digitalDate);
+            tdw.setTextColor(defaultTextColor);
+        } else {
+            final TextView tw = findViewById(R.id.digitalClock);
+            tw.setTextColor(defaultTextColor);
+            final TextView tdw = findViewById(R.id.digitalDate);
+            tdw.setTextColor(defaultTextColor);
         }
     }
 
@@ -778,7 +812,7 @@ public class MainActivity extends AppCompatActivity {
 
         };
 
-        double anum = Math.min(homeAppName.size(), homeAppNum);
+        double anum = Math.min(homeAppName.size(),  HOME_APP_NUM);
         double an = anum / 2;
         long halfA = round(an);
         int halfApp = (int) halfA;
@@ -789,7 +823,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        for (var i = halfApp; i < homeAppNum; i++) {
+        for (var i = halfApp; i <  HOME_APP_NUM; i++) {
             if (homeAppName.size() > i) {
                 if (!homeAppName.get(i).isEmpty()) {
                     appHList2.add(homeAppName.get(i));
@@ -895,19 +929,19 @@ public class MainActivity extends AppCompatActivity {
     private Drawable mainDrawable(Drawable appI, Drawable drI) {
         Drawable iconToDisplay;
         if (adaptiveIcon && appI instanceof AdaptiveIconDrawable) {
-                AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
-                Drawable monoIcon = adaptI.getMonochrome();
-                if (monoIcon != null) {
-                    monoIcon.mutate();
-                    monoIcon.setTint(adaptiveIconColor);
-                    InsetDrawable insetIcon = new InsetDrawable(monoIcon, iconPadding);
-                    LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
-                    layer.setLayerSize(0, iconSize, iconSize);
-                    iconToDisplay = layer;
-                } else {
-                    iconToDisplay = getDefaultIconMain(iconSize);
-                }
+            AdaptiveIconDrawable adaptI = (AdaptiveIconDrawable) appI;
+            Drawable monoIcon = adaptI.getMonochrome();
+            if (monoIcon != null) {
+                monoIcon.mutate();
+                monoIcon.setTint(adaptiveIconColor);
+                InsetDrawable insetIcon = new InsetDrawable(monoIcon, iconPadding);
+                LayerDrawable layer = new LayerDrawable(new Drawable[]{insetIcon});
+                layer.setLayerSize(0, iconSize, iconSize);
+                iconToDisplay = layer;
             } else {
+                iconToDisplay = getDefaultIconMain(iconSize);
+            }
+        } else {
             if (adaptiveIcon) {
                 iconToDisplay = getDefaultIconMain(iconSize);
             } else {
@@ -949,7 +983,6 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: alapértelmezett gombok előkészítése, alapértelmezett app kéeresése
     //
     public void buttonPrepare() {
-        //final PackageManager pm1 = getPackageManager();
         // dial
         Intent dialIn = new Intent(Intent.ACTION_DIAL, null);
         dialIn.addCategory(Intent.CATEGORY_DEFAULT);
@@ -957,19 +990,25 @@ public class MainActivity extends AppCompatActivity {
         ResolveInfo appD = appDL.get(0);
         String packD = appD.activityInfo.packageName;
         ImageView dialF = findViewById(R.id.dialButton);
+        dialF.clearColorFilter();
         if (homeSysIcon) {
             Drawable dialI = appD.loadIcon(packageMan);
-            @SuppressLint("UseCompatLoadingForDrawables") Drawable dialI2 = mainDrawable(dialI, getDrawable(R.drawable.call));
-            dialF.setImageDrawable(dialI2);
+            @SuppressLint("UseCompatLoadingForDrawables")
+            Drawable dialI2 = mainDrawable(dialI, getDrawable(R.drawable.call));
+            if (adaptiveIcon) {
+                dialF.setImageDrawable(dialI2);
+            } else {
+                dialF.setImageDrawable(dialI);
+            }
         } else {
             dialF.setImageDrawable(defaultIcons.get(0));
             if (adaptiveIcon || textColorMode) {
                 dialF.setColorFilter(adaptiveIconColor);
             } else {
-                dialF.clearColorFilter();
+                dialF.setColorFilter(defaultIconColor);
             }
         }
-        MainActivity.packName.add(packD);
+        packName.add(packD);
         // mail
         Intent mailIn = new Intent(Intent.ACTION_MAIN, null);
         mailIn.addCategory(Intent.CATEGORY_APP_EMAIL);
@@ -977,21 +1016,24 @@ public class MainActivity extends AppCompatActivity {
         ResolveInfo mailD = mailDL.get(0);
         String packI = mailD.activityInfo.packageName;
         ImageView mailF = findViewById(R.id.mailButton);
+        mailF.clearColorFilter();
         if (homeSysIcon) {
             Drawable mailI = mailD.loadIcon(packageMan);
-            @SuppressLint("UseCompatLoadingForDrawables") Drawable mailI2 = mainDrawable(mailI, getDrawable(R.drawable.email));
+            @SuppressLint("UseCompatLoadingForDrawables")
+            Drawable mailI2 = mainDrawable(mailI, getDrawable(R.drawable.email));
             mailF.setImageDrawable(mailI2);
         } else {
             mailF.setImageDrawable(defaultIcons.get(1));
             if (adaptiveIcon || textColorMode) {
                 mailF.setColorFilter(adaptiveIconColor);
             } else {
-                mailF.clearColorFilter();
+                mailF.setColorFilter(defaultIconColor);
             }
         }
-        MainActivity.packName.add(packI);
+        packName.add(packI);
         // app list
         ImageView appF = findViewById(R.id.applistButton);
+        appF.clearColorFilter();
         if ((homeSysIcon) && (!adaptiveIcon)) {
             GradientDrawable border = new GradientDrawable();
             border.setColor(Color.TRANSPARENT);
@@ -1004,12 +1046,16 @@ public class MainActivity extends AppCompatActivity {
             appF.setPadding(0, 0, 0, 0);
         }
         appF.setImageDrawable(defaultIcons.get(2));
-        if (adaptiveIcon || textColorMode) {
+        if (adaptiveIcon) {
             appF.setColorFilter(adaptiveIconColor);
         } else {
-            appF.clearColorFilter();
+            if (textColorMode) {
+                appF.setColorFilter(adaptiveIconColor);
+            } else {
+                appF.setColorFilter(defaultIconColor);
+            }
         }
-        MainActivity.packName.add("");
+        packName.add("");
         // browser
         // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
         // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
@@ -1019,6 +1065,7 @@ public class MainActivity extends AppCompatActivity {
         ResolveInfo broD = broDL.get(0);
         String broB = broD.activityInfo.packageName;
         ImageView broF = findViewById(R.id.browserButton);
+        broF.clearColorFilter();
         if (homeSysIcon) {
             Intent bI = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
             ResolveInfo rI = getPackageManager().resolveActivity(bI, PackageManager.MATCH_DEFAULT_ONLY);
@@ -1031,10 +1078,10 @@ public class MainActivity extends AppCompatActivity {
             if (adaptiveIcon || textColorMode) {
                 broF.setColorFilter(adaptiveIconColor);
             } else {
-                broF.clearColorFilter();
+                broF.setColorFilter(defaultIconColor);
             }
         }
-        MainActivity.packName.add(broB);
+        packName.add(broB);
         // camera
         Intent camIn = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         camIn.addCategory(Intent.CATEGORY_DEFAULT);
@@ -1042,6 +1089,7 @@ public class MainActivity extends AppCompatActivity {
         ResolveInfo camD = camDL.get(0);
         String camC = camD.activityInfo.packageName;
         ImageView camF = findViewById(R.id.cameraButton);
+        camF.clearColorFilter();
         if (homeSysIcon) {
             Drawable camI = camD.loadIcon(packageMan);
             @SuppressLint("UseCompatLoadingForDrawables") Drawable camI2 = mainDrawable(camI, getDrawable(R.drawable.photo));
@@ -1051,10 +1099,10 @@ public class MainActivity extends AppCompatActivity {
             if (adaptiveIcon || textColorMode) {
                 camF.setColorFilter(adaptiveIconColor);
             } else {
-                camF.clearColorFilter();
+                camF.setColorFilter(defaultIconColor);
             }
         }
-        MainActivity.packName.add(camC);
+        packName.add(camC);
     }
 
 
@@ -1080,15 +1128,15 @@ public class MainActivity extends AppCompatActivity {
     private String getString(View view) {
         String appp = "";
         if (view.getId() == R.id.dialButton) {
-            appp = MainActivity.packName.get(0);
+            appp = packName.get(0);
             //msg = "Button start: dial";
         }
         if (view.getId() == R.id.mailButton) {
-            appp = MainActivity.packName.get(1);
+            appp = packName.get(1);
             //msg = "Button start: e-mail";
         }
         if (view.getId() == R.id.browserButton) {
-            appp = MainActivity.packName.get(3);
+            appp = packName.get(3);
             // ! try {
                 // ! Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
                 // ! broIn.addCategory(Intent.CATEGORY_DEFAULT);
@@ -1101,7 +1149,7 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {
-            appp = MainActivity.packName.get(4);
+            appp = packName.get(4);
             //msg = "Button start: camera";
         }
         return appp;
@@ -1117,13 +1165,13 @@ public class MainActivity extends AppCompatActivity {
         // 5 perc
         if ((currentTime - packageUpdateTime) > 300) {
             packageUpdateTime = currentTime;
-            MainActivity.allApplicationsList.clear();
+            allApplicationsList.clear();
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> apps = packageMan.queryIntentActivities(intent, PackageManager.GET_META_DATA);
             apps.sort(new ResolveInfo.DisplayNameComparator(packageMan));
-            MainActivity.allApplicationsList.addAll(apps);
-            MainActivity.allAppData = new String[apps.size()][3];
+            allApplicationsList.addAll(apps);
+            allAppData = new String[apps.size()][3];
             String appName;
             String pkgName;
             String[] parts;
@@ -1218,7 +1266,7 @@ public class MainActivity extends AppCompatActivity {
     public void openAppListActivity() {
         //syslog("Action swipe up: openapplist");
         startedAppAct = true;
-        startActivity(new Intent(MainActivity.this, AppListActivity.class));
+        startActivity(new Intent(this, AppListActivity.class));
     }
 
 
@@ -1228,7 +1276,7 @@ public class MainActivity extends AppCompatActivity {
     public void openAppListButton(View view) {
         //syslog("Action tap button: openapplist");
         try {
-            startActivity(new Intent(MainActivity.this, AppListActivity.class));
+            startActivity(new Intent(this, AppListActivity.class));
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1241,8 +1289,8 @@ public class MainActivity extends AppCompatActivity {
     public void openSettingsActivity() {
         //syslog("Action long tap: open settings");
         startedSettingsAct = true;
-        MainActivity.backgroundImageBackup = MainActivity.backgroundImage;
-        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        backgroundImageBackup = backgroundImage;
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
 
@@ -1252,7 +1300,7 @@ public class MainActivity extends AppCompatActivity {
     public void openFavActivity() {
         //syslog("Action swipe down: open fav avt");
         startedFavAct = true;
-        startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+        startActivity(new Intent(this, FavoritesActivity.class));
 
     }
 
@@ -1263,7 +1311,7 @@ public class MainActivity extends AppCompatActivity {
     public void openWidgetActivity() {
         //syslog("Action swipe right: open widgets");
         startedWidgetAct = true;
-        startActivity(new Intent(MainActivity.this, WidgetActivity.class));
+        startActivity(new Intent(this, WidgetActivity.class));
     }
 
 
@@ -1403,17 +1451,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     //
     // verzió ellenőrzése
     //
     public void versionCheck() {
         // régi beállítások törlése
-        String valx = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE, "");
-        if (!valx.isEmpty()) {
-            var settings = sharedPreferences.edit();
-            settings.remove(SETTINGS_BACKGROUND_IMAGE);
-            settings.apply();
-        }
+        // - String valx = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE, "");
+        // - if (!valx.isEmpty()) {
+        // -    var settings = sharedPreferences.edit();
+        // -    settings.remove(SETTINGS_BACKGROUND_IMAGE);
+        // -    settings.apply();
+        // - }
 
         //newInstall();
         String val = sharedPreferences.getString(SETTINGS_VERSION_TAG, "");
@@ -1435,6 +1484,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     //
     // Első indítás
     //
@@ -1444,11 +1494,10 @@ public class MainActivity extends AppCompatActivity {
         //
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String msg = getString(R.string.news_firstrun);
-        msg = msg.replaceAll(lineSeparator, "\n");
         builder.setTitle(getString(R.string.news_firstrun_title))
                 .setMessage(msg)
                 .setPositiveButton(getString(R.string.button_next), (dialog, id) ->
-                        startActivity(new Intent(MainActivity.this, HelpActivity.class)));
+                        startActivity(new Intent(this, HelpActivity.class)));
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -1468,11 +1517,10 @@ public class MainActivity extends AppCompatActivity {
         // üzenet
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String msg = getString(R.string.news_update);
-        msg = msg.replaceAll(lineSeparator, "\n");
         builder.setTitle(getString(R.string.news_update_title))
                 .setMessage(msg)
                 .setPositiveButton(getString(R.string.button_next), (dialog, id) -> {
-                    //startActivity(new Intent(MainActivity.this, HelpActivity.class));
+                    //startActivity(new Intent(this, HelpActivity.class));
                 });
         AlertDialog alert = builder.create();
         alert.show();
@@ -1483,7 +1531,7 @@ public class MainActivity extends AppCompatActivity {
     //  Fő nézet: rendszerüzenet
     //
     public static void systemMessage(String mtext) {
-        Toast.makeText(MainActivity.AppContext, mtext, Toast.LENGTH_SHORT).show();
+        Toast.makeText(AppContext, mtext, Toast.LENGTH_SHORT).show();
     }
 
 

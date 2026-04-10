@@ -484,6 +484,7 @@
                 android:id="@+id/widgetCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:theme= "@style/Theme.AppCompat.DayNight"
                 app:layout_constraintTop_toBottomOf="@+id/widgetDivider" />
 
             <View

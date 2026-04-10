@@ -1,12 +1,14 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE;
+import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.hideKeyboard;
 import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
@@ -16,8 +18,11 @@ import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
@@ -27,6 +32,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +46,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.DateFormat;
 
 
 //
@@ -62,21 +69,28 @@ public class WidgetActivity extends AppCompatActivity {
             return insets;
         });
 
+        // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+
         TextView tv = findViewById(R.id.widgetTitle);
+        tv.setTextColor(defaultTextColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
+            appI.setTint(defaultTextColor);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
         }
 
         EditText editText = findViewById(R.id.widgetTextNote);
+        editText.setBackgroundTintList(ColorStateList.valueOf(Color.DKGRAY));
         editText.setMovementMethod(new ScrollingMovementMethod());
         editText.setOnTouchListener((v, event) -> {
             if (editText.hasFocus()) {
+                editText.clearFocus();
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 switch (event.getAction() & MotionEvent.ACTION_MASK){
                     case MotionEvent.ACTION_SCROLL:
@@ -90,18 +104,37 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         CalendarView cv = findViewById(R.id.widgetCalendar);
+        EditText editT = findViewById(R.id.widgetTextNote);
         Calendar calendar = Calendar.getInstance();
-        //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         cv.setDate(calendar.getTimeInMillis(), false, true);
         cv.setFirstDayOfWeek(calendar.getFirstDayOfWeek());
-        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+        cv.setOnLongClickListener(v -> {
             try {
                 Intent cal = new Intent(Intent.ACTION_MAIN);
                 cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
                 startActivity(cal);
-                this.finish();
+                finish();
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
+            }
+            return false;
+        });
+        cv.setOnDateChangeListener((view, year, mounth, day) -> {
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.set(year, mounth, day);
+            DateFormat df = DateFormat.getDateInstance();
+            String date = df.format(calendar1.getTime());
+            String text = editT.getText().toString();
+            if (text.isEmpty()) {
+                editT.setText(date + "  ");
+            } else {
+                editT.setText(text + "\n" + date + "  ");
+            }
+            editT.requestFocus();
+            editT.setSelection(editT.getText().length());
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(editT, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -129,39 +162,53 @@ public class WidgetActivity extends AppCompatActivity {
             setIconColorW(R.id.wmapButton, defaultIconColor);
         }
 
+        int textColor;
+        int iconColor;
         if (textColorMode) {
-            TextView tvx;
-            setIconColorW(R.id.wdialButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wdialButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wmailButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wmailButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.whelpButton, adaptiveIconColor);
-            tvx = findViewById(R.id.whelpButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wbrowserButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wbrowserButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wcameraButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wcameraButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wapplistButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wapplistButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wfavlistButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wfavlistButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.waiButton, adaptiveIconColor);
-            tvx = findViewById(R.id.waiButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wdiscoveryButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wdiscoveryButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
-            setIconColorW(R.id.wmapButton, adaptiveIconColor);
-            tvx = findViewById(R.id.wmapButtonTitle);
-            tvx.setTextColor(adaptiveIconColor);
+            textColor = adaptiveIconColor;
+            iconColor = adaptiveIconColor;
+        } else {
+            textColor = defaultTextColor;
+            if (adaptiveIcon) {
+                iconColor = adaptiveIconColor;
+            } else {
+                iconColor = defaultTextColor;
+            }
         }
+        TextView tvx;
+        setIconColorW(R.id.wdialButton, iconColor);
+        tvx = findViewById(R.id.wdialButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wmailButton, iconColor);
+        tvx = findViewById(R.id.wmailButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.whelpButton, iconColor);
+        tvx = findViewById(R.id.whelpButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wbrowserButton, iconColor);
+        tvx = findViewById(R.id.wbrowserButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wcameraButton, iconColor);
+        tvx = findViewById(R.id.wcameraButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wapplistButton, iconColor);
+        tvx = findViewById(R.id.wapplistButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wfavlistButton, iconColor);
+        tvx = findViewById(R.id.wfavlistButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.waiButton, iconColor);
+        tvx = findViewById(R.id.waiButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wdiscoveryButton, iconColor);
+        tvx = findViewById(R.id.wdiscoveryButtonTitle);
+        tvx.setTextColor(textColor);
+        setIconColorW(R.id.wmapButton, iconColor);
+        tvx = findViewById(R.id.wmapButtonTitle);
+        tvx.setTextColor(textColor);
+
+        tvx = findViewById(R.id.widgetNoteTitle);
+        tvx.setTextColor(textColor);
     }
 
 
@@ -175,7 +222,7 @@ public class WidgetActivity extends AppCompatActivity {
 
         super.onStart();
 
-        String val = MainActivity.sharedPreferences.getString(SETTINGS_NOTE, "");
+        String val = MainActivity.sharedPreferences.getString(SETTINGS_NOTE_TAG, "");
         if (!val.isEmpty()) {
             EditText tv = findViewById(R.id.widgetTextNote);
             tv.setText(val);
@@ -205,7 +252,7 @@ public class WidgetActivity extends AppCompatActivity {
         var settings = MainActivity.sharedPreferences.edit();
         EditText tv = findViewById(R.id.widgetTextNote);
         String text = tv.getText().toString();
-        settings.putString(SETTINGS_NOTE, text);
+        settings.putString(SETTINGS_NOTE_TAG, text);
         settings.apply();
     }
 

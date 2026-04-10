@@ -1,16 +1,15 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
 import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
+import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.iconSize;
-import static com.wswdteam.txtlauncher.MainActivity.isDarkMode;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
 import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
 import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -68,20 +66,16 @@ public class AppListActivity extends AppCompatActivity {
             return insets;
         });
 
-        if (adaptiveIcon || textColorMode) {
-            defaultLetterColor = ContextCompat.getColor(this, R.color.yellow);
-        } else {
-            if (isDarkMode) {
-                defaultLetterColor = getColor(com.google.android.material.R.color.design_default_color_secondary_variant);
-            } else {
-                defaultLetterColor = getColor(com.google.android.material.R.color.design_dark_default_color_primary_variant);
-            }
-        }
+                // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+        // vissza gomb szine
+        ImageView imv = findViewById(R.id.quitAllAppListButton);
+        imv.setColorFilter(defaultTextColor);
 
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
-        //ImageView iv = findViewById(R.id.quitAllAppListButton);
         if (appI != null) {
             appI.setBounds(0, 0, (int) defaultFontSize, (int) defaultFontSize);
+            appI.setTint(defaultTextColor);
             ImageView iv = findViewById(R.id.quitAllAppListButton);
             ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();
             layoutParams.width = layoutParams.width + (int) defaultPlusFontSize;

@@ -3,10 +3,11 @@ package com.wswdteam.txtlauncher;
 import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
 import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
 import static com.wswdteam.txtlauncher.MainActivity.allAppData;
+import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
 import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.favAppNum;
+import static com.wswdteam.txtlauncher.MainActivity.FAV_APP_NUM;
 import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
 import static com.wswdteam.txtlauncher.MainActivity.iconSize;
 import static com.wswdteam.txtlauncher.MainActivity.syslog;
@@ -56,12 +57,17 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             return insets;
         });
 
+        // teljes háttér színe
+        getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
+
         TextView tv = findViewById(R.id.addFavAppTitle);
+        tv.setTextColor(defaultTextColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
             appI.setBounds(0, 0, ts, ts);
+            appI.setTint(defaultTextColor);
             tv.setCompoundDrawables(appI, null, null, null);
             tv.setGravity(Gravity.CENTER_VERTICAL);
             tv.setCompoundDrawables(appI, null, null, null);
@@ -82,7 +88,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
         selApp.clear();
         String tag;
         String val;
-        for (var i=0; i<favAppNum; i++) {
+        for (var i = 0; i < FAV_APP_NUM; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
             val = MainActivity.sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
@@ -102,7 +108,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
         var settings = MainActivity.sharedPreferences.edit();
         String tag;
         sort(selApp);
-        for (var i = 0; i < favAppNum; i++) {
+        for (var i = 0; i < FAV_APP_NUM; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
             if (i < selApp.size()) {
                 settings.putString(tag, selApp.get(i));
@@ -168,7 +174,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             if (selApp.contains(appName)) {
                 selectedApp++;
                 TextView tv = findViewById(R.id.addFavAppInfo);
-                String st = favAppNum + " / " + selectedApp;
+                String st = FAV_APP_NUM + " / " + selectedApp;
                 tv.setText(st);
             }
         }
@@ -197,7 +203,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                 selectedApp++;
             }
             TextView tv = findViewById(R.id.addFavAppInfo);
-            String st1 = favAppNum + " / " + selectedApp;
+            String st1 = FAV_APP_NUM + " / " + selectedApp;
             tv.setText(st1);
             // - String selectedP = (String) (appTable.getItemAtPosition(position));
             // - syslog(selectedP);
