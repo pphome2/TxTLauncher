@@ -57,7 +57,7 @@ public class WidgetActivity extends AppCompatActivity {
     public static boolean firstLoadAI = true;
 
 
-    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility"})
+    @SuppressLint({"SetJavaScriptEnabled", "ClickableViewAccessibility", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +104,7 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         CalendarView cv = findViewById(R.id.widgetCalendar);
-        EditText editT = findViewById(R.id.widgetTextNote);
+        //EditText editT = findViewById(R.id.widgetTextNote);
         Calendar calendar = Calendar.getInstance();
         cv.setDate(calendar.getTimeInMillis(), false, true);
         cv.setFirstDayOfWeek(calendar.getFirstDayOfWeek());
@@ -113,6 +113,7 @@ public class WidgetActivity extends AppCompatActivity {
                 Intent cal = new Intent(Intent.ACTION_MAIN);
                 cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
                 startActivity(cal);
+                MainActivity.startedAndroidApp = true;
                 finish();
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
@@ -124,17 +125,19 @@ public class WidgetActivity extends AppCompatActivity {
             calendar1.set(year, mounth, day);
             DateFormat df = DateFormat.getDateInstance();
             String date = df.format(calendar1.getTime());
-            String text = editT.getText().toString();
+            String text = editText.getText().toString();
             if (text.isEmpty()) {
-                editT.setText(date + "  ");
+                editText.setText(date + "  ");
             } else {
-                editT.setText(text + "\n" + date + "  ");
+                // végére: editText.setText(text + "\n" + date + "  ");
+                editText.setText(date + "  \n" + text);
             }
-            editT.requestFocus();
-            editT.setSelection(editT.getText().length());
+            editText.requestFocus();
+            // végére: editText.setSelection(editText.getText().length());
+            editText.setSelection(date.length() + 2);
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null) {
-                imm.showSoftInput(editT, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -306,6 +309,7 @@ public class WidgetActivity extends AppCompatActivity {
                 //searchIntent.setPackage("com.google.android.googlequicksearchbox");
             }
             startActivity(brIn);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -323,6 +327,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(0));
             assert launchIntent != null;
             startActivity(launchIntent);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -341,6 +346,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(1));
             assert launchIntent != null;
             startActivity(launchIntent);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -375,6 +381,7 @@ public class WidgetActivity extends AppCompatActivity {
             // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
             // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
             startActivity(broIn);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -393,6 +400,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(3));
             assert launchIntent != null;
             startActivity(launchIntent);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -441,6 +449,7 @@ public class WidgetActivity extends AppCompatActivity {
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
             startActivity(intent);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -468,6 +477,7 @@ public class WidgetActivity extends AppCompatActivity {
             Uri mapUri = Uri.parse("geo:0,0");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             startActivity(mapIntent);
+            MainActivity.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));

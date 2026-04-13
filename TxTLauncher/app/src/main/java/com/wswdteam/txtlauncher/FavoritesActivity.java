@@ -283,6 +283,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
+                        MainActivity.startedAndroidApp = true;
                         this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
@@ -304,6 +305,7 @@ public class FavoritesActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
+                        MainActivity.startedAndroidApp = true;
                         this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));

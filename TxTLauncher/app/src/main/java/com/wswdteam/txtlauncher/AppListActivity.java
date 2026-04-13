@@ -76,11 +76,11 @@ public class AppListActivity extends AppCompatActivity {
         if (appI != null) {
             appI.setBounds(0, 0, (int) defaultFontSize, (int) defaultFontSize);
             appI.setTint(defaultTextColor);
-            ImageView iv = findViewById(R.id.quitAllAppListButton);
-            ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();
+            //ImageView iv = findViewById(R.id.quitAllAppListButton);
+            ViewGroup.LayoutParams layoutParams = imv.getLayoutParams();
             layoutParams.width = layoutParams.width + (int) defaultPlusFontSize;
             layoutParams.height = layoutParams.height + (int) defaultPlusFontSize;
-            iv.setLayoutParams(layoutParams);
+            imv.setLayoutParams(layoutParams);
         }
     }
 
@@ -270,6 +270,7 @@ public class AppListActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
+                        MainActivity.startedAndroidApp = true;
                         this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));

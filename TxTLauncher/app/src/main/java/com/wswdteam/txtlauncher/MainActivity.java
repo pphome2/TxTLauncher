@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean startedSettingsAct = false;
     public boolean startedFavAct = false;
     public boolean startedHelp = false;
+    public static boolean startedAndroidApp = true;
 
     // dátum kiírás
     private boolean dateReady = false;
@@ -329,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
 
         // verzió ellenőrzés
         versionCheck();
+        // első indulás
+        startedAndroidApp = true;
         generateAppList();
         getSettings();
         setColors();
@@ -351,8 +354,9 @@ public class MainActivity extends AppCompatActivity {
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
 
+        generateAppList();
+
         if (startedSettingsAct) {
-            generateAppList();
             getSettings();
             setColors();
             saveButtonImages();
@@ -613,6 +617,7 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: beállítások betöltése
     //
+    @SuppressLint("PrivateResource")
     public void setColors() {
         if (darkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -849,6 +854,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
+                        startedAndroidApp = true;
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
@@ -870,6 +876,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
+                        startedAndroidApp = true;
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
@@ -1118,6 +1125,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Intent launchIntent = getPackageManager().getLaunchIntentForPackage(appp);
                     startActivity(launchIntent);
+                    startedAndroidApp = true;
                 } catch (Exception e) {
                     systemMessage(getString(R.string.error_startapp));
                 }
@@ -1161,10 +1169,12 @@ public class MainActivity extends AppCompatActivity {
     //
     public static void generateAppList() {
         // másodperc
-        long currentTime = System.currentTimeMillis() / 1000;
+        //long currentTime = System.currentTimeMillis() / 1000;
         // 5 perc
-        if ((currentTime - packageUpdateTime) > 300) {
-            packageUpdateTime = currentTime;
+        //if ((currentTime - packageUpdateTime) > 300) {
+        if (startedAndroidApp) {
+            //packageUpdateTime = currentTime;
+            startedAndroidApp = false;
             allApplicationsList.clear();
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -1200,6 +1210,8 @@ public class MainActivity extends AppCompatActivity {
                 allAppData[i][2] = info.activityInfo.name;
             }
         }
+        // idő: currentTime = (System.currentTimeMillis() / 1000) - currentTime;
+        // kiír:  systemMessage(String.valueOf(currentTime));
     }
 
 
@@ -1239,6 +1251,7 @@ public class MainActivity extends AppCompatActivity {
             Intent searchintent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
             searchintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(searchintent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1253,6 +1266,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
             startActivity(intent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1323,6 +1337,7 @@ public class MainActivity extends AppCompatActivity {
             Intent mClockIntent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
             mClockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mClockIntent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1337,6 +1352,7 @@ public class MainActivity extends AppCompatActivity {
             Intent cal = new Intent(Intent.ACTION_MAIN);
             cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
             startActivity(cal);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1363,6 +1379,7 @@ public class MainActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1377,6 +1394,7 @@ public class MainActivity extends AppCompatActivity {
             Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privateSearchUrl));
             launchIntent.addCategory(Intent.CATEGORY_DEFAULT);
             startActivity(launchIntent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1401,6 +1419,7 @@ public class MainActivity extends AppCompatActivity {
                 //searchIntent.setPackage("com.google.android.googlequicksearchbox");
             }
             startActivity(searchIntent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1414,6 +1433,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Intent mapIntent = new Intent(Intent.ACTION_VOICE_COMMAND);
             startActivity(mapIntent);
+            startedAndroidApp = true;
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
         }
@@ -1447,6 +1467,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            startedAndroidApp = true;
         }
     }
 
