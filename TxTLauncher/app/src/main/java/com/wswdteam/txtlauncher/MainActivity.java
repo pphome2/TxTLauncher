@@ -1,18 +1,43 @@
 package com.wswdteam.txtlauncher;
 
+import static com.wswdteam.txtlauncher.TxTLauncherApp.HOME_APP_NUM;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allApplicationsList;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultIcons;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.savedBackgroundImage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.darkMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeSysIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultLetterColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultSelectColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.iconPadding;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allAppData;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.backgroundImage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeAppName;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packName;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.privateSearchUrl;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrl;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.generateAppList;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.getSettingsMain;
 import static java.lang.Math.round;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -31,19 +56,16 @@ import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.ComponentName;
 
 import androidx.activity.EdgeToEdge;
@@ -70,105 +92,25 @@ import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
-    //
-    // verzió, fejlesztő adatok
-    //
-    public static String TXT_VERSION = "1.0.1";
-    public static String TXT_APP_NAME = "TxTLauncher";
-    public static String TXT_WEB_PAGE = "https://github.com/pphome2/TxTLauncher";
 
-    //
-    // Log üzenetekhez használható
-    //
-    public static boolean developerMode = false;
+    // gesture mód beállítások
+    public static final int SWIPE_MIN_DISTANCE = 100;
+    public static final int SWIPE_TRESHOLD = 50;
 
-    // verzió mentése
-    public final String SETTINGS_VERSION_TAG = "TxTVersion";
-
-    // debug jelölő a log-ba
-    public static String DEBUG_TAG = "TxTLauncher_App";
-
-    // általános constansok
-    public static final int HOME_APP_NUM = 10;
-    public static final int FAV_APP_NUM = 20;
-    private static final int SWIPE_MIN_DISTANCE = 100;
-    private static final int SWIPE_TRESHOLD = 50;
-
-    // beállítások mentése jelölők
-    public static String PRIVATE_SETTINGS_TAG = "TxTLauncher_App";
-    public static String SETTINGS_APP_TAG = "HomeApp";
-    public static String SETTINGS_FAV_APP_TAG = "FavApp";
-    public static String SETTINGS_SYS_ICON_TAG = "SysIcon";
-    public static String SETTINGS_HOME_ICON_TAG = "AppIcon";
-    public static String SETTINGS_ADAPTIVE_ICON_TAG = "AdaptiveIcon";
-    public static String SETTINGS_ADAPTIVE_ICON_COLOR_TAG = "AdaptiveIconColor";
-    public static String SETTINGS_TEXT_COLOR_MODE_TAG = "TextColorMode";
-    public static String SETTINGS_DARK_MODE_TAG = "DarkMode";
-    public static String SETTINGS_ONE_COLUMN_FAVORITES_TAG = "oneColFavorites";
-    public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
-    public static String SETTINGS_URL_SEARCH_TAG = "Search";
-    public static String SETTINGS_WEATHER_URL_TAG = "Weather";
-    public static String SETTINGS_BACKGROUND_IMAGE_TAG = "BackgroundImage";
-    public static String SETTINGS_NOTE_TAG = "AppNote";
-
-    // beállítások alapértelmezett tartalma
-    public static String privateAIUrl = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
-    public static String privateSearchUrl = "https://duckduckgo.com/?q=";
-    public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
-    public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
-    public static String weatherUrl = "";
-    public static String backgroundImage = "";
-    public static String weatherUrlOrig = "";
-    public static String backgroundImageOrig = "";
-
-    // rendszer változók
-    public static SharedPreferences sharedPreferences;
-    public static PackageManager packageMan;
-
-    // beállítások változói
-    public static boolean homeSysIcon = false;
-    public static boolean homeStartAppIcon = false;
-    public static boolean adaptiveIcon = false;
-    public static boolean onecolFavorites = false;
-    public static boolean textColorMode = false;
-    public static boolean darkMode = true;
-    public static int adaptiveIconColor = 0;
-    public static int defaultIconColor = 0;
-
-    // app-ok kezelése
-    public static ArrayList<ResolveInfo> allApplicationsList = new ArrayList<>();
-    public static List<String> packName = new ArrayList<>();
-    public static List<String> homeAppName = new ArrayList<>();
-    public static List<Drawable> defaultIcons = new ArrayList<>();
-    public static Context AppContext;
-    public static long packageUpdateTime;
-    public static String[][] allAppData;
-
-    // activity figyelés
-    public boolean startedAppAct = false;
-    public boolean startedWidgetAct = false;
-    public boolean startedSettingsAct = false;
-    public boolean startedFavAct = false;
-    public boolean startedHelp = false;
-    public static boolean startedAndroidApp = true;
+    // háttérkép kezelése
+    private boolean firstPermissionRequest = true;
+    public static String backgroundImageBackup = "";
 
     // dátum kiírás
     private boolean dateReady = false;
 
-    private boolean firstPermissionRequest = true;
-    public static String backgroundImageBackup = "";
-    public static String savedBackgroundImage = "";
-
-    // szöveg és szín beállítások
-    public static float defaultFontSize = 0;
-    public static float defaultPlusFontSize = 10;
-    public static float defaultPlusFontSizeTitle = 15;
-    public static int defaultBackGroundColor = 0;
-    public static int defaultSelectColor = 0;
-    public static int defaultTextColor = 0;
-    public static int defaultLetterColor = 0;
-    public static int iconSize;
-    public static int iconPadding;
+    // activity figyelés
+    public static boolean startedAppAct = false;
+    public static boolean startedWidgetAct = false;
+    public static boolean startedSettingsAct = false;
+    public static boolean startedFavAct = false;
+    public static boolean startedHelp = false;
+    public static boolean startedAndroidApp = true;
 
 
     //
@@ -187,26 +129,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        weatherUrl = getString(R.string.search_weather);
-        weatherUrlOrig = getString(R.string.search_weather);
-
         TextView tv = findViewById(R.id.mainTitle);
         defaultFontSize = tv.getTextSize();
         // méretezés: float scaledDensity = configuration.fontScale;
         // @float defaultTextSize = 14f;
         // - méretezetten: defaultPlusFontSize = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSize;
         // - méretezetten: defaultPlusFontSizeTitle = (defaultFontSize * scaledDensity) - defaultFontSize + defaultPlusFontSizeTitle;
-
-        iconSize = (int) (32 * this.getResources().getDisplayMetrics().density);
-        float density = ((float) iconSize / 2);// * getContext().getResources().getDisplayMetrics().density;
-        iconPadding = (int) (-1 * density);
-
-        savedBackgroundImage = String.format("%s/launcher_bg.png", getFilesDir());
-
-        // sötét mód beállítása
-        Configuration configuration = getResources().getConfiguration();
-        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        darkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
         tv = findViewById(R.id.digitalClock);
         tv.setTextSize(tv.getTextSize());
@@ -217,17 +145,13 @@ public class MainActivity extends AppCompatActivity {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + (2 * defaultPlusFontSizeTitle));
         tv.setTextColor(defaultTextColor);
 
-        AppContext = this.getApplicationContext();
-        sharedPreferences = getSharedPreferences(PRIVATE_SETTINGS_TAG, MODE_PRIVATE);
-        packageMan = getPackageManager();
-
         // touch
         findViewById(R.id.mainView).setOnTouchListener(new View.OnTouchListener() {
             private final GestureDetector gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(@NonNull MotionEvent event) {
                     //syslog("Action double tap: lock");
-                    lockApp();
+                    TxTLauncherApp.lockApp(getBaseContext());
                     return super.onDoubleTap(event);
                 }
 
@@ -328,12 +252,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // verzió ellenőrzés
-        versionCheck();
         // első indulás
         startedAndroidApp = true;
         generateAppList();
-        getSettings();
+        getSettingsMain(this);
         setColors();
         // első indulás: nincs új háttér
         backgroundImageBackup = backgroundImage;
@@ -353,11 +275,12 @@ public class MainActivity extends AppCompatActivity {
         overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_bottom, R.anim.exit_to_top);
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
+        dateReady = false;
 
         generateAppList();
 
         if (startedSettingsAct) {
-            getSettings();
+            getSettingsMain(this);
             setColors();
             saveButtonImages();
             buttonPrepare();
@@ -509,116 +432,9 @@ public class MainActivity extends AppCompatActivity {
     //
     //  Fő nézet: beállítások betöltése
     //
-    public void getSettings() {
-        homeAppName.clear();
-        String tag;
-        String val;
-        String appName;
-        for (var i = 0; i <  HOME_APP_NUM; i++) {
-            tag = SETTINGS_APP_TAG + i;
-            val = sharedPreferences.getString(tag, "");
-            if (!val.isEmpty()) {
-                for (String[] allAppDatum : allAppData) {
-                    appName = allAppDatum[0];
-                    if (appName.equals(val)) {
-                        homeAppName.add(appName);
-                    }
-                }
-            }
-        }
-
-        val = sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            adaptiveIcon = !val.equals("0");
-        }
-
-        int buttonId;
-        buttonId = sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-        if (buttonId == R.id.btnRed) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.red);
-        }
-        if (buttonId == R.id.btnWhite) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.white);
-        }
-        if (buttonId == R.id.btnBlack) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.black);
-        }
-        if (buttonId == R.id.btnGray) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.gray);
-        }
-        if (buttonId == R.id.btnBlue) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.blue);
-        }
-        if (buttonId == R.id.btnGreen) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.green);
-        }
-        if (buttonId == R.id.btnPurple) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.purple);
-        }
-        if (buttonId == R.id.btnOlive) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.olive);
-        }
-        if (buttonId == R.id.btnLevander) {
-            adaptiveIconColor = ContextCompat.getColor(this, R.color.levander);
-        }
-        if (adaptiveIconColor == 0) {
-            adaptiveIconColor = defaultIconColor;
-        }
-
-        if (adaptiveIcon) {
-            homeSysIcon = true;
-            homeStartAppIcon = true;
-        } else {
-            val = sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
-            if (!val.isEmpty()) {
-                homeSysIcon = !val.equals("0");
-            } else {
-                homeSysIcon = false;
-            }
-            val = sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-            if (!val.isEmpty()) {
-                homeStartAppIcon = !val.equals("0");
-            } else {
-                homeStartAppIcon = false;
-            }
-        }
-
-        val = sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            textColorMode = !val.equals("0");
-        } else {
-            textColorMode = false;
-        }
-
-        val = sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            darkMode = !val.equals("0");
-        }
-
-        val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
-        if (!val.isEmpty()) {
-            privateAIUrl = val;
-        }
-        val = sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
-        if (!val.isEmpty()) {
-            privateSearchUrl = val;
-        }
-        val = sharedPreferences.getString(SETTINGS_WEATHER_URL_TAG, "");
-        if (!val.isEmpty()) {
-            weatherUrl = val;
-        }
-        val = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE_TAG, "");
-        if (!val.isEmpty()) {
-            backgroundImage = val;
-        }
-    }
-
-
-    //
-    //  Fő nézet: beállítások betöltése
-    //
     @SuppressLint("PrivateResource")
     public void setColors() {
+        // szín beállítás a változókba
         if (darkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             defaultBackGroundColor = getColor(com.google.android.material.R.color.design_dark_default_color_background);
@@ -661,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
             setIconColor(R.id.browserButton, defaultIconColor);
             setIconColor(R.id.cameraButton, defaultIconColor);
         }
+
         if (textColorMode) {
             final TextView tw = findViewById(R.id.digitalClock);
             tw.setTextColor(defaultTextColor);
@@ -1145,15 +962,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (view.getId() == R.id.browserButton) {
             appp = packName.get(3);
-            // ! try {
-                // ! Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-                // ! broIn.addCategory(Intent.CATEGORY_DEFAULT);
-            // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
-            // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
-            // ! startActivity(broIn);
-            // ! } catch (Exception e) {
-            // ! systemMessage(getString(R.string.error_startapp));
-            // ! }
             //msg = "Button start: browser";
         }
         if (view.getId() == R.id.cameraButton) {
@@ -1161,57 +969,6 @@ public class MainActivity extends AppCompatActivity {
             //msg = "Button start: camera";
         }
         return appp;
-    }
-
-
-    //
-    //  Fő nézet: telepített app-ok bellvasása
-    //
-    public static void generateAppList() {
-        // másodperc
-        //long currentTime = System.currentTimeMillis() / 1000;
-        // 5 perc
-        //if ((currentTime - packageUpdateTime) > 300) {
-        if (startedAndroidApp) {
-            //packageUpdateTime = currentTime;
-            startedAndroidApp = false;
-            allApplicationsList.clear();
-            Intent intent = new Intent(Intent.ACTION_MAIN, null);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> apps = packageMan.queryIntentActivities(intent, PackageManager.GET_META_DATA);
-            apps.sort(new ResolveInfo.DisplayNameComparator(packageMan));
-            allApplicationsList.addAll(apps);
-            allAppData = new String[apps.size()][3];
-            String appName;
-            String pkgName;
-            String[] parts;
-            String formerAppName = "";
-            String formerPkgName = "";
-            for (int i=0; i<apps.size(); i++) {
-                ResolveInfo info = apps.get(i);
-                appName = info.loadLabel(packageMan).toString();
-                pkgName= info.activityInfo.packageName;
-                parts = pkgName.split("\\.");
-                if (parts.length < 2) {
-                    pkgName = "0";
-                } else {
-                    pkgName = parts[1];
-                }
-                if (appName.equals(formerAppName)) {
-                    appName = appName + " (" + pkgName + ")";
-                    if (i > 0) {
-                        allAppData[i - 1][0] = formerAppName + " (" + formerPkgName + ")";
-                    }
-                }
-                formerAppName = appName;
-                formerPkgName = pkgName;
-                allAppData[i][0] = appName;
-                allAppData[i][1] = info.activityInfo.packageName;
-                allAppData[i][2] = info.activityInfo.name;
-            }
-        }
-        // idő: currentTime = (System.currentTimeMillis() / 1000) - currentTime;
-        // kiír:  systemMessage(String.valueOf(currentTime));
     }
 
 
@@ -1438,133 +1195,6 @@ public class MainActivity extends AppCompatActivity {
             systemMessage(getString(R.string.error_startapp));
         }
     }
-
-
-
-    //
-    //  Billentyűzet elrejtése
-    //
-    public static void hideKeyboard(Activity act) {
-        View v = act.getCurrentFocus();
-        if (v != null) {
-            InputMethodManager im = (InputMethodManager) act.getSystemService(INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            v.clearFocus();
-        }
-    }
-
-
-
-    //
-    //  Fő nézet: eszköz zárolása
-    //
-    public void lockApp() {
-        LDAccessibility service = LDAccessibility.getInstance();
-        if (service != null) {
-            service.lockScreen();
-        } else {
-            systemMessage(getString(R.string.error_lock));
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            startedAndroidApp = true;
-        }
-    }
-
-
-
-    //
-    // verzió ellenőrzése
-    //
-    public void versionCheck() {
-        // régi beállítások törlése
-        // - String valx = sharedPreferences.getString(SETTINGS_BACKGROUND_IMAGE, "");
-        // - if (!valx.isEmpty()) {
-        // -    var settings = sharedPreferences.edit();
-        // -    settings.remove(SETTINGS_BACKGROUND_IMAGE);
-        // -    settings.apply();
-        // - }
-
-        //newInstall();
-        String val = sharedPreferences.getString(SETTINGS_VERSION_TAG, "");
-        if (val.isEmpty()) {
-            var settings = sharedPreferences.edit();
-            settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-            settings.apply();
-            newInstall();
-            systemMessage(getString(R.string.new_install));
-        } else {
-            if (!val.equals(TXT_VERSION)) {
-                var settings = sharedPreferences.edit();
-                settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-                settings.apply();
-                updateInstall();
-                systemMessage(getString(R.string.update_install));
-            }
-        }
-    }
-
-
-
-    //
-    // Első indítás
-    //
-    public void newInstall() {
-        //
-        // első indítás: alap beállítások
-        //
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String msg = getString(R.string.news_firstrun);
-        builder.setTitle(getString(R.string.news_firstrun_title))
-                .setMessage(msg)
-                .setPositiveButton(getString(R.string.button_next), (dialog, id) ->
-                        startActivity(new Intent(this, HelpActivity.class)));
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
-
-    //
-    // Frissítés utáni első indítás
-    //
-    public void updateInstall() {
-        //
-        // esetleges beállítások és egyebek módosítása az új verzióhoz
-        //
-
-        // feladatok
-
-        // üzenet
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String msg = getString(R.string.news_update);
-        builder.setTitle(getString(R.string.news_update_title))
-                .setMessage(msg)
-                .setPositiveButton(getString(R.string.button_next), (dialog, id) -> {
-                    //startActivity(new Intent(this, HelpActivity.class));
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
-    //
-    //  Fő nézet: rendszerüzenet
-    //
-    public static void systemMessage(String mtext) {
-        Toast.makeText(AppContext, mtext, Toast.LENGTH_SHORT).show();
-    }
-
-
-    //
-    //  Fő nézet: degug log üzenet
-    //
-    public static void syslog(String mtext) {
-        if (developerMode) {
-            Log.d(DEBUG_TAG, mtext);
-        }
-    }
-
 
 
 }

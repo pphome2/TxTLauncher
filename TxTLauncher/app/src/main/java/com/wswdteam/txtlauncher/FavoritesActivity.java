@@ -2,23 +2,23 @@ package com.wswdteam.txtlauncher;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
-import static com.wswdteam.txtlauncher.MainActivity.FAV_APP_NUM;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
-import static com.wswdteam.txtlauncher.MainActivity.allAppData;
-import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
-import static com.wswdteam.txtlauncher.MainActivity.iconSize;
-import static com.wswdteam.txtlauncher.MainActivity.onecolFavorites;
-import static com.wswdteam.txtlauncher.MainActivity.packageMan;
-import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
-import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
-import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.FAV_APP_NUM;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_FAV_APP_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allAppData;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allApplicationsList;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.onecolFavorites;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.sharedPreferences;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -68,7 +68,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.favTitle);
         tv.setTextColor(defaultTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;

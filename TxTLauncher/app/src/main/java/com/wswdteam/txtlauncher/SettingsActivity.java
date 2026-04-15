@@ -1,30 +1,31 @@
 package com.wswdteam.txtlauncher;
 
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ADAPTIVE_ICON_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_BACKGROUND_IMAGE_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_DARK_MODE_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_HOME_ICON_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_SYS_ICON_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_TEXT_COLOR_MODE_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_PRIVATEAI_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_WEATHER_URL_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.backgroundImageOrig;
-import static com.wswdteam.txtlauncher.MainActivity.darkMode;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.packageUpdateTime;
-import static com.wswdteam.txtlauncher.MainActivity.privateAIUrlOrig;
-import static com.wswdteam.txtlauncher.MainActivity.privateSearchUrlOrig;
-import static com.wswdteam.txtlauncher.MainActivity.sharedPreferences;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
-import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
-import static com.wswdteam.txtlauncher.MainActivity.weatherUrlOrig;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_ADAPTIVE_ICON_COLOR_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_ADAPTIVE_ICON_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_BACKGROUND_IMAGE_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_DARK_MODE_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_HOME_ICON_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_SYS_ICON_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_TEXT_COLOR_MODE_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_PRIVATEAI_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_SEARCH_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_WEATHER_URL_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.backgroundImageOrig;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.darkMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packageUpdateTime;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.privateAIUrlOrig;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.privateSearchUrlOrig;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.savedBackgroundImage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.sharedPreferences;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrlOrig;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -73,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.settingsViewTitle);
         tv.setTextColor(defaultTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TxTLauncherApp.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
@@ -103,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c5 = findViewById(R.id.textColorMode);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c6 = findViewById(R.id.darkMode);
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_SYS_ICON_TAG, "1");
             } else {
@@ -112,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.apply();
         });
         c2.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_HOME_ICON_TAG, "1");
             } else {
@@ -121,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.apply();
         });
         c3.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_ADAPTIVE_ICON_TAG, "1");
             } else {
@@ -130,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.apply();
         });
         c4.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "1");
             } else {
@@ -139,7 +140,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.apply();
         });
         c5.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_TEXT_COLOR_MODE_TAG, "1");
             } else {
@@ -148,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.apply();
         });
         c6.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            var settings = MainActivity.sharedPreferences.edit();
+            var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
                 settings.putString(SETTINGS_DARK_MODE_TAG, "1");
             } else {
@@ -156,27 +157,27 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
-        val = MainActivity.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
         if (!val.isEmpty()) {
             c1.setChecked(!val.equals("0"));
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
         if (!val.isEmpty()) {
             c2.setChecked(!val.equals("0"));
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
         if (!val.isEmpty()) {
             c3.setChecked(!val.equals("0"));
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
         if (!val.isEmpty()) {
             c4.setChecked(!val.equals("0"));
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
         if (!val.isEmpty()) {
             c5.setChecked(!val.equals("0"));
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
         if (!val.isEmpty()) {
             c6.setChecked(!val.equals("0"));
         } else {
@@ -184,7 +185,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         int buttonId;
-        buttonId = MainActivity.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
+        buttonId = TxTLauncherApp.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
 
         EditText v1 = findViewById(R.id.editPrivateAI);
         EditText v2 = findViewById(R.id.editUrlSearch);
@@ -193,7 +194,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         v1.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
+                var settings = TxTLauncherApp.sharedPreferences.edit();
                 settings.putString(SETTINGS_URL_PRIVATEAI_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
@@ -202,7 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
         v2.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
+                var settings = TxTLauncherApp.sharedPreferences.edit();
                 settings.putString(SETTINGS_URL_SEARCH_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
@@ -211,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
         v3.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
+                var settings = TxTLauncherApp.sharedPreferences.edit();
                 settings.putString(SETTINGS_WEATHER_URL_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
@@ -220,7 +221,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
         v4.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
-                var settings = MainActivity.sharedPreferences.edit();
+                var settings = TxTLauncherApp.sharedPreferences.edit();
                 settings.putString(SETTINGS_BACKGROUND_IMAGE_TAG, String.valueOf(s).trim());
                 settings.apply();
             }
@@ -228,23 +229,23 @@ public class SettingsActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        val = MainActivity.sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
         if (!val.isEmpty()) {
             v1.setText(val);
         } else {
-            v1.setText(MainActivity.privateAIUrl);
+            v1.setText(TxTLauncherApp.privateAIUrl);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
         if (!val.isEmpty()) {
             v2.setText(val);
         } else {
-            v2.setText(MainActivity.privateSearchUrl);
+            v2.setText(TxTLauncherApp.privateSearchUrl);
         }
-        val = MainActivity.sharedPreferences.getString(SETTINGS_WEATHER_URL_TAG, "");
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_WEATHER_URL_TAG, "");
         if (!val.isEmpty()) {
             v3.setText(val);
         } else {
-            v3.setText(MainActivity.weatherUrl);
+            v3.setText(TxTLauncherApp.weatherUrl);
         }
 
         if (buttonId > 0) {
@@ -269,7 +270,7 @@ public class SettingsActivity extends AppCompatActivity {
         ScrollView sv = findViewById(R.id.settingsScrollFrame);
         sv.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             if (Math.abs(scrollY - oldScrollY) > 1) {
-                MainActivity.hideKeyboard(this);
+                TxTLauncherApp.hideKeyboard(this);
             }
         });
 
@@ -325,7 +326,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void resetButtonBackground(View view) {
         EditText v4 = findViewById(R.id.editBackgroundImage);
         v4.setText(backgroundImageOrig);
-        File imgFile = new File(MainActivity.savedBackgroundImage);
+        File imgFile = new File(savedBackgroundImage);
         if (imgFile.exists()) {
             if (!imgFile.delete()) {
                 systemMessage(getString(R.string.background_file_not_found));
@@ -338,7 +339,7 @@ public class SettingsActivity extends AppCompatActivity {
     // App lista újraolvasása
     public void rereadAppListButton(View view) {
         packageUpdateTime = packageUpdateTime / 2;
-        MainActivity.generateAppList();
+        TxTLauncherApp.generateAppList();
         this.finish();
     }
 

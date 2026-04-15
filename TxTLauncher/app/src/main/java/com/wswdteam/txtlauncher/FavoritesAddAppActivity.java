@@ -1,17 +1,21 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_FAV_APP_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
-import static com.wswdteam.txtlauncher.MainActivity.allAppData;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.FAV_APP_NUM;
-import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
-import static com.wswdteam.txtlauncher.MainActivity.iconSize;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
-import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_FAV_APP_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allAppData;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allApplicationsList;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultSelectColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.FAV_APP_NUM;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.sharedPreferences;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 
 import static java.util.Collections.sort;
 
@@ -62,7 +66,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.addFavAppTitle);
         tv.setTextColor(defaultTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
@@ -90,7 +94,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
         String val;
         for (var i = 0; i < FAV_APP_NUM; i++) {
             tag = SETTINGS_FAV_APP_TAG + i;
-            val = MainActivity.sharedPreferences.getString(tag, "");
+            val = sharedPreferences.getString(tag, "");
             if (!val.isEmpty()) {
                 selApp.add(val);
             }
@@ -105,7 +109,7 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
     //
     @Override
     public void onStop() {
-        var settings = MainActivity.sharedPreferences.edit();
+        var settings = sharedPreferences.edit();
         String tag;
         sort(selApp);
         for (var i = 0; i < FAV_APP_NUM; i++) {
@@ -150,17 +154,17 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
                     }
                     if (homeStartAppIcon) {
                         int padding = iconSize / 2;
-                        ResolveInfo thisApp = MainActivity.allApplicationsList.get(position);
-                        Drawable appI = thisApp.loadIcon(MainActivity.packageMan);
+                        ResolveInfo thisApp = allApplicationsList.get(position);
+                        Drawable appI = thisApp.loadIcon(packageMan);
                         Drawable iconToDisplay = MainActivity.getDrawable(row, appI, iconSize);
                         tvt.setCompoundDrawablesRelative(iconToDisplay, null, null, null);
                         tvt.setCompoundDrawablePadding(padding);
                     }
                     // ! tvt.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSize);
                     if (selApp.contains(appN)) {
-                        tvt.setBackgroundColor(MainActivity.defaultSelectColor);
+                        tvt.setBackgroundColor(defaultSelectColor);
                     } else {
-                        tvt.setBackgroundColor(MainActivity.defaultBackGroundColor);
+                        tvt.setBackgroundColor(defaultBackGroundColor);
                     }
                 }
                 return row;
@@ -195,11 +199,11 @@ public class FavoritesAddAppActivity extends AppCompatActivity {
             }
             if (del) {
                 selApp.remove(pos);
-                view.setBackgroundColor(MainActivity.defaultBackGroundColor);
+                view.setBackgroundColor(defaultBackGroundColor);
                 selectedApp--;
             } else {
                 selApp.add(iname);
-                view.setBackgroundColor(MainActivity.defaultSelectColor);
+                view.setBackgroundColor(defaultSelectColor);
                 selectedApp++;
             }
             TextView tv = findViewById(R.id.addFavAppInfo);

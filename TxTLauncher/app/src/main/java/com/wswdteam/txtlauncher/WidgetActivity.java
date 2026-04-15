@@ -1,19 +1,19 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_NOTE_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.SETTINGS_URL_SEARCH_TAG;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIcon;
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultIconColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.hideKeyboard;
-import static com.wswdteam.txtlauncher.MainActivity.privateAIUrl;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
-import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
-import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_NOTE_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_SEARCH_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.privateAIUrl;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.hideKeyboard;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -74,7 +74,7 @@ public class WidgetActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.widgetTitle);
         tv.setTextColor(defaultTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, TxTLauncherApp.defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
@@ -113,7 +113,7 @@ public class WidgetActivity extends AppCompatActivity {
                 Intent cal = new Intent(Intent.ACTION_MAIN);
                 cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
                 startActivity(cal);
-                MainActivity.startedAndroidApp = true;
+                TxTLauncherApp.startedAndroidApp = true;
                 finish();
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
@@ -225,7 +225,7 @@ public class WidgetActivity extends AppCompatActivity {
 
         super.onStart();
 
-        String val = MainActivity.sharedPreferences.getString(SETTINGS_NOTE_TAG, "");
+        String val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_NOTE_TAG, "");
         if (!val.isEmpty()) {
             EditText tv = findViewById(R.id.widgetTextNote);
             tv.setText(val);
@@ -252,7 +252,7 @@ public class WidgetActivity extends AppCompatActivity {
         super.onStop();
         //appWidgetHost.stopListening();
 
-        var settings = MainActivity.sharedPreferences.edit();
+        var settings = TxTLauncherApp.sharedPreferences.edit();
         EditText tv = findViewById(R.id.widgetTextNote);
         String text = tv.getText().toString();
         settings.putString(SETTINGS_NOTE_TAG, text);
@@ -298,7 +298,7 @@ public class WidgetActivity extends AppCompatActivity {
                 brIn.addCategory(Intent.CATEGORY_DEFAULT);
                 brIn = new Intent(Intent.ACTION_VIEW);
                 brIn.setData(Uri.parse(privateAIUrl));
-                brIn.setPackage(MainActivity.packName.get(2));
+                brIn.setPackage(TxTLauncherApp.packName.get(2));
                 brIn.addCategory(Intent.CATEGORY_DEFAULT);
             } else {
                 brIn = new Intent(Intent.ACTION_WEB_SEARCH);
@@ -309,7 +309,7 @@ public class WidgetActivity extends AppCompatActivity {
                 //searchIntent.setPackage("com.google.android.googlequicksearchbox");
             }
             startActivity(brIn);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -324,10 +324,10 @@ public class WidgetActivity extends AppCompatActivity {
         // dial
         try {
             final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(0));
+            Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(0));
             assert launchIntent != null;
             startActivity(launchIntent);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -343,10 +343,10 @@ public class WidgetActivity extends AppCompatActivity {
         // mail
         try {
             final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(1));
+            Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(1));
             assert launchIntent != null;
             startActivity(launchIntent);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -371,9 +371,9 @@ public class WidgetActivity extends AppCompatActivity {
     public void startButtonAppBrowser(View v) {
         // browser
         try {
-            String url = MainActivity.sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
+            String url = TxTLauncherApp.sharedPreferences.getString(SETTINGS_URL_SEARCH_TAG, "");
             if (url.isEmpty()) {
-                url = MainActivity.privateSearchUrl;
+                url = TxTLauncherApp.privateSearchUrl;
             }
             Intent broIn = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             broIn.addCategory(Intent.CATEGORY_DEFAULT);
@@ -381,7 +381,7 @@ public class WidgetActivity extends AppCompatActivity {
             // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
             // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
             startActivity(broIn);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -397,10 +397,10 @@ public class WidgetActivity extends AppCompatActivity {
         // camera
         try {
             final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(MainActivity.packName.get(3));
+            Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(3));
             assert launchIntent != null;
             startActivity(launchIntent);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -449,7 +449,7 @@ public class WidgetActivity extends AppCompatActivity {
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
             startActivity(intent);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -477,7 +477,7 @@ public class WidgetActivity extends AppCompatActivity {
             Uri mapUri = Uri.parse("geo:0,0");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             startActivity(mapIntent);
-            MainActivity.startedAndroidApp = true;
+            TxTLauncherApp.startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));

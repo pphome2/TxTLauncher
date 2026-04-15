@@ -1,18 +1,20 @@
 package com.wswdteam.txtlauncher;
 
-import static com.wswdteam.txtlauncher.MainActivity.adaptiveIconColor;
-import static com.wswdteam.txtlauncher.MainActivity.allAppData;
-import static com.wswdteam.txtlauncher.MainActivity.allApplicationsList;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultLetterColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.homeStartAppIcon;
-import static com.wswdteam.txtlauncher.MainActivity.iconSize;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
-import static com.wswdteam.txtlauncher.MainActivity.systemMessage;
-import static com.wswdteam.txtlauncher.MainActivity.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allAppData;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.allApplicationsList;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultLetterColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.hideKeyboard;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.homeStartAppIcon;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -109,7 +111,7 @@ public class AppListActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == SCROLL_STATE_TOUCH_SCROLL) {
-                    MainActivity.hideKeyboard(AppListActivity.this);
+                    hideKeyboard(AppListActivity.this);
                 }
             }
         });
@@ -170,7 +172,7 @@ public class AppListActivity extends AppCompatActivity {
                                     if ((appN.equals(appName))||(appN.equals(appName + " "))) {
                                         int padding = iconSize / 2;
                                         ResolveInfo info = allApplicationsList.get(i);
-                                        Drawable appI = info.loadIcon(MainActivity.packageMan);
+                                        Drawable appI = info.loadIcon(packageMan);
                                         Drawable ic = MainActivity.getDrawable(row, appI, iconSize);
                                         tvt.setCompoundDrawablesRelative(ic, null, null, null);
                                         tvt.setCompoundDrawablePadding(padding);

@@ -1,14 +1,14 @@
 package com.wswdteam.txtlauncher;
 
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
-import static com.wswdteam.txtlauncher.MainActivity.TXT_APP_NAME;
-import static com.wswdteam.txtlauncher.MainActivity.TXT_VERSION;
-import static com.wswdteam.txtlauncher.MainActivity.TXT_WEB_PAGE;
-import static com.wswdteam.txtlauncher.MainActivity.defaultBackGroundColor;
-import static com.wswdteam.txtlauncher.MainActivity.defaultFontSize;
-import static com.wswdteam.txtlauncher.MainActivity.defaultPlusFontSizeTitle;
-import static com.wswdteam.txtlauncher.MainActivity.defaultTextColor;
-import static com.wswdteam.txtlauncher.MainActivity.syslog;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.TXT_APP_NAME;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.TXT_VERSION;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.TXT_WEB_PAGE;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -48,7 +48,7 @@ public class HelpActivity extends AppCompatActivity {
 
         TextView tv = findViewById(R.id.helpViewTitle);
         tv.setTextColor(defaultTextColor);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MainActivity.defaultFontSize + defaultPlusFontSizeTitle);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultFontSize + defaultPlusFontSizeTitle);
         @SuppressLint("UseCompatLoadingForDrawables") Drawable appI = getDrawable(R.drawable.arrow_back);
         if (appI != null) {
             int ts = (int) defaultFontSize + (int) defaultPlusFontSizeTitle;
