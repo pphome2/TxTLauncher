@@ -14,6 +14,7 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.hideKeyboard;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -113,7 +114,7 @@ public class WidgetActivity extends AppCompatActivity {
                 Intent cal = new Intent(Intent.ACTION_MAIN);
                 cal.addCategory(Intent.CATEGORY_APP_CALENDAR);
                 startActivity(cal);
-                TxTLauncherApp.startedAndroidApp = true;
+                startedAndroidApp = true;
                 finish();
             } catch (Exception e) {
                 systemMessage(getString(R.string.error_startapp));
@@ -309,7 +310,7 @@ public class WidgetActivity extends AppCompatActivity {
                 //searchIntent.setPackage("com.google.android.googlequicksearchbox");
             }
             startActivity(brIn);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -327,7 +328,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(0));
             assert launchIntent != null;
             startActivity(launchIntent);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -346,7 +347,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(1));
             assert launchIntent != null;
             startActivity(launchIntent);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -381,7 +382,7 @@ public class WidgetActivity extends AppCompatActivity {
             // ! Intent broIn = new Intent(Intent.ACTION_MAIN);
             // ! broIn.addCategory(Intent.CATEGORY_APP_BROWSER);
             startActivity(broIn);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -400,7 +401,7 @@ public class WidgetActivity extends AppCompatActivity {
             Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(3));
             assert launchIntent != null;
             startActivity(launchIntent);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -449,7 +450,7 @@ public class WidgetActivity extends AppCompatActivity {
         try {
             Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
             startActivity(intent);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));
@@ -477,7 +478,7 @@ public class WidgetActivity extends AppCompatActivity {
             Uri mapUri = Uri.parse("geo:0,0");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
             startActivity(mapIntent);
-            TxTLauncherApp.startedAndroidApp = true;
+            startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {
             systemMessage(getString(R.string.error_startapp));

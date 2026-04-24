@@ -15,6 +15,7 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -272,7 +273,7 @@ public class AppListActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
-                        MainActivity.startedAndroidApp = true;
+                        startedAndroidApp = true;
                         this.finish();
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));

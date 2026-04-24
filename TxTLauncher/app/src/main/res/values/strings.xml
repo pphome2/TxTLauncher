@@ -45,7 +45,7 @@
     <string name="settings_weather_html1">Weather HTML (@CITY@ - where the city should be inserted)</string>
     <string name="version">Version</string>
     <string name="widgat_map">Go to map</string>
-    <string name="error_startapp">App launch faled</string>
+    <string name="error_startapp">App launch failed</string>
     <string name="news_update_title">The app is updated</string>
     <string name="news_update">New functions:\n\n- error repair\n- new function</string>
     <string name="button_next">Next</string>

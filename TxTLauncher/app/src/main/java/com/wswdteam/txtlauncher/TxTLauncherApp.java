@@ -145,11 +145,13 @@ public class TxTLauncherApp extends android.app.Application {
     //
     public static void generateAppList() {
         // másodperc
-        //long currentTime = System.currentTimeMillis() / 1000;
-        // 5 perc
-        //if ((currentTime - packageUpdateTime) > 300) {
+        long currentTime = System.currentTimeMillis() / 1000;
+        // 5 perc és újra olvas
+        // - if ((currentTime - packageUpdateTime) > 300) {
+        // -    startedAndroidApp = true;
+        // - }
         if (startedAndroidApp) {
-            //packageUpdateTime = currentTime;
+            packageUpdateTime = currentTime;
             startedAndroidApp = false;
             allApplicationsList.clear();
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
@@ -185,9 +187,11 @@ public class TxTLauncherApp extends android.app.Application {
                 allAppData[i][1] = info.activityInfo.packageName;
                 allAppData[i][2] = info.activityInfo.name;
             }
+            // végrehajtási idő
+            // currentTime = (System.currentTimeMillis() / 1000) - currentTime;
+            //syslog(String.valueOf(currentTime));
+            // ! kiírás:  systemMessage(String.valueOf(currentTime));
         }
-        // ! idő: currentTime = (System.currentTimeMillis() / 1000) - currentTime;
-        // ! kiírás:  systemMessage(String.valueOf(currentTime));
     }
 
 

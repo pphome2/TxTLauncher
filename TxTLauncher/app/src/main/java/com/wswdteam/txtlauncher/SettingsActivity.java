@@ -23,6 +23,7 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.privateAIUrlOrig;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.privateSearchUrlOrig;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.savedBackgroundImage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.sharedPreferences;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrlOrig;
@@ -316,6 +317,7 @@ public class SettingsActivity extends AppCompatActivity {
         v2.setText(privateSearchUrlOrig);
         v3.setText(weatherUrlOrig);
         v4.setText(backgroundImageOrig);
+        systemMessage(getString(R.string.settings_button_reset));
     }
 
 
@@ -339,7 +341,9 @@ public class SettingsActivity extends AppCompatActivity {
     // App lista újraolvasása
     public void rereadAppListButton(View view) {
         packageUpdateTime = packageUpdateTime / 2;
+        startedAndroidApp = true;
         TxTLauncherApp.generateAppList();
+        systemMessage(getString(R.string.settings_read_applist));
         this.finish();
     }
 

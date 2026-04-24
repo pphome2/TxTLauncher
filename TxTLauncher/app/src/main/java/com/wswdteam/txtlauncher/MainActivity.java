@@ -26,6 +26,7 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.packName;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.privateSearchUrl;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrl;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.generateAppList;
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     public static boolean startedSettingsAct = false;
     public static boolean startedFavAct = false;
     public static boolean startedHelp = false;
-    public static boolean startedAndroidApp = true;
 
 
     //
