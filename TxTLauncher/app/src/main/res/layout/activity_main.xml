@@ -28,7 +28,7 @@
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
-        android:id="@+id/lLayout1"
+        android:id="@+id/lLayoutHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -60,19 +60,80 @@
                 android:textStyle="bold" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/lLayoutIcons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="20dp"
+        android:padding="20dp"
+        android:paddingLeft="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/lLayoutHead"
+        tools:ignore="DisableBaselineAlignment,MissingConstraints">
         <LinearLayout
-            android:id="@+id/lLayout2"
-            android:layout_width="match_parent"
+            android:id="@+id/lLayoutIcons1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingTop="16dp"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:paddingBottom="5dp"
-            android:gravity="end"
-            app:layout_constraintTop_toBottomOf="@id/lLayout1"
+            android:gravity="start"
+            app:layout_constraintTop_toBottomOf="@id/lLayoutHead"
             tools:ignore="DisableBaselineAlignment,MissingConstraints">
+            <ImageView
+                android:id="@+id/arrowLeft"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_search"
+                android:onClick="startButtonAppDiscovery"
+                app:srcCompat="@drawable/arrow_left" />
 
+            <ImageView
+                android:id="@+id/arrowUp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_arrow"
+                android:onClick="startButtonAllApp"
+                app:srcCompat="@drawable/arrow_up" />
+
+            <ImageView
+                android:id="@+id/arrowDown"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_arrow"
+                android:onClick="startButtonAppFav"
+                app:srcCompat="@drawable/arrow_down" />
+
+            <ImageView
+                android:id="@+id/arrowRight"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_arrow"
+                android:onClick="startButtonWidgetActivity"
+                app:srcCompat="@drawable/arrow_right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lLayoutIcons2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="end"
+            app:layout_constraintTop_toBottomOf="@id/lLayoutHead"
+            tools:ignore="DisableBaselineAlignment,MissingConstraints">
             <ImageView
                 android:id="@+id/searchButton"
                 android:layout_width="30dp"
@@ -93,7 +154,6 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/button_weather"
                 android:onClick="openWeatherSearch"
-                android:gravity="center"
                 app:srcCompat="@drawable/weather" />
 
             <ImageView
@@ -117,7 +177,7 @@
                 android:contentDescription="@string/button_aiapp"
                 android:onClick="openAI"
                 app:srcCompat="@drawable/ai" />
-
+        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -143,7 +203,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttonsFrame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lLayout1">
+        app:layout_constraintTop_toBottomOf="@id/lLayoutIcons">
 
         <ListView
             android:id="@+id/homeAppList1"

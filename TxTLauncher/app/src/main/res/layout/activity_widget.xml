@@ -77,7 +77,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
-                    android:id="@+id/wdialButtonL"
+                    android:id="@+id/wsettingsButtonL"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:layout_width="0dp"
@@ -87,17 +87,17 @@
                     android:orientation="vertical"
                     tools:ignore="UseCompoundDrawables">
                     <ImageView
-                        android:id="@+id/wdialButton"
+                        android:id="@+id/wsettingsButton"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/rounded_button"
-                        android:contentDescription="@string/button_dial"
-                        android:onClick="startButtonAppDial"
+                        android:contentDescription="@string/button_settings"
+                        android:onClick="startButtonSettings"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/call" />
+                        app:srcCompat="@drawable/settings" />
                     <TextView
-                        android:id="@+id/wdialButtonTitle"
+                        android:id="@+id/wsettingsButtonTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
@@ -106,7 +106,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:scrollHorizontally="true"
-                        android:text="@string/wbutt_dial"
+                        android:text="@string/button_settings"
                         android:textAlignment="gravity">
                     </TextView>
                 </LinearLayout>
@@ -496,29 +496,6 @@
                 android:layout_marginEnd="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintTop_toBottomOf="@+id/widgetCalendar" />
-
-            <Button
-                android:id="@+id/widgetCloseView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:gravity="center|center_horizontal"
-                android:onClick="closeWidgetButton"
-                android:text="@string/button_close_widget"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startAI" />
-
-            <View
-                android:id="@+id/widgetDivider3"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintTop_toBottomOf="@+id/widgetCloseView" />
 
         </LinearLayout>
 

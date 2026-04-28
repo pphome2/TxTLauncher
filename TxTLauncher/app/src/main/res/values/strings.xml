@@ -89,5 +89,8 @@
     <string name="settings_button_reset_title">Settings reset</string>
     <string name="settings_text_color">Text color mode</string>
     <string name="settings_dark_mode">Dark mode</string>
+    <string name="button_arrow">Function</string>
+    <string name="settings_show_arrows">Navigation using the arrow keys</string>
+    <string name="settings_show_main_icons">Show main icons</string>
 
 </resources>

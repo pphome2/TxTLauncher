@@ -143,7 +143,7 @@ public class WidgetActivity extends AppCompatActivity {
         });
 
         if (adaptiveIcon) {
-            setIconColorW(R.id.wdialButton, adaptiveIconColor);
+            setIconColorW(R.id.wsettingsButton, adaptiveIconColor);
             setIconColorW(R.id.wmailButton, adaptiveIconColor);
             setIconColorW(R.id.whelpButton, adaptiveIconColor);
             setIconColorW(R.id.wbrowserButton, adaptiveIconColor);
@@ -154,7 +154,7 @@ public class WidgetActivity extends AppCompatActivity {
             setIconColorW(R.id.wdiscoveryButton, adaptiveIconColor);
             setIconColorW(R.id.wmapButton, adaptiveIconColor);
         } else {
-            setIconColorW(R.id.wdialButton, defaultIconColor);
+            setIconColorW(R.id.wsettingsButton, defaultIconColor);
             setIconColorW(R.id.wmailButton, defaultIconColor);
             setIconColorW(R.id.whelpButton, defaultIconColor);
             setIconColorW(R.id.wbrowserButton, defaultIconColor);
@@ -180,8 +180,8 @@ public class WidgetActivity extends AppCompatActivity {
             }
         }
         TextView tvx;
-        setIconColorW(R.id.wdialButton, iconColor);
-        tvx = findViewById(R.id.wdialButtonTitle);
+        setIconColorW(R.id.wsettingsButton, iconColor);
+        tvx = findViewById(R.id.wsettingsButtonTitle);
         tvx.setTextColor(textColor);
         setIconColorW(R.id.wmailButton, iconColor);
         tvx = findViewById(R.id.wmailButtonTitle);
@@ -318,24 +318,6 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
 
-    //
-    // App indítása
-    //
-    public void startButtonAppDial(View v) {
-        // dial
-        try {
-            final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(0));
-            assert launchIntent != null;
-            startActivity(launchIntent);
-            startedAndroidApp = true;
-            this.finish();
-        } catch (Exception e) {
-            systemMessage(getString(R.string.error_startapp));
-        }
-    }
-
-
 
     //
     // App indítása
@@ -427,6 +409,17 @@ public class WidgetActivity extends AppCompatActivity {
     public void startButtonAppFav(View v) {
         // fav
         startActivity(new Intent(WidgetActivity.this, FavoritesActivity.class));
+        this.finish();
+    }
+
+
+
+    //
+    // App indítása
+    //
+    public void startButtonSettings(View v) {
+        MainActivity.startedSettingsAct = true;
+        startActivity(new Intent(WidgetActivity.this, SettingsActivity.class));
         this.finish();
     }
 

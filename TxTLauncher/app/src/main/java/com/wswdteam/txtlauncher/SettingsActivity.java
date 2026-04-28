@@ -7,6 +7,8 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_BACKGROUND_IMAGE_
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_DARK_MODE_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_HOME_ICON_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_ONE_COLUMN_FAVORITES_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_SHOW_ARROWS_TAG;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_SHOW_MAIN_CONTROL_ICONS;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_SYS_ICON_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_TEXT_COLOR_MODE_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_PRIVATEAI_TAG;
@@ -104,6 +106,8 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c4 = findViewById(R.id.onecolFavorites);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c5 = findViewById(R.id.textColorMode);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c6 = findViewById(R.id.darkMode);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c7 = findViewById(R.id.showArrows);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c8 = findViewById(R.id.showMainIcons);
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
@@ -158,6 +162,24 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
+        c7.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            var settings = TxTLauncherApp.sharedPreferences.edit();
+            if (isChecked) {
+                settings.putString(SETTINGS_SHOW_ARROWS_TAG, "1");
+            } else {
+                settings.putString(SETTINGS_SHOW_ARROWS_TAG, "0");
+            }
+            settings.apply();
+        });
+        c8.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            var settings = TxTLauncherApp.sharedPreferences.edit();
+            if (isChecked) {
+                settings.putString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "1");
+            } else {
+                settings.putString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "0");
+            }
+            settings.apply();
+        });
         val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
         if (!val.isEmpty()) {
             c1.setChecked(!val.equals("0"));
@@ -181,8 +203,14 @@ public class SettingsActivity extends AppCompatActivity {
         val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
         if (!val.isEmpty()) {
             c6.setChecked(!val.equals("0"));
-        } else {
-            c6.setChecked(darkMode);
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_ARROWS_TAG, "");
+        if (!val.isEmpty()) {
+            c7.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "");
+        if (!val.isEmpty()) {
+            c8.setChecked(!val.equals("0"));
         }
 
         int buttonId;

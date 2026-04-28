@@ -1,5 +1,7 @@
 package com.wswdteam.txtlauncher;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.HOME_APP_NUM;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIcon;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIconColor;
@@ -8,6 +10,8 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultIcons;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.packageMan;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.savedBackgroundImage;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.showArrows;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.showMainIcons;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.darkMode;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.homeStartAppIcon;
@@ -65,6 +69,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.content.ComponentName;
@@ -264,6 +269,20 @@ public class MainActivity extends AppCompatActivity {
         buttonPrepare();
         setHomaApp();
         backgroundPrepare();
+
+        LinearLayout ll;
+        ll = findViewById(R.id.lLayoutIcons1);
+        if (showArrows) {
+            ll.setVisibility(VISIBLE);
+        } else {
+            ll.setVisibility(INVISIBLE);
+        }
+        ll = findViewById(R.id.lLayoutIcons2);
+        if (showMainIcons) {
+            ll.setVisibility(VISIBLE);
+        } else {
+            ll.setVisibility(INVISIBLE);
+        }
     }
 
 
@@ -286,6 +305,19 @@ public class MainActivity extends AppCompatActivity {
             buttonPrepare();
             setHomaApp();
             backgroundPrepare();
+            LinearLayout ll;
+            ll = findViewById(R.id.lLayoutIcons1);
+            if (showArrows) {
+                ll.setVisibility(VISIBLE);
+            } else {
+                ll.setVisibility(INVISIBLE);
+            }
+            ll = findViewById(R.id.lLayoutIcons2);
+            if (showMainIcons) {
+                ll.setVisibility(VISIBLE);
+            } else {
+                ll.setVisibility(INVISIBLE);
+            }
         }
 
         startedAppAct = false;
@@ -459,6 +491,10 @@ public class MainActivity extends AppCompatActivity {
             setIconColor(R.id.weatherButton, adaptiveIconColor);
             setIconColor(R.id.settingsButton, adaptiveIconColor);
             setIconColor(R.id.aiButton, adaptiveIconColor);
+            setIconColor(R.id.arrowDown, adaptiveIconColor);
+            setIconColor(R.id.arrowLeft, adaptiveIconColor);
+            setIconColor(R.id.arrowRight, adaptiveIconColor);
+            setIconColor(R.id.arrowUp, adaptiveIconColor);
             setIconColor(R.id.applistButton, adaptiveIconColor);
             setIconColor(R.id.dialButton, adaptiveIconColor);
             setIconColor(R.id.mailButton, adaptiveIconColor);
@@ -470,6 +506,10 @@ public class MainActivity extends AppCompatActivity {
             setIconColor(R.id.weatherButton, defaultIconColor);
             setIconColor(R.id.settingsButton, defaultIconColor);
             setIconColor(R.id.aiButton, defaultIconColor);
+            setIconColor(R.id.arrowDown, defaultIconColor);
+            setIconColor(R.id.arrowLeft, defaultIconColor);
+            setIconColor(R.id.arrowRight, defaultIconColor);
+            setIconColor(R.id.arrowUp, defaultIconColor);
             setIconColor(R.id.applistButton, defaultIconColor);
             setIconColor(R.id.dialButton, defaultIconColor);
             setIconColor(R.id.mailButton, defaultIconColor);
@@ -1197,5 +1237,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    //
+    // App indítása
+    //
+    public void startButtonAppFav(View v) {
+        // fav
+        startedFavAct = true;
+        startActivity(new Intent(this, FavoritesActivity.class));
+    }
+
+
+
+    //
+    // App indítása
+    //
+    public void startButtonAppDiscovery(View v) {
+        // discovery
+        try {
+            Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.googlequicksearchbox");
+            startActivity(intent);
+            this.finish();
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+
+    //
+    // App indítása
+    //
+    public void startButtonAllApp(View v) {
+        // all
+        startedAppAct = true;
+        startActivity(new Intent(this, AppListActivity.class));
+    }
+
+
+
+    //
+    //  Fő nézet: widget nézet indítása
+    //
+    public void startButtonWidgetActivity(View v) {
+        //syslog("Action swipe right: open widgets");
+        startedWidgetAct = true;
+        startActivity(new Intent(this, WidgetActivity.class));
+    }
 }
 

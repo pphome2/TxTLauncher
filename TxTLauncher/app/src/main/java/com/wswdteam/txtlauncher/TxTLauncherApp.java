@@ -55,6 +55,8 @@ public class TxTLauncherApp extends android.app.Application {
     public static String SETTINGS_ADAPTIVE_ICON_COLOR_TAG = "AdaptiveIconColor";
     public static String SETTINGS_TEXT_COLOR_MODE_TAG = "TextColorMode";
     public static String SETTINGS_DARK_MODE_TAG = "DarkMode";
+    public static String SETTINGS_SHOW_ARROWS_TAG = "ShowArrows";
+    public static String SETTINGS_SHOW_MAIN_CONTROL_ICONS = "ShowMainIcons";
     public static String SETTINGS_ONE_COLUMN_FAVORITES_TAG = "oneColFavorites";
     public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
     public static String SETTINGS_URL_SEARCH_TAG = "Search";
@@ -84,6 +86,8 @@ public class TxTLauncherApp extends android.app.Application {
     public static boolean onecolFavorites = false;
     public static boolean textColorMode = false;
     public static boolean darkMode = true;
+    public static boolean showArrows = false;
+    public static boolean showMainIcons = true;
     public static int adaptiveIconColor = 0;
     public static int defaultIconColor = 0;
 
@@ -262,27 +266,29 @@ public class TxTLauncherApp extends android.app.Application {
             val = sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
             if (!val.isEmpty()) {
                 homeSysIcon = !val.equals("0");
-            } else {
-                homeSysIcon = false;
             }
             val = sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
             if (!val.isEmpty()) {
                 homeStartAppIcon = !val.equals("0");
-            } else {
-                homeStartAppIcon = false;
             }
         }
 
         val = sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
         if (!val.isEmpty()) {
             textColorMode = !val.equals("0");
-        } else {
-            textColorMode = false;
         }
 
         val = sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
         if (!val.isEmpty()) {
             darkMode = !val.equals("0");
+        }
+        val = sharedPreferences.getString(SETTINGS_SHOW_ARROWS_TAG, "");
+        if (!val.isEmpty()) {
+            showArrows = !val.equals("0");
+        }
+        val = sharedPreferences.getString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "");
+        if (!val.isEmpty()) {
+            showMainIcons = !val.equals("0");
         }
 
         val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
