@@ -224,6 +224,7 @@ public class WidgetActivity extends AppCompatActivity {
         ImageView iv = findViewById(R.id.wsettingsButton);
         iv.setOnLongClickListener(v -> {
             startButtonSystemSettings(v);
+            this.finish();
             return true;
         });
     }
