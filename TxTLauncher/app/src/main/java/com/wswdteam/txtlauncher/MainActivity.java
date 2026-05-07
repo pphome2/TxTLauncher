@@ -29,6 +29,8 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.homeAppName;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.iconSize;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.packName;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.privateSearchUrl;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.timeHandler;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.timeRunnable;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrl;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
@@ -55,8 +57,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -106,9 +106,6 @@ public class MainActivity extends AppCompatActivity {
     // háttérkép kezelése
     private boolean firstPermissionRequest = true;
     public static String backgroundImageBackup = "";
-
-    // dátum kiírás
-    private boolean dateReady = false;
 
     // activity figyelés
     public static boolean startedAppAct = false;
@@ -294,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
         overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.enter_from_bottom, R.anim.exit_to_top);
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.enter_from_top, R.anim.exit_to_bottom);
         super.onStart();
-        dateReady = false;
 
         generateAppList();
 
@@ -325,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         startedSettingsAct = false;
         startedFavAct = false;
         startedHelp = false;
-        dateReady = false;
+        timeInScreen();
 
         syslog(getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
@@ -337,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //syslog(getString(R.string.stopped_activty) + ": " + this.getClass().getSimpleName());
+        timeHandler.removeCallbacks(timeRunnable);
     }
 
 
@@ -347,7 +343,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dateReady = false;
     }
 
 
@@ -357,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        timeHandler.removeCallbacks(timeRunnable);
     }
 
 
@@ -366,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        timeHandler.removeCallbacks(timeRunnable);
     }
 
 
@@ -1020,23 +1017,20 @@ public class MainActivity extends AppCompatActivity {
         // óra
         final TextView textView = findViewById(R.id.digitalClock);
         final TextView textDateView = findViewById(R.id.digitalDate);
-        final Handler handler = new Handler(Looper.getMainLooper());
-        final Runnable runnable = new Runnable() {
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+        textDateView.setText(currentDate);
+        timeRunnable = new Runnable() {
             @Override
             public void run() {
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 String currentTime = simpleTimeFormat.format(calendar.getTime());
                 textView.setText(currentTime);
-                if (!dateReady) {
-                    String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
-                    textDateView.setText(currentDate);
-                    dateReady = true;
-                }
-                handler.postDelayed(this, 3000);
+                timeHandler.postDelayed(this, 10000);
             }
         };
-        handler.post(runnable);
+        timeHandler.post(timeRunnable);
     }
 
 
@@ -1207,7 +1201,7 @@ public class MainActivity extends AppCompatActivity {
             if (weatherUrl.contains("://")) {
                 searchIntent = new Intent(Intent.ACTION_VIEW);
                 searchIntent.setData(Uri.parse(weatherUrl));
-                searchIntent.setPackage(packName.get(2));
+                searchIntent.setPackage(packName.get(3));
                 searchIntent.addCategory(Intent.CATEGORY_DEFAULT);
             } else {
                 searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);

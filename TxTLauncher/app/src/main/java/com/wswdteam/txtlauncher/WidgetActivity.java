@@ -1,5 +1,7 @@
 package com.wswdteam.txtlauncher;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_NOTE_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.adaptiveIcon;
@@ -9,12 +11,15 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultIconColor;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultTextColor;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.extraTools;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.packName;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.privateAIUrl;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.syslog;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.systemMessage;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.textColorMode;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.hideKeyboard;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.startedAndroidApp;
+import static com.wswdteam.txtlauncher.TxTLauncherApp.weatherUrl;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -28,6 +33,7 @@ import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,6 +43,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -144,7 +151,7 @@ public class WidgetActivity extends AppCompatActivity {
 
         if (adaptiveIcon) {
             setIconColorW(R.id.wsettingsButton, adaptiveIconColor);
-            setIconColorW(R.id.wmailButton, adaptiveIconColor);
+            setIconColorW(R.id.wwetButton, adaptiveIconColor);
             setIconColorW(R.id.whelpButton, adaptiveIconColor);
             setIconColorW(R.id.wbrowserButton, adaptiveIconColor);
             setIconColorW(R.id.wcameraButton, adaptiveIconColor);
@@ -155,7 +162,7 @@ public class WidgetActivity extends AppCompatActivity {
             setIconColorW(R.id.wmapButton, adaptiveIconColor);
         } else {
             setIconColorW(R.id.wsettingsButton, defaultIconColor);
-            setIconColorW(R.id.wmailButton, defaultIconColor);
+            setIconColorW(R.id.wwetButton, defaultIconColor);
             setIconColorW(R.id.whelpButton, defaultIconColor);
             setIconColorW(R.id.wbrowserButton, defaultIconColor);
             setIconColorW(R.id.wcameraButton, defaultIconColor);
@@ -183,8 +190,8 @@ public class WidgetActivity extends AppCompatActivity {
         setIconColorW(R.id.wsettingsButton, iconColor);
         tvx = findViewById(R.id.wsettingsButtonTitle);
         tvx.setTextColor(textColor);
-        setIconColorW(R.id.wmailButton, iconColor);
-        tvx = findViewById(R.id.wmailButtonTitle);
+        setIconColorW(R.id.wwetButton, iconColor);
+        tvx = findViewById(R.id.wwetButtonTitle);
         tvx.setTextColor(textColor);
         setIconColorW(R.id.whelpButton, iconColor);
         tvx = findViewById(R.id.whelpButtonTitle);
@@ -213,6 +220,12 @@ public class WidgetActivity extends AppCompatActivity {
 
         tvx = findViewById(R.id.widgetNoteTitle);
         tvx.setTextColor(textColor);
+
+        ImageView iv = findViewById(R.id.wsettingsButton);
+        iv.setOnLongClickListener(v -> {
+            startButtonSystemSettings(v);
+            return true;
+        });
     }
 
 
@@ -233,6 +246,17 @@ public class WidgetActivity extends AppCompatActivity {
         }
         firstLoadAI = true;
 
+        if (extraTools) {
+            LinearLayout ll = findViewById(R.id.extraWidget1);
+            ll.setVisibility(VISIBLE);
+            ll = findViewById(R.id.extraWidget2);
+            ll.setVisibility(VISIBLE);
+        } else {
+            LinearLayout ll = findViewById(R.id.extraWidget1);
+            ll.setVisibility(GONE);
+            ll = findViewById(R.id.extraWidget2);
+            ll.setVisibility(GONE);
+        }
 
         ScrollView sv = findViewById(R.id.widgetScrollFrame);
         sv.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -320,15 +344,40 @@ public class WidgetActivity extends AppCompatActivity {
 
 
     //
-    // App indítása
+    // Rendszer beállítások indítása
     //
-    public void startButtonAppMail(View v) {
-        // mail
+    public void startButtonSystemSettings(View v) {
         try {
-            final PackageManager pm = getPackageManager();
-            Intent launchIntent = pm.getLaunchIntentForPackage(TxTLauncherApp.packName.get(1));
-            assert launchIntent != null;
-            startActivity(launchIntent);
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            startedAndroidApp = true;
+        } catch (Exception e) {
+            systemMessage(getString(R.string.error_startapp));
+        }
+    }
+
+
+
+    //
+    // időjárás keresés
+    //
+    public void startButtonWeatherSearch(View v) {
+        try {
+            Intent searchIntent;
+            if (weatherUrl.contains("://")) {
+                searchIntent = new Intent(Intent.ACTION_VIEW);
+                searchIntent.setData(Uri.parse(weatherUrl));
+                searchIntent.setPackage(packName.get(3));
+                searchIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            } else {
+                searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
+                searchIntent.putExtra(SearchManager.QUERY, weatherUrl + "\n");
+                searchIntent.setComponent(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+                //searchIntent.setPackage("com.google.android.googlequicksearchbox");
+            }
+            startActivity(searchIntent);
             startedAndroidApp = true;
             this.finish();
         } catch (Exception e) {

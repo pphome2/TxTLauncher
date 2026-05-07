@@ -92,4 +92,7 @@
     <string name="button_arrow">Funkciók</string>
     <string name="settings_show_arrows">Vezérlés nyilakkal</string>
     <string name="settings_show_main_icons">Vezérlő ikonok a főképernyőn</string>
+    <string name="widget_weather">Időjárási adatok</string>
+    <string name="settings_extra_tools">Különleges eszközök (több erőforrást igényel)</string>
+    <string name="wbutt_weather">Időjárás</string>
 </resources>

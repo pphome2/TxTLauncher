@@ -92,5 +92,8 @@
     <string name="button_arrow">Function</string>
     <string name="settings_show_arrows">Navigation using the arrow keys</string>
     <string name="settings_show_main_icons">Show main icons</string>
+    <string name="widget_weather">Weather data</string>
+    <string name="settings_extra_tools">Special tools (more resource consumption)</string>
+    <string name="wbutt_weather">Weather</string>
 
 </resources>

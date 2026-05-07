@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -57,6 +59,7 @@ public class TxTLauncherApp extends android.app.Application {
     public static String SETTINGS_DARK_MODE_TAG = "DarkMode";
     public static String SETTINGS_SHOW_ARROWS_TAG = "ShowArrows";
     public static String SETTINGS_SHOW_MAIN_CONTROL_ICONS = "ShowMainIcons";
+    public static String SETTINGS_EXTRA_TOOLS = "ExtraTools";
     public static String SETTINGS_ONE_COLUMN_FAVORITES_TAG = "oneColFavorites";
     public static String SETTINGS_URL_PRIVATEAI_TAG = "PrivateAI";
     public static String SETTINGS_URL_SEARCH_TAG = "Search";
@@ -69,6 +72,7 @@ public class TxTLauncherApp extends android.app.Application {
     public static String privateSearchUrl = "https://duckduckgo.com/?q=";
     public static String privateAIUrlOrig = "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1";
     public static String privateSearchUrlOrig = "https://duckduckgo.com/?q=";
+    public static boolean extraTools = false;
     public static String weatherUrl = "";
     public static String backgroundImage = "";
     public static String weatherUrlOrig = "";
@@ -78,6 +82,8 @@ public class TxTLauncherApp extends android.app.Application {
     // rendszer változók
     public static SharedPreferences sharedPreferences;
     public static PackageManager packageMan;
+    public static Handler timeHandler = new Handler(Looper.getMainLooper());
+    public static Runnable timeRunnable;
 
     // beállítások változói
     public static boolean homeSysIcon = false;
@@ -282,6 +288,7 @@ public class TxTLauncherApp extends android.app.Application {
         if (!val.isEmpty()) {
             darkMode = !val.equals("0");
         }
+
         val = sharedPreferences.getString(SETTINGS_SHOW_ARROWS_TAG, "");
         if (!val.isEmpty()) {
             showArrows = !val.equals("0");
@@ -289,6 +296,11 @@ public class TxTLauncherApp extends android.app.Application {
         val = sharedPreferences.getString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "");
         if (!val.isEmpty()) {
             showMainIcons = !val.equals("0");
+        }
+
+        val = sharedPreferences.getString(SETTINGS_EXTRA_TOOLS, "");
+        if (!val.isEmpty()) {
+            extraTools = !val.equals("0");
         }
 
         val = sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
