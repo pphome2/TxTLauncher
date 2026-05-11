@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Alkalmazások</string>
+    <string name="started_activity">Elindított activity</string>
+    <string name="error_startapp">Hiba az app elindításakor</string>
+    <string name="settings_title">Beállítások</string>
+    <string name="settings_addfavapp">Kedvenc alkalmazások hozzáadása</string>
+    <string name="settings_adapticon">Adaptív ikonok használata</string>
+    <string name="settings_text_color">Szüvegszín használata</string>
+    <string name="settings_dark_mode">Sötét üzemmód</string>
+    <string name="quit_button_desc">Kilépés</string>
+    <string name="search">Keresés</string>
+    <string name="title_favorite_addapp">Kedvenc alkalmazások</string>
+    <string name="second_fragment_label">2</string>
+    <string name="first_fragment_label">1</string>
+    <string name="app_favorite">Kedvencek</string>
+    <string name="settings_runandquit">Indítás és kilépés</string>
+</resources>

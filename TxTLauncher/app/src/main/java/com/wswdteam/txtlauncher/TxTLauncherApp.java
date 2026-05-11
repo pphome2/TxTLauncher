@@ -261,6 +261,9 @@ public class TxTLauncherApp extends android.app.Application {
         if (buttonId == R.id.btnLevander) {
             adaptiveIconColor = ContextCompat.getColor(cont, R.color.levander);
         }
+        if (buttonId == R.id.btnLightblue) {
+            adaptiveIconColor = ContextCompat.getColor(cont, R.color.lightblue);
+        }
         if (adaptiveIconColor == 0) {
             adaptiveIconColor = defaultIconColor;
         }

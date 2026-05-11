@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Applications</string>
+    <string name="started_activity">Started activity</string>
+    <string name="error_startapp">Error starting app</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_addfavapp">Add favorite apps</string>
+    <string name="settings_adapticon">Use adaptive icons</string>
+    <string name="settings_text_color">Text color</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="quit_button_desc">Quit</string>
+    <string name="search">Search</string>
+    <string name="title_favorite_addapp">Add favorite apps</string>
+    <string name="second_fragment_label">2</string>
+    <string name="first_fragment_label">1</string>
+    <string name="app_favorite">Favorite</string>
+    <string name="settings_runandquit">Run and quit</string>
+    <!-- Strings used for fragments for navigation -->
+
+</resources>

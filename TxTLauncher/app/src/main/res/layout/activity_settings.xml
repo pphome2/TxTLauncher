@@ -228,6 +228,13 @@
                     android:button="@null"
                     android:textAlignment="center"
                     android:background="@color/olive" />
+                <RadioButton
+                    android:id="@+id/btnLightblue"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:button="@null"
+                    android:textAlignment="center"
+                    android:background="@color/lightblue" />
             </RadioGroup>
 
             <Switch
