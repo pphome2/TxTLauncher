@@ -145,6 +145,7 @@ public class TxTLauncherApp extends android.app.Application {
 
         savedBackgroundImage = String.format("%s/launcher_bg.png", getFilesDir());
 
+        syslog(TXT_APP_NAME + " " + TXT_VERSION + " - " + TXT_WEB_PAGE);
         syslog(getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
     }
 
@@ -372,18 +373,12 @@ public class TxTLauncherApp extends android.app.Application {
         //newInstall();
         String val = sharedPreferences.getString(SETTINGS_VERSION_TAG, "");
         if (val.isEmpty()) {
-            var settings = sharedPreferences.edit();
-            settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-            settings.apply();
             newInstall();
-            systemMessage(getString(R.string.new_install));
+            //systemMessage(getString(R.string.new_install));
         } else {
             if (!val.equals(TXT_VERSION)) {
-                var settings = sharedPreferences.edit();
-                settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
-                settings.apply();
                 updateInstall();
-                systemMessage(getString(R.string.update_install));
+                //systemMessage(getString(R.string.update_install));
             }
         }
     }
@@ -397,6 +392,25 @@ public class TxTLauncherApp extends android.app.Application {
         //
         // első indítás: alap beállítások
         //
+        // feladatok
+        var settings = TxTLauncherApp.sharedPreferences.edit();
+        settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
+        settings.putString(SETTINGS_SYS_ICON_TAG, "0");
+        settings.putString(SETTINGS_HOME_ICON_TAG, "0");
+        settings.putString(SETTINGS_ADAPTIVE_ICON_TAG, "0");
+        settings.putString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "0");
+        settings.putString(SETTINGS_TEXT_COLOR_MODE_TAG, "0");
+        settings.putString(SETTINGS_SHOW_ARROWS_TAG, "0");
+        settings.putString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "0");
+        settings.putString(SETTINGS_EXTRA_TOOLS, "0");
+        if (darkMode) {
+            settings.putString(SETTINGS_DARK_MODE_TAG, "1");
+        } else {
+            settings.putString(SETTINGS_DARK_MODE_TAG, "0");
+        }
+        settings.apply();
+
+        // üzenet
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String msg = getString(R.string.news_firstrun);
         builder.setTitle(getString(R.string.news_firstrun_title))
@@ -416,8 +430,10 @@ public class TxTLauncherApp extends android.app.Application {
         //
         // esetleges beállítások és egyebek módosítása az új verzióhoz
         //
-
         // feladatok
+        var settings = TxTLauncherApp.sharedPreferences.edit();
+        settings.putString(SETTINGS_VERSION_TAG, TXT_VERSION);
+        settings.apply();
 
         // üzenet
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -16,7 +16,6 @@ import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_PRIVATEAI_TAG
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_URL_SEARCH_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.SETTINGS_WEATHER_URL_TAG;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.backgroundImageOrig;
-import static com.wswdteam.txtlauncher.TxTLauncherApp.darkMode;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultBackGroundColor;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultFontSize;
 import static com.wswdteam.txtlauncher.TxTLauncherApp.defaultPlusFontSizeTitle;
@@ -110,6 +109,44 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c7 = findViewById(R.id.showArrows);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c8 = findViewById(R.id.showMainIcons);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c9 = findViewById(R.id.extraTools);
+
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            c1.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            c2.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            c3.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
+        if (!val.isEmpty()) {
+            c4.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c5.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c6.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_ARROWS_TAG, "");
+        if (!val.isEmpty()) {
+            c7.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "");
+        if (!val.isEmpty()) {
+            c8.setChecked(!val.equals("0"));
+        }
+        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_EXTRA_TOOLS, "");
+        if (!val.isEmpty()) {
+            c9.setChecked(!val.equals("0"));
+        }
+
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             var settings = TxTLauncherApp.sharedPreferences.edit();
             if (isChecked) {
@@ -191,42 +228,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SYS_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            c1.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_HOME_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            c2.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            c3.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_ONE_COLUMN_FAVORITES_TAG, "");
-        if (!val.isEmpty()) {
-            c4.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            c5.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            c6.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_ARROWS_TAG, "");
-        if (!val.isEmpty()) {
-            c7.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_SHOW_MAIN_CONTROL_ICONS, "");
-        if (!val.isEmpty()) {
-            c8.setChecked(!val.equals("0"));
-        }
-        val = TxTLauncherApp.sharedPreferences.getString(SETTINGS_EXTRA_TOOLS, "");
-        if (!val.isEmpty()) {
-            c9.setChecked(!val.equals("0"));
-        }
 
         int buttonId;
         buttonId = TxTLauncherApp.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));

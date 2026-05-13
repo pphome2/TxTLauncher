@@ -10,6 +10,7 @@ import static com.wswdteam.applist.AppListApp.defaultBackGroundColor;
 import static com.wswdteam.applist.AppListApp.defaultFontSize;
 import static com.wswdteam.applist.AppListApp.defaultPlusFontSizeTitle;
 import static com.wswdteam.applist.AppListApp.defaultTextColor;
+import static com.wswdteam.applist.AppListApp.info;
 import static com.wswdteam.applist.AppListApp.sharedPreferences;
 import static com.wswdteam.applist.AppListApp.syslog;
 
@@ -53,6 +54,9 @@ public class SettingsActivity extends AppCompatActivity {
         // teljes háttér színe
         getWindow().getDecorView().setBackgroundColor(defaultBackGroundColor);
 
+        TextView iv = findViewById(R.id.infoText);
+        iv.setText(info);
+
         TextView tv = findViewById(R.id.settingsViewTitle);
         tv.setTextColor(defaultTextColor);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, AppListApp.defaultFontSize + defaultPlusFontSizeTitle);
@@ -82,6 +86,23 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c2 = findViewById(R.id.adaptiveIcon);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c3 = findViewById(R.id.textColorMode);
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch c4 = findViewById(R.id.darkMode);
+
+        val = AppListApp.sharedPreferences.getString(SETTINGS_RUN_AND_QUIT_TAG, "");
+        if (!val.isEmpty()) {
+            c1.setChecked(!val.equals("0"));
+        }
+        val = AppListApp.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
+        if (!val.isEmpty()) {
+            c2.setChecked(!val.equals("0"));
+        }
+        val = AppListApp.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c3.setChecked(!val.equals("0"));
+        }
+        val = AppListApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
+        if (!val.isEmpty()) {
+            c4.setChecked(!val.equals("0"));
+        }
 
         c1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             var settings = AppListApp.sharedPreferences.edit();
@@ -119,44 +140,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
             settings.apply();
         });
-        val = AppListApp.sharedPreferences.getString(SETTINGS_RUN_AND_QUIT_TAG, "");
-        if (!val.isEmpty()) {
-            c1.setChecked(!val.equals("0"));
-        }
-        val = AppListApp.sharedPreferences.getString(SETTINGS_ADAPTIVE_ICON_TAG, "");
-        if (!val.isEmpty()) {
-            c2.setChecked(!val.equals("0"));
-        }
-        val = AppListApp.sharedPreferences.getString(SETTINGS_TEXT_COLOR_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            c3.setChecked(!val.equals("0"));
-        }
-        val = AppListApp.sharedPreferences.getString(SETTINGS_DARK_MODE_TAG, "");
-        if (!val.isEmpty()) {
-            c4.setChecked(!val.equals("0"));
-        }
 
         int buttonId;
         buttonId = AppListApp.sharedPreferences.getInt(SETTINGS_ADAPTIVE_ICON_COLOR_TAG, Integer.parseInt("0"));
-
-        //EditText v1 = findViewById(R.id.editPrivateAI);
-
-        //v1.addTextChangedListener(new TextWatcher() {
-        //    public void afterTextChanged(Editable s) {
-        //        var settings = AppListApp.sharedPreferences.edit();
-        //        settings.putString(SETTINGS_URL_PRIVATEAI_TAG, String.valueOf(s).trim());
-        //        settings.apply();
-        //    }
-        //    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        //    public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        //});
-
-        //val = AppListApp.sharedPreferences.getString(SETTINGS_URL_PRIVATEAI_TAG, "");
-        //if (!val.isEmpty()) {
-        //    v1.setText(val);
-        //} else {
-        //    v1.setText(AppListApp.privateAIUrl);
-        //}
 
         if (buttonId > 0) {
             RadioButton rb = findViewById(buttonId);
@@ -184,7 +170,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-
         syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -203,16 +188,6 @@ public class SettingsActivity extends AppCompatActivity {
     //
     public void openAddFavAppList(View view){
         startActivity(new Intent(SettingsActivity.this, FavoritesAddAppActivity.class));
-    }
-
-
-    //
-    // Beállítások visszaállítása
-    //
-    public void resetButton(View view) {
-        //EditText v1 = findViewById(R.id.editPrivateAI);
-        //v1.setText(privateAIUrlOrig);
-        //systemMessage(getString(R.string.settings_button_reset));
     }
 
 

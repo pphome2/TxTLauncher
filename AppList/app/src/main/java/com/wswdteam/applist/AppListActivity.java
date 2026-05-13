@@ -36,6 +36,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -84,8 +86,6 @@ public class AppListActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        prepare();
     }
 
 
@@ -96,7 +96,6 @@ public class AppListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        appListView();
         SearchView sv = findViewById(R.id.allAppListSearch);
         sv.setQuery("", false);
         sv.setIconified(true);
@@ -117,6 +116,7 @@ public class AppListActivity extends AppCompatActivity {
         });
 
         prepare();
+        appListView();
         syslog(getString(R.string.started_activity) + ": "+ this.getClass().getSimpleName());
     }
 
@@ -366,25 +366,27 @@ public class AppListActivity extends AppCompatActivity {
                     String cls = allAppData[i][2];
                     Intent intent = new Intent();
                     intent.setClassName(pkg, cls);
-                    if (runAndQuit) {
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    } else {
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    }
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
                         startActivity(intent);
                         startedAndroidApp = true;
-                        if (runAndQuit) {
-                            this.finishAndRemoveTask();
-                        } else {
-                            this.finish();
-                        }
                     } catch (Exception e) {
                         systemMessage(getString(R.string.error_startapp));
                     }
                     i = allAppData.length;
                 }
             }
+            if (startedAndroidApp) {
+                if (runAndQuit) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        finishAndRemoveTask();
+                        System.exit(0);
+                    }, 2000);
+                //} else {
+                    //this.finish();
+                }
+            }
+
         });
 
         letterTable.setOnItemClickListener((parent, view, position, id) -> {
@@ -505,7 +507,9 @@ public class AppListActivity extends AppCompatActivity {
     // App lista kilépés
     //
     public void closeAppViewButton(View view) {
-        this.finish();
+        //this.finish();
+        finishAndRemoveTask();
+        System.exit(0);
     }
 
 }

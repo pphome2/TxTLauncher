@@ -41,8 +41,9 @@ public class AppListApp extends android.app.Application {
 
     // beállítások mentése jelölők
     public static String PRIVATE_SETTINGS_TAG = APP_NAME + "_config";
+    public static String SETTINGS_APP_VERSION = APP_VERSION;
     public static String SETTINGS_FAV_APP_TAG = "FavApp";
-    public static String SETTINGS_RUN_AND_QUIT_TAG = "AdaptiveIcon";
+    public static String SETTINGS_RUN_AND_QUIT_TAG = "RunAndQuit";
     public static String SETTINGS_ADAPTIVE_ICON_TAG = "AdaptiveIcon";
     public static String SETTINGS_ADAPTIVE_ICON_COLOR_TAG = "AdaptiveIconColor";
     public static String SETTINGS_TEXT_COLOR_MODE_TAG = "TextColorMode";
@@ -52,6 +53,7 @@ public class AppListApp extends android.app.Application {
     // beállítások alapértelmezett tartalma
     public static SharedPreferences sharedPreferences;
     public static PackageManager packageMan;
+
 
     // beállítások változói
     public static boolean runAndQuit = false;
@@ -77,7 +79,7 @@ public class AppListApp extends android.app.Application {
     public static int iconSize;
     public static int iconPadding;
     public static boolean startedAndroidApp = true;
-    public static String info = APP_NAME + " " + APP_VERSION + " " + APP_WEB_PAGE;
+    public static String info = APP_NAME + " " + APP_VERSION + " - " + APP_WEB_PAGE;
 
 
     @Override
@@ -101,6 +103,20 @@ public class AppListApp extends android.app.Application {
         iconPadding = (int) (-1 * density);
 
         defaultFontSize = (float) iconSize / 2;
+
+        if (sharedPreferences.getString(SETTINGS_APP_VERSION, "").isEmpty()) {
+            var settings = AppListApp.sharedPreferences.edit();
+            settings.putString(SETTINGS_APP_VERSION, APP_VERSION);
+            settings.putString(SETTINGS_RUN_AND_QUIT_TAG, "0");
+            settings.putString(SETTINGS_ADAPTIVE_ICON_TAG, "0");
+            settings.putString(SETTINGS_TEXT_COLOR_MODE_TAG, "0");
+            if (darkMode) {
+                settings.putString(SETTINGS_DARK_MODE_TAG, "1");
+            } else {
+                settings.putString(SETTINGS_DARK_MODE_TAG, "0");
+            }
+            settings.apply();
+        }
 
         syslog(info);
         syslog(getString(R.string.started_activity) + ": " + this.getClass().getSimpleName());
